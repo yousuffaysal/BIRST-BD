@@ -73,7 +73,7 @@ export default function ResearchLibrary() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -83,7 +83,7 @@ export default function ResearchLibrary() {
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center">
             <Library className="w-8 h-8 text-white" />
           </div>
           <div>
@@ -103,7 +103,7 @@ export default function ResearchLibrary() {
               placeholder="Search resources by title, description, or tags..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -114,7 +114,7 @@ export default function ResearchLibrary() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -125,7 +125,7 @@ export default function ResearchLibrary() {
             <select
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {types.map((type) => (
                 <option key={type} value={type}>
@@ -139,7 +139,7 @@ export default function ResearchLibrary() {
 
       {/* Results Count */}
       <div className="text-gray-600">
-        Found <span className="font-bold text-indigo-600">{filteredResources.length}</span> resources
+        Found <span className="font-bold text-blue-600">{filteredResources.length}</span> resources
       </div>
 
       {/* Resources List */}
@@ -155,15 +155,15 @@ export default function ResearchLibrary() {
             return (
               <div
                 key={resource._id}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-indigo-500"
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-blue-500"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                      <TypeIcon className="w-5 h-5 text-indigo-600" />
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <TypeIcon className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded">
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded">
                         {resource.type || 'Resource'}
                       </span>
                     </div>
@@ -172,7 +172,7 @@ export default function ResearchLibrary() {
 
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{resource.title}</h3>
                 {resource.category && (
-                  <p className="text-sm text-indigo-600 font-medium mb-2">{resource.category}</p>
+                  <p className="text-sm text-blue-600 font-medium mb-2">{resource.category}</p>
                 )}
                 {resource.description && (
                   <p className="text-gray-700 text-sm mb-4 line-clamp-3">{resource.description}</p>
@@ -201,14 +201,14 @@ export default function ResearchLibrary() {
                       href={resource.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex-1 justify-center"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex-1 justify-center"
                     >
                       <ExternalLink className="w-4 h-4" />
                       View
                     </a>
                   )}
                   {resource.downloadUrl && (
-                    <button className="flex items-center gap-2 px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition">
+                    <button className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
                       <Download className="w-4 h-4" />
                       Download
                     </button>
@@ -222,4 +222,3 @@ export default function ResearchLibrary() {
     </div>
   );
 }
-

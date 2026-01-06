@@ -590,4 +590,3 @@ export default function WrappedCourseCheckout() {
     </PrivateRoute>
   );
 }
-

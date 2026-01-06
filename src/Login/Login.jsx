@@ -100,7 +100,7 @@
 //                     <div className="absolute bottom-20 right-20 w-16 h-16 bg-deep-teal/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
 //                     <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-light-sky-blue/20 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
 //                 </div>
-                
+
 //                 <div className="max-w-lg relative z-10">
 //                     {/* Logo */}
 //                     <div className="mb-8">
@@ -113,11 +113,11 @@
 //                             Welcome Back to <span className="text-deep-teal">The Lebas Buying</span>
 //                         </h2>
 //                     </div>
-                    
+
 //                     <p className="text-xl font-dm-sans text-charcoal/80 mb-8 leading-relaxed text-center">
 //                         Crafting Quality<br className="hidden sm:inline" />Garments with Precision
 //                     </p>
-                    
+
 //                     {/* Sign Up Button */}
 //                     <div className="text-center">
 //                         <p className="text-charcoal/70 font-dm-sans mb-4">Don't have an account?</p>
@@ -501,6 +501,7 @@ import Swal from 'sweetalert2';
 
 import SocialLogin from '../components/SocialLogin';
 import { AuthContext } from '../Providers/AuthProvider';
+import birstLogo from '../assets/BIRST_LOGO.svg';
 
 const Login = () => {
     const [disabled, setDisabled] = useState(true);
@@ -589,29 +590,29 @@ const Login = () => {
                     <div className="absolute bottom-20 right-20 w-16 h-16 bg-deep-teal/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
                     <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-light-sky-blue/20 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
                 </div>
-                
+
                 <div className="max-w-lg relative z-10">
                     {/* Logo */}
                     <div className="mb-8">
                         <img
-                            src="/src/assets/logo_lebas.png"
-                            alt="The Lebas Buying"
+                            src={birstLogo}
+                            alt="BIRSTBD"
                             className="h-16 w-auto mx-auto mb-4"
                         />
                         <h2 className="text-4xl font-bold font-space-grotesk text-charcoal text-center">
-                            Welcome Back to <span className="text-deep-teal">The Lebas Buying</span>
+                            Welcome Back to <span className="text-deep-teal">BIRSTBD</span>
                         </h2>
                     </div>
-                    
+
                     <p className="text-xl font-dm-sans text-charcoal/80 mb-8 leading-relaxed text-center">
                         Crafting Quality<br className="hidden sm:inline" />Garments with Precision
                     </p>
-                    
+
                     {/* Sign Up Button */}
                     <div className="text-center">
                         <p className="text-charcoal/70 font-dm-sans mb-4">Don't have an account?</p>
-                        <Link 
-                            to="/signup" 
+                        <Link
+                            to="/signup"
                             className="btn-elevated px-8 py-4"
                         >
                             Sign Up Here
@@ -626,8 +627,8 @@ const Login = () => {
                     {/* Logo and Welcome Text */}
                     <div className="text-center">
                         <img
-                            src="/src/assets/logo_lebas.png"
-                            alt="The Lebas Buying"
+                            src={birstLogo}
+                            alt="BIRSTBD"
                             className="h-12 w-auto mx-auto mb-4 lg:hidden"
                         />
                         <h1 className="text-3xl font-bold font-space-grotesk text-deep-teal mb-2">Welcome!</h1>

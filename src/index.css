@@ -6,37 +6,6 @@
 @import "./styles/responsive.css";
 
 /* === SRCBD BRANDING COLORS === */
-:root {
-  /* Your original colors */
-  --color-deep-teal: #1A3C52;
-  --color-hero-bg: #034652;
-  --color-mint-green: #A9D6C5;
-  --color-warm-beige: #F5E8C7;
-  --color-light-sky-blue: #B3D4FC;
-  --color-soft-sand: #D9BBA0;
-  --color-copper: #B85C38;
-  --color-charcoal: #333333;
-  --color-white: #FFFFFF;
-  --color-button-bg: #F5F0E1;
-  --color-button-text: #282A36;
-  --color-button-shadow: #282A36;
-  --color-button-hero-bg: #FAF3E0;
-  --color-button-hero-text: #282A36;
-  --color-button-hero-shadow: #282A36;
-  --font-family-space-grotesk: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-  /* === SRCBD OFFICIAL COLORS === */
-  --color-srcbd-red: #e63946;
-  --color-srcbd-red-hover: #d62828;
-  --color-srcbd-green: #a8dadc;
-  --color-srcbd-green-hover: #8ac7c9;
-  --color-srcbd-bg: #fdfdfd;
-  --color-srcbd-text: #1d3557;
-  --color-srcbd-border: #e5e7eb;
-  --color-srcbd-dropdown-bg: #ffffff;
-  --color-srcbd-dropdown-shadow: rgba(0, 0, 0, 0.1);
-}
-
 @theme {
   /* Existing */
   --color-deep-teal: var(--color-deep-teal);
@@ -64,6 +33,105 @@
   --color-srcbd-bg: var(--color-srcbd-bg);
   --color-srcbd-text: var(--color-srcbd-text);
   --color-srcbd-border: var(--color-srcbd-border);
+
+  /* BIRST NEW PALETTE */
+  --color-birst-dark: var(--color-birst-dark);
+  --color-birst-primary: var(--color-birst-primary);
+  --color-birst-accent: var(--color-birst-accent);
+  --color-birst-light: var(--color-birst-light);
+}
+
+/* === FONTS === */
+@font-face {
+  font-family: 'Helvetica';
+  src: url('./assets/font/Helvetica.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HelveticaRoundedBold';
+  src: url('./assets/font/helvetica-rounded-bold-5871d05ead8de.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+:root {
+  /* ... existing vars ... */
+  --font-family-helvetica-rounded: 'HelveticaRoundedBold', system-ui, -apple-system, sans-serif;
+}
+
+/* ... existing styles ... */
+
+.btn-registration {
+  background: #000000;
+  /* Primary: Black */
+  color: #FFFFFF;
+  /* Text: White */
+  border: none;
+  border-radius: 9999px;
+  /* pill shape */
+  font-family: var(--font-family-helvetica-rounded);
+  /* Updated Font */
+  font-size: 0.875rem;
+  /* text-sm */
+  font-weight: 700;
+  /* font-bold */
+  text-transform: uppercase;
+  /* uppercase */
+  padding: 0.75rem 2rem;
+  /* px-8 py-3 */
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.39);
+}
+
+:root {
+  /* Your original colors */
+  --color-deep-teal: #1A3C52;
+  --color-hero-bg: #034652;
+  --color-mint-green: #A9D6C5;
+  --color-warm-beige: #F5E8C7;
+  --color-light-sky-blue: #B3D4FC;
+  --color-soft-sand: #D9BBA0;
+  --color-copper: #B85C38;
+  --color-charcoal: #333333;
+  --color-white: #FFFFFF;
+  --color-button-bg: #F5F0E1;
+  --color-button-text: #282A36;
+  --color-button-shadow: #282A36;
+  --color-button-hero-bg: #FAF3E0;
+  --color-button-hero-text: #282A36;
+  --color-button-hero-shadow: #282A36;
+  --font-family-space-grotesk: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-helvetica: 'Helvetica', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-helvetica-bold: 'Helvetica-Bold', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* === SRCBD OFFICIAL COLORS === */
+  --color-srcbd-red: #e63946;
+  --color-srcbd-red-hover: #d62828;
+  --color-srcbd-green: #a8dadc;
+  --color-srcbd-green-hover: #8ac7c9;
+  --color-srcbd-bg: #fdfdfd;
+  --color-srcbd-text: #1d3557;
+  --color-srcbd-border: #e5e7eb;
+  --color-srcbd-dropdown-bg: #ffffff;
+  --color-srcbd-dropdown-shadow: rgba(0, 0, 0, 0.1);
+
+  /* === BIRST DESIGN SYSTEM === */
+  --color-birst-dark: #0B2340;
+  /* Dominant Header/Nav/Footer */
+  --color-birst-primary: #1FB6FF;
+  /* CTAs, Buttons, Links */
+  --color-birst-accent: #7C4DFF;
+  /* Highlights, Badges */
+  --color-birst-light: #F6F8FA;
+  /* Background */
 }
 
 /* === BASE STYLES === */
@@ -81,11 +149,13 @@ html,
 body,
 #root {
   height: 100%;
+  font-size: 18px;
+  /* Zoom effect */
 }
 
 body {
   margin: 0;
-  font-family: var(--font-family-space-grotesk);
+  font-family: var(--font-family-helvetica);
   color: var(--color-charcoal);
   background-color: #ffffff;
   -webkit-font-smoothing: antialiased;
@@ -130,6 +200,7 @@ button {
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -148,11 +219,36 @@ button {
   padding-left: 1rem;
   padding-right: 1rem;
 }
-@media (min-width: 640px) { .container { max-width: 640px; } }
-@media (min-width: 768px) { .container { max-width: 768px; } }
-@media (min-width: 1024px) { .container { max-width: 1024px; } }
-@media (min-width: 1280px) { .container { max-width: 1280px; } }
-@media (min-width: 1536px) { .container { max-width: 1536px; } }
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
 
 /* === NAVBAR STYLES === */
 
@@ -268,32 +364,105 @@ button {
     opacity: 0;
     transform: translateY(-8px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-.animate-float { animation: float 3s ease-in-out infinite; }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
 
-.animate-fade-in-up { animation: fadeInUp 0.5s ease-out both; }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes float {
 
-.animate-slide-in-left { animation: slideInLeft 0.5s ease-out both; }
-@keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
 
-.animate-slide-in-right { animation: slideInRight 0.5s ease-out both; }
-@keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s ease-out both;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s ease-out both;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
 /* === UTILITIES === */
-.text-srcbd-red { color: var(--color-srcbd-red); }
-.hover\:text-srcbd-red:hover { color: var(--color-srcbd-red); }
-.bg-srcbd-red { background-color: var(--color-srcbd-red); }
-.hover\:bg-srcbd-red:hover { background-color: var(--color-srcbd-red); }
-.border-srcbd-red { border-color: var(--color-srcbd-red); }
-.text-srcbd-green { color: var(--color-srcbd-green); }
-.hover\:text-srcbd-green:hover { color: var(--color-srcbd-green); }
+.text-srcbd-red {
+  color: var(--color-srcbd-red);
+}
+
+.hover\:text-srcbd-red:hover {
+  color: var(--color-srcbd-red);
+}
+
+.bg-srcbd-red {
+  background-color: var(--color-srcbd-red);
+}
+
+.hover\:bg-srcbd-red:hover {
+  background-color: var(--color-srcbd-red);
+}
+
+.border-srcbd-red {
+  border-color: var(--color-srcbd-red);
+}
+
+.text-srcbd-green {
+  color: var(--color-srcbd-green);
+}
+
+.hover\:text-srcbd-green:hover {
+  color: var(--color-srcbd-green);
+}
 
 /* === MOBILE RESPONSIVE === */
 @media (max-width: 640px) {
@@ -301,28 +470,44 @@ button {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
-  
-  button, a, input, select, textarea {
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
     min-height: 44px;
   }
-  
-  .space-y-1 > * + * { margin-top: 0.25rem; }
-  .space-y-2 > * + * { margin-top: 0.5rem; }
+
+  .space-y-1>*+* {
+    margin-top: 0.25rem;
+  }
+
+  .space-y-2>*+* {
+    margin-top: 0.5rem;
+  }
 }
 
 /* Tablet */
 @media (min-width: 768px) and (max-width: 1023px) {
-  .md\:text-balance { text-wrap: balance; }
+  .md\:text-balance {
+    text-wrap: balance;
+  }
 }
 
 /* Large */
 @media (min-width: 1280px) {
-  .xl\:text-balance { text-wrap: balance; }
+  .xl\:text-balance {
+    text-wrap: balance;
+  }
 }
 
 /* High DPI */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  img, video {
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+  img,
+  video {
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
   }
@@ -330,27 +515,53 @@ button {
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+
   .animate-float,
   .animate-fade-in-up,
   .animate-slide-in-left,
   .animate-slide-in-right {
     animation: none;
   }
-  .group-hover\:scale-110:hover { transform: none; }
-  .group-hover\:translate-x-1:hover { transform: none; }
+
+  .group-hover\:scale-110:hover {
+    transform: none;
+  }
+
+  .group-hover\:translate-x-1:hover {
+    transform: none;
+  }
 }
 
 /* Print */
 @media print {
-  .no-print { display: none !important; }
-  body { font-size: 12pt; line-height: 1.4; }
-  h1, h2, h3, h4, h5, h6 { page-break-after: avoid; }
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    page-break-after: avoid;
+  }
 }
 
 /* Marquee */
 @keyframes marquee-left {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 .animate-marquee-left {
@@ -383,4 +594,81 @@ button {
 .btn-elevated:active {
   transform: translateY(1px) !important;
   box-shadow: 2px 2px 0px var(--color-button-shadow) !important;
+}
+
+/* === REGISTRATION BUTTON (User Provided) === */
+.btn-registration {
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding: 0.9rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.05rem;
+  font-weight: 700;
+  border-radius: 500px;
+  overflow: hidden;
+  background: #00BFFF;
+  /* Base: Brand Blue (Revealed on hover) */
+  color: #FFFFFF;
+  text-transform: uppercase;
+}
+
+.btn-registration span {
+  position: relative;
+  z-index: 10;
+  transition: color 0.4s;
+}
+
+.btn-registration:hover span {
+  color: #000000;
+  /* Hover Text: Black */
+}
+
+.btn-registration::before,
+.btn-registration::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  content: "";
+}
+
+.btn-registration::before {
+  background: #000000;
+  /* Initial Overlay: Black */
+  width: 120%;
+  left: -10%;
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.btn-registration:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+/* === MARQUEE ANIMATION === */
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  animation: marquee-scroll 40s linear infinite;
+  display: flex;
+  /* Ensure it stays in a row for the effect */
+}
+
+.pause-on-hover:hover {
+  animation-play-state: paused;
 }

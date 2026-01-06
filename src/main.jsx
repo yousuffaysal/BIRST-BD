@@ -22,7 +22,7 @@ import { router } from './Routes/Routes';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; 
+import 'react-toastify/dist/ReactToastify.css';
 import AuthProvider from './Providers/AuthProvider';
 import LoadingScreen from './components/Loading/LoadingScreen';
 import SmoothCursor from './components/ui/SmoothCursor';
@@ -30,26 +30,10 @@ import SmoothCursor from './components/ui/SmoothCursor';
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate app initialization time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // 3 seconds loading time
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-
   return (
     <AuthProvider>
-      <div className="cursor-none">
-        <SmoothCursor />
-        <QueryClientProvider client={queryClient}> 
+      <div>
+        <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
           <ToastContainer position="top-center" autoClose={3000} />
         </QueryClientProvider>

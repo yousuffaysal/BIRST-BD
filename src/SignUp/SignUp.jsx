@@ -11,7 +11,8 @@ import SocialLogin from "../components/SocialLogin";
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { getAuth, signOut } from 'firebase/auth';
 import { AuthContext } from "../Providers/AuthProvider";
-import useAxiosPublic from "../hooks/UseAxiosPublic";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import birstLogo from "../assets/BIRST_LOGO.svg";
 
 
 const SignUp = () => {
@@ -113,7 +114,7 @@ const SignUp = () => {
             if (res.data.insertedId) {
                 reset();
                 await signOut(auth);
-                
+
                 await Swal.fire({
                     title: 'Account Created Successfully!',
                     html: `
@@ -158,29 +159,29 @@ const SignUp = () => {
                     <div className="absolute bottom-20 right-20 w-16 h-16 bg-deep-teal/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
                     <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-light-sky-blue/20 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
                 </div>
-                
+
                 <div className="max-w-lg relative z-10">
                     {/* Logo */}
                     <div className="mb-8">
                         <img
-                            src="/src/assets/logo_lebas.png"
+                            src={birstLogo}
                             alt="The Lebas Buying"
                             className="h-16 w-auto mx-auto mb-4"
                         />
                         <h2 className="text-4xl font-bold font-space-grotesk text-charcoal text-center">
-                            Join <span className="text-deep-teal">The Lebas Buying</span>
+                            Join <span className="text-deep-teal">BIRSTBD</span>
                         </h2>
                     </div>
-                    
+
                     <p className="text-xl font-dm-sans text-charcoal/80 mb-8 leading-relaxed text-center">
                         Crafting Quality<br className="hidden sm:inline" />Garments with Precision
                     </p>
-                    
+
                     {/* Login Button */}
                     <div className="text-center">
                         <p className="text-charcoal/70 font-dm-sans mb-4">Already have an account?</p>
-                        <Link 
-                            to="/login" 
+                        <Link
+                            to="/login"
                             className="btn-elevated px-8 py-4"
                         >
                             Login Here
@@ -195,12 +196,12 @@ const SignUp = () => {
                     {/* Header */}
                     <div className="text-center mt-8">
                         <img
-                            src="/src/assets/logo_lebas.png"
-                            alt="The Lebas Buying"
+                            src={birstLogo}
+                            alt="BIRST"
                             className="h-12 w-auto mx-auto mb-4 lg:hidden"
                         />
                         <h1 className="text-3xl font-bold font-space-grotesk text-deep-teal mb-2">Welcome!</h1>
-                        <p className="text-charcoal/70 font-dm-sans">Create your account to get started</p>
+                        <p className="text-charcoal/70 font-dm-sans">Sign in to access your research portal</p>
                     </div>
 
                     {/* Sign Up Form */}
@@ -310,7 +311,7 @@ const SignUp = () => {
                                     <span className="text-copper text-sm mt-1 font-dm-sans">{errors.password.message}</span>
                                 )}
                             </div>
-                            
+
                             {/* Captcha Section */}
                             <div className="space-y-3 p-4 bg-warm-beige rounded-lg border border-gray-300">
                                 <LoadCanvasTemplate />

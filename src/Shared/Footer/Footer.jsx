@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { 
-  Mail, 
-  Phone, 
-  MapPin, 
-  Facebook, 
-  Linkedin, 
-  Youtube, 
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Facebook,
+  Linkedin,
+  Youtube,
   Twitter,
   Send,
-  ChevronRight
+  ChevronRight,
+  ArrowUp
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import birstLogo from "../../assets/BIRST_LOGO.svg";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Footer = () => {
@@ -30,7 +32,7 @@ const Footer = () => {
     }
 
     try {
-      await axiosPublic.post("/contacts", { 
+      await axiosPublic.post("/contacts", {
         name: "Newsletter Subscriber",
         email: email,
         message: "Newsletter subscription request from footer"
@@ -47,6 +49,7 @@ const Footer = () => {
     { label: "Home", to: "/" },
     { label: "About Us", to: "/about" },
     { label: "Courses", to: "/courses" },
+    { label: "Services", to: "/service" },
     { label: "Research & Publication", to: "/researchAndPublication" },
     { label: "News & Events", to: "/newsAndEvents" },
     { label: "Gallery", to: "/gallery" },
@@ -68,17 +71,29 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-gradient-to-b from-gray-900 to-black text-white mt-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10">
+    <footer className="bg-[var(--color-birst-dark)] text-white mt-0 border-t border-white/5">
+      <div className="w-full px-4 sm:px-8 lg:px-16 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
 
           {/* Brand & About */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <h3 className="text-xl sm:text-2xl font-bold text-indigo-400 mb-3 sm:mb-4">BIRSTBD</h3>
-            <p className="text-gray-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-              Bangladesh Institute for Research and Statistical Training (BIRST) - Empowering minds through 
-              excellence in research and professional development. We provide comprehensive training in statistics, 
-              research methodology, and data analysis.
+            <div className="flex items-center gap-2 mb-4">
+              <img
+                src={birstLogo}
+                alt="BIRST Logo"
+                className="w-10 h-10"
+              />
+              <div className="flex flex-col">
+                <span className="font-medium text-white text-sm leading-tight tracking-wide">
+                  Bangladesh Institute for
+                </span>
+                <span className="font-medium text-white text-sm leading-tight tracking-wide">
+                  Research and Statistical Training
+                </span>
+              </div>
+            </div>
+            <p className="text-gray-400 text-sm leading-relaxed mb-6">
+              Empowering minds through excellence in research and professional development.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social, i) => (
@@ -88,7 +103,7 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-indigo-600 transition"
+                  className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center hover:bg-[var(--color-birst-primary)] hover:text-white transition-all duration-300 text-gray-400"
                 >
                   <social.icon className="w-5 h-5" />
                 </a>
@@ -98,15 +113,15 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">Quick Links</h4>
-            <ul className="space-y-2 sm:space-y-3">
+            <h4 className="text-lg font-bold text-white mb-6">Quick Links</h4>
+            <ul className="space-y-3">
               {quickLinks.map((link, i) => (
                 <li key={i}>
                   <Link
                     to={link.to}
-                    className="text-gray-400 hover:text-indigo-400 transition flex items-center gap-1 text-xs sm:text-sm"
+                    className="text-gray-400 hover:text-[var(--color-birst-primary)] transition flex items-center gap-2 text-sm group"
                   >
-                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <ChevronRight className="w-3 h-3 text-[var(--color-birst-primary)] opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                     {link.label}
                   </Link>
                 </li>
@@ -116,15 +131,15 @@ const Footer = () => {
 
           {/* About Links */}
           <div>
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">About Us</h4>
-            <ul className="space-y-2 sm:space-y-3">
+            <h4 className="text-lg font-bold text-white mb-6">About Us</h4>
+            <ul className="space-y-3">
               {aboutLinks.map((link, i) => (
                 <li key={i}>
                   <Link
                     to={link.to}
-                    className="text-gray-400 hover:text-indigo-400 transition flex items-center gap-1 text-xs sm:text-sm"
+                    className="text-gray-400 hover:text-[var(--color-birst-primary)] transition flex items-center gap-2 text-sm group"
                   >
-                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <ChevronRight className="w-3 h-3 text-[var(--color-birst-primary)] opacity-0 -ml-5 group-hover:opacity-100 group-hover:ml-0 transition-all" />
                     {link.label}
                   </Link>
                 </li>
@@ -134,67 +149,64 @@ const Footer = () => {
 
           {/* Contact Info & Newsletter */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <h4 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-5">Contact Us</h4>
-            <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm text-gray-300 mb-4 sm:mb-6">
-              <div className="flex items-start gap-2 sm:gap-3">
-                <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400 mt-0.5 flex-shrink-0" />
-                <p className="break-words">Dhaka, Bangladesh</p>
+            <h4 className="text-lg font-bold text-white mb-6">Contact Us</h4>
+            <div className="space-y-4 text-sm text-gray-400 mb-8">
+              <div className="flex items-start gap-3 group">
+                <MapPin className="w-5 h-5 text-[var(--color-birst-primary)] mt-0.5 flex-shrink-0 group-hover:animate-bounce" />
+                <p className="leading-relaxed">House #56, Road #03, Dhaka, Bangladesh</p>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <Phone className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400 flex-shrink-0" />
-                <a href="tel:+8801753973892" className="hover:text-indigo-400 break-all">+880 1753-973892</a>
+              <div className="flex items-center gap-3 group">
+                <Phone className="w-5 h-5 text-[var(--color-birst-primary)] flex-shrink-0 group-hover:animate-shake" />
+                <a href="tel:+8801753973892" className="hover:text-white transition">+880 1753-973892</a>
               </div>
-              <div className="flex items-center gap-2 sm:gap-3">
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400 flex-shrink-0" />
-                <a href="mailto:birstbd@gmail.com" className="hover:text-indigo-400 break-all">
-                  birstbd@gmail.com
+              <div className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-[var(--color-birst-primary)] flex-shrink-0" />
+                <a href="mailto:info@birstbd.com" className="hover:text-white transition">
+                  info@birstbd.com
                 </a>
               </div>
             </div>
 
             {/* Newsletter */}
-            <div className="mt-4 sm:mt-6">
-              <h4 className="text-base sm:text-lg font-semibold text-white mb-2 sm:mb-3">Stay Updated</h4>
-              <p className="text-xs sm:text-sm text-gray-400 mb-3 sm:mb-4">
-                Subscribe to get updates on new courses, events, and research insights.
-              </p>
-              <form onSubmit={handleSubscribe} className="space-y-2 sm:space-y-3">
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your email"
-                    className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-gray-800 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs sm:text-sm min-h-[44px]"
-                    aria-label="Email for newsletter"
-                  />
-                  <button
-                    type="submit"
-                    className="px-3 sm:px-4 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 rounded-lg transition flex items-center justify-center gap-1 text-xs sm:text-sm font-medium min-h-[44px] touch-target whitespace-nowrap"
-                  >
-                    <Send className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">Subscribe</span>
-                    <span className="sm:hidden">Sub</span>
-                  </button>
-                </div>
-                {error && <p className="text-red-400 text-xs">{error}</p>}
-                {subscribed && <p className="text-green-400 text-xs">Subscribed successfully!</p>}
+            <div>
+              <h5 className="text-sm font-semibold text-white mb-3">Newsletter</h5>
+              <form onSubmit={handleSubscribe} className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email address"
+                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--color-birst-primary)] transition text-sm"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 top-1 p-2 bg-[var(--color-birst-primary)] hover:bg-[var(--color-birst-accent)] rounded-md text-white transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
               </form>
+              {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
+              {subscribed && <p className="text-green-400 text-xs mt-2">Subscribed!</p>}
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-2 text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-          <p className="break-words">
-            &copy; {new Date().getFullYear()} BIRSTBD (Bangladesh Institute for Research and Statistical Training). All rights reserved.
-          </p>
+        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
           <p>
-            Powered by{" "}
-            <a href="https://foxmenstudio.com" target="_blank" rel="noopener noreferrer" className="text-indigo-400 hover:underline">
-              Foxmen Studio
-            </a>
+            &copy; {new Date().getFullYear()} BIRSTBD. All rights reserved.
           </p>
+          <div className="flex gap-6 items-center">
+            <a href="#" className="hover:text-white transition">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition">Terms of Service</a>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="flex items-center gap-1 hover:text-[var(--color-birst-primary)] transition-colors ml-4 pl-4 border-l border-white/10"
+            >
+              Back to Top
+              <ArrowUp className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

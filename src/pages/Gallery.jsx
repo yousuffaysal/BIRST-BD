@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Calendar, Image, Video, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Calendar, Image, Video, ArrowRight, ArrowLeft, Layers, Sparkles, Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 
 export default function Gallery() {
@@ -22,7 +23,6 @@ export default function Gallery() {
         }
       } catch (error) {
         console.error('Error fetching gallery:', error);
-        // Use sample data
         setPhotoAlbums(samplePhotoAlbums);
         setVideoAlbums(sampleVideoAlbums);
       } finally {
@@ -77,156 +77,199 @@ export default function Gallery() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedAlbums = currentAlbums.slice(startIndex, startIndex + itemsPerPage);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-      </div>
-    );
-  }
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 sm:py-12 px-4 sm:px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Breadcrumbs */}
-        <div className="text-xs sm:text-sm text-gray-600 mb-4 sm:mb-6">
-          <span className="hover:text-indigo-600">Home</span> / <span className="text-gray-900">Gallery</span>
-        </div>
+    <div className="min-h-screen bg-[#F8FAFC] font-sans">
 
-        {/* Page Title */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-gray-900 mb-8 sm:mb-12">
-          Gallery
-        </h1>
+      {/* --- HERO SECTION --- */}
+      <section className="relative pt-32 pb-24 px-4 sm:px-6 bg-[#0F172A] overflow-hidden">
+        {/* Abstract Cinematic Background */}
+        <div className="absolute top-0 right-0 w-[80%] h-full bg-gradient-to-l from-blue-900/10 to-transparent -z-10 pointer-events-none" />
+        <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-[#1FB6FF]/10 rounded-full blur-[120px] -z-10 animate-pulse" />
+        <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] -z-10" />
+
+        <div className="max-w-7xl mx-auto relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#1FB6FF] text-xs font-bold uppercase tracking-wider mb-6 backdrop-blur-md">
+              <Layers className="w-3 h-3" />
+              <span>Visual Archive</span>
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-6">
+              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-sky-300">Gallery</span>
+            </h1>
+
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Explore moments from our journey—workshops, milestones, and the vibrant community that defines us.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* --- CONTENT SECTION --- */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 -mt-8 relative z-20 pb-20">
 
         {/* Tabs */}
-        <div className="flex justify-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-          <button
-            onClick={() => {
-              setActiveTab('photo');
-              setCurrentPage(1);
-            }}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition min-h-[44px] touch-target ${
-              activeTab === 'photo'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            <Image className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden sm:inline">Photo Gallery</span>
-            <span className="sm:hidden">Photos</span>
-          </button>
-          <button
-            onClick={() => {
-              setActiveTab('video');
-              setCurrentPage(1);
-            }}
-            className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg text-xs sm:text-sm md:text-base font-semibold transition min-h-[44px] touch-target ${
-              activeTab === 'video'
-                ? 'bg-indigo-600 text-white'
-                : 'bg-white text-gray-700 hover:bg-gray-100'
-            }`}
-          >
-            <Video className="w-4 h-4 sm:w-5 sm:h-5" />
-            <span className="hidden sm:inline">Video Gallery</span>
-            <span className="sm:hidden">Videos</span>
-          </button>
+        <div className="flex justify-center mb-12">
+          <div className="bg-white p-1.5 rounded-full shadow-xl shadow-gray-200/50 inline-flex">
+            {['photo', 'video'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setCurrentPage(1);
+                }}
+                className={`relative px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 min-w-[140px] z-10 outline-none
+                            ${activeTab === tab ? 'text-white' : 'text-gray-500 hover:text-gray-900'}`}
+              >
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="activeTabGallery"
+                    className="absolute inset-0 bg-[#1FB6FF] rounded-full shadow-md"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {tab === 'photo' ? <Image className="w-4 h-4" /> : <Video className="w-4 h-4" />}
+                  {tab === 'photo' ? 'Photo Gallery' : 'Video Gallery'}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          {paginatedAlbums.map((album) => (
-            <div
-              key={album._id}
-              className="bg-white rounded-lg sm:rounded-xl shadow-md hover:shadow-xl transition-all overflow-hidden group"
+        <AnimatePresence mode="wait">
+          {loading ? (
+            <motion.div
+              key="loader"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex justify-center py-20"
             >
-              {/* Thumbnail */}
-              <div className="relative overflow-hidden bg-gradient-to-br from-green-500 to-blue-500 h-40 sm:h-48">
-                {album.thumbnail ? (
-                  <img
-                    src={album.thumbnail}
-                    alt={album.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white p-3 sm:p-4">
-                    <div className="text-center">
-                      <p className="text-xs sm:text-sm mb-1 sm:mb-2">SRCBD</p>
-                      <p className="text-sm sm:text-base md:text-lg font-bold">{album.title}</p>
-                    </div>
-                  </div>
-                )}
-                {activeTab === 'video' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-white/90 rounded-full flex items-center justify-center">
-                      <Video className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-indigo-600" />
-                    </div>
-                  </div>
-                )}
-              </div>
+              <div className="w-12 h-12 border-4 border-blue-100 border-t-[#1FB6FF] rounded-full animate-spin" />
+            </motion.div>
+          ) : (
+            <motion.div
+              key={activeTab + currentPage}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {paginatedAlbums.map((album) => (
+                <motion.div
+                  key={album._id}
+                  variants={itemVariants}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-blue-100/50 transition-all duration-500 border border-gray-100"
+                >
+                  {/* Thumbnail */}
+                  <div className="relative h-64 overflow-hidden">
+                    <div className="absolute inset-0 bg-gray-900/20 group-hover:bg-gray-900/40 transition-colors duration-500 z-10" />
 
-              {/* Content */}
-              <div className="p-3 sm:p-4">
-                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2 line-clamp-2">
-                  {album.title}
-                </h3>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-                  {activeTab === 'photo' ? (
-                    <Link
-                      to={`/gallery/photo/${album._id}`}
-                      className="flex items-center gap-1.5 sm:gap-2 text-indigo-600 font-semibold hover:gap-2.5 sm:hover:gap-3 transition-all group text-sm sm:text-base"
-                    >
-                      See Album
-                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/gallery/video"
-                      className="flex items-center gap-1.5 sm:gap-2 text-indigo-600 font-semibold hover:gap-2.5 sm:hover:gap-3 transition-all group text-sm sm:text-base"
-                    >
-                      See Videos
-                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
-                    </Link>
-                  )}
-                  <div className="flex items-center gap-1 text-gray-500 text-xs sm:text-sm">
-                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {new Date(album.date).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
+                    {album.thumbnail ? (
+                      <img
+                        src={album.thumbnail}
+                        alt={album.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-400 font-bold">No Image</span>
+                      </div>
+                    )}
+
+                    {/* Overlay Content */}
+                    <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {activeTab === 'photo' ? (
+                        <Link
+                          to={`/gallery/photo/${album._id}`}
+                          className="px-6 py-3 bg-white/90 backdrop-blur-sm rounded-full text-gray-900 font-bold text-sm transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 hover:bg-[#1FB6FF] hover:text-white"
+                        >
+                          View Album
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/gallery/video"
+                          className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-[#1FB6FF] transform scale-50 group-hover:scale-100 transition-all duration-300 hover:bg-[#1FB6FF] hover:text-white"
+                        >
+                          <Play className="w-6 h-6 ml-1 fill-current" />
+                        </Link>
+                      )}
+                    </div>
+
+                    <div className="absolute bottom-4 left-4 z-20 text-white/90 text-xs font-bold bg-black/40 px-3 py-1 rounded-full backdrop-blur-md">
+                      <div className="flex items-center gap-1.5">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(album.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                      </div>
+                    </div>
                   </div>
-                </div>
-                {activeTab === 'photo' && album.imageCount && (
-                  <p className="text-xs sm:text-sm text-gray-500 mt-2">
-                    {album.imageCount} photos
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
+
+                  {/* Card Body */}
+                  <div className="p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#1FB6FF] transition-colors">
+                      {album.title}
+                    </h3>
+                    {activeTab === 'photo' && album.imageCount && (
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Image className="w-4 h-4" />
+                        <span>{album.imageCount} Photos</span>
+                      </div>
+                    )}
+                    {activeTab === 'video' && (
+                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <Video className="w-4 h-4" />
+                        <span>Video Content</span>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 sm:gap-4">
+          <div className="flex justify-center items-center gap-4 mt-16">
             <button
               onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
-              className="px-3 sm:px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 min-h-[44px] touch-target"
-              aria-label="Previous page"
+              className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#1FB6FF] hover:text-white hover:border-[#1FB6FF] transition-all"
             >
-              <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ArrowLeft className="w-5 h-5" />
             </button>
-            <span className="px-3 sm:px-4 py-2 text-xs sm:text-sm md:text-base text-gray-700 font-semibold">
-              {currentPage} / {totalPages}
+            <span className="text-sm font-bold text-gray-400 tracking-wider">
+              PAGE {currentPage} / {totalPages}
             </span>
             <button
               onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
               disabled={currentPage === totalPages}
-              className="px-3 sm:px-4 py-2 rounded-lg border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 min-h-[44px] touch-target"
-              aria-label="Next page"
+              className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-[#1FB6FF] hover:text-white hover:border-[#1FB6FF] transition-all"
             >
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ArrowRight className="w-5 h-5" />
             </button>
           </div>
         )}

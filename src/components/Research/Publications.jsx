@@ -89,7 +89,7 @@ export default function Publications() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
     );
   }
@@ -99,7 +99,7 @@ export default function Publications() {
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center">
             <FileText className="w-8 h-8 text-white" />
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function Publications() {
               placeholder="Search publications by title, author, or abstract..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -130,7 +130,7 @@ export default function Publications() {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -141,7 +141,7 @@ export default function Publications() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -155,7 +155,7 @@ export default function Publications() {
 
       {/* Results */}
       <div className="text-gray-600">
-        Found <span className="font-bold text-indigo-600">{filteredPublications.length}</span> publications
+        Found <span className="font-bold text-blue-600">{filteredPublications.length}</span> publications
       </div>
 
       {/* Publications List */}
@@ -169,7 +169,7 @@ export default function Publications() {
           {filteredPublications.map((publication) => (
             <div
               key={publication._id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-indigo-500"
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-blue-500"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
@@ -194,7 +194,7 @@ export default function Publications() {
                     <p className="text-xs text-gray-500 mb-4">DOI: {publication.doi}</p>
                   )}
                 </div>
-                <span className="px-3 py-1 bg-indigo-100 text-indigo-700 text-xs font-semibold rounded ml-4">
+                <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded ml-4">
                   {publication.category}
                 </span>
               </div>
@@ -204,12 +204,12 @@ export default function Publications() {
                   href={publication.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition"
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Read Full Text
                 </a>
-                <button className="flex items-center gap-2 px-4 py-2 border border-indigo-600 text-indigo-600 rounded-lg hover:bg-indigo-50 transition">
+                <button className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
                   <Download className="w-4 h-4" />
                   PDF
                 </button>
@@ -225,6 +225,3 @@ export default function Publications() {
     </div>
   );
 }
-
-
-

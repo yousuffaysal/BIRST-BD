@@ -1,7 +1,7 @@
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../hooks/UseAuth";
-import useAxiosPublic from "../hooks/UseAxiosPublic";
+
 import { toast } from "react-toastify";
 
 const GoogleIcon = () => (

@@ -24,8 +24,8 @@ export default function FieldGuides() {
     {
       field: 'Social Sciences',
       icon: GraduationCap,
-      bgColor: 'bg-purple-100',
-      textColor: 'text-purple-600',
+      bgColor: 'bg-sky-100',
+      textColor: 'text-sky-600',
       description: 'Guide for psychology, sociology, anthropology, and political science research.',
       topics: ['Surveys & Interviews', 'Qualitative Analysis', 'Ethnography', 'Case Studies'],
       resources: 38,
@@ -51,8 +51,8 @@ export default function FieldGuides() {
     {
       field: 'Mathematics & Statistics',
       icon: Calculator,
-      bgColor: 'bg-indigo-100',
-      textColor: 'text-indigo-600',
+      bgColor: 'bg-blue-100',
+      textColor: 'text-blue-600',
       description: 'Mathematical research methodologies, statistical analysis, and computational methods.',
       topics: ['Theoretical Proofs', 'Computational Methods', 'Statistical Modeling', 'Data Science'],
       resources: 28,
@@ -94,7 +94,7 @@ export default function FieldGuides() {
           return (
             <div
               key={index}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-t-4 border-indigo-500 group cursor-pointer"
+              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-t-4 border-blue-500 group cursor-pointer"
             >
               <div className={`w-14 h-14 ${guide.bgColor} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
                 <Icon className={`w-7 h-7 ${guide.textColor}`} />
@@ -119,9 +119,9 @@ export default function FieldGuides() {
 
               <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                 <span className="text-sm text-gray-600">
-                  <span className="font-bold text-indigo-600">{guide.resources}</span> resources
+                  <span className="font-bold text-blue-600">{guide.resources}</span> resources
                 </span>
-                <button className="flex items-center gap-2 text-indigo-600 font-semibold text-sm group-hover:gap-3 transition-all">
+                <button className="flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-3 transition-all">
                   Explore
                   <ArrowRight className="w-4 h-4" />
                 </button>
@@ -132,9 +132,9 @@ export default function FieldGuides() {
       </div>
 
       {/* Getting Started Section */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl shadow-lg p-8 text-white">
         <h3 className="text-2xl font-bold mb-4">New to Research in Your Field?</h3>
-        <p className="mb-6 text-indigo-100">
+        <p className="mb-6 text-blue-100">
           Get started with our beginner-friendly guides that walk you through the fundamentals of conducting research in your specific field.
         </p>
         <div className="grid md:grid-cols-3 gap-4">

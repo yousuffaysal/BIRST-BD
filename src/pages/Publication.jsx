@@ -232,6 +232,3 @@ export default function Publication() {
     </div>
   );
 }
-
-
-

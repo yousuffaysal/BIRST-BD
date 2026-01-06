@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Send, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { MapPin, Phone, Mail, Send, Clock, BookOpen, Users, HelpCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import { toast } from 'react-toastify';
 
@@ -8,7 +9,7 @@ export default function ContactUs() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    mobile: '',
+    university: '',
     subject: '',
     message: '',
     captcha: '',
@@ -17,7 +18,7 @@ export default function ContactUs() {
   const [loading, setLoading] = useState(false);
 
   // Generate simple math captcha
-  React.useEffect(() => {
+  useEffect(() => {
     const num1 = Math.floor(Math.random() * 10) + 1;
     const num2 = Math.floor(Math.random() * 10) + 1;
     setCaptchaAnswer(num1 + num2);
@@ -32,7 +33,7 @@ export default function ContactUs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validate captcha
     if (parseInt(formData.captcha) !== captchaAnswer) {
       toast.error('Incorrect captcha answer. Please try again.');
@@ -40,27 +41,32 @@ export default function ContactUs() {
     }
 
     // Validate required fields
-    if (!formData.name || !formData.email || !formData.mobile || !formData.subject || !formData.message) {
+    if (!formData.name || !formData.email || !formData.university || !formData.subject || !formData.message) {
       toast.error('Please fill in all required fields.');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await axiosPublic.post('/contacts', {
+      // Appending University to message or sending as payload if supported. 
+      // Sending as separate field for now, but also appending to message for safety in case backend ignores unknown fields.
+      const payload = {
         name: formData.name,
         email: formData.email,
-        phone: formData.mobile,
+        university: formData.university,
+        phone: "N/A", // Phone field removed from UI as per new requirement "name, mail, subject, description, University"
         subject: formData.subject,
-        message: formData.message,
-      });
+        message: `University: ${formData.university}\n\n${formData.message}`,
+      };
+
+      const response = await axiosPublic.post('/contacts', payload);
 
       if (response.data.insertedId) {
         toast.success('Message sent successfully! We will get back to you soon.');
         setFormData({
           name: '',
           email: '',
-          mobile: '',
+          university: '',
           subject: '',
           message: '',
           captcha: '',
@@ -83,183 +89,252 @@ export default function ContactUs() {
   const captchaNum2 = captchaAnswer - captchaNum1;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Breadcrumbs */}
-        <div className="text-sm text-gray-600 mb-6">
-          <span className="hover:text-indigo-600">Home</span> / <span className="text-gray-900">Contact Us</span>
+    <div className="min-h-screen bg-[#fffff0] text-[#0B2340] font-sans selection:bg-[#1FB6FF] selection:text-white">
+
+      {/* Header Section */}
+      <section className="bg-[#0B2340] text-white pt-36 pb-20 px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto"
+        >
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 text-[#1FB6FF] uppercase tracking-wider">Contact Us</h1>
+          <p className="text-xl md:text-2xl text-[#8892b0] mb-8 leading-relaxed">
+            We would love to hear from you.
+          </p>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Whether you have questions about our training programs, seminars, research tools, collaborations, or student activities, the BIRST team is always ready to assist you.
+          </p>
+        </motion.div>
+      </section>
+
+      {/* Intro Statement */}
+      <section className="py-16 px-6 max-w-7xl mx-auto text-center">
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-lg md:text-xl text-[#0B2340]/80 leading-relaxed max-w-4xl mx-auto"
+        >
+          At Bangladesh Institute of Research and Statistical Training (BIRST), we believe communication is the first step toward meaningful learning and impactful research. Feel free to reach out to us for academic support, institutional partnerships, or general inquiries.
+        </motion.p>
+      </section>
+
+      <div className="max-w-7xl mx-auto px-6 pb-24 grid lg:grid-cols-2 gap-16">
+
+        {/* Left Column: Contact Info & Inquiries */}
+        <div className="space-y-16">
+
+          {/* Get in Touch */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-2xl font-bold mb-8 border-b-2 border-[#1FB6FF] inline-block pb-2">Get in Touch</h2>
+
+            <div className="space-y-8">
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-[#1FB6FF]/10 rounded-full flex items-center justify-center flex-shrink-0 text-[#1FB6FF]">
+                  <MapPin className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Address</h3>
+                  <p className="text-gray-600">Bangladesh Institute of Research and Statistical Training (BIRST)</p>
+                  <p className="text-gray-600">Bangladesh</p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-[#1FB6FF]/10 rounded-full flex items-center justify-center flex-shrink-0 text-[#1FB6FF]">
+                  <Mail className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Email</h3>
+                  <p className="text-gray-600"><a href="mailto:info@birstbd.com" className="hover:text-[#1FB6FF]">info@birstbd.com</a></p>
+                  <p className="text-gray-600"><a href="mailto:contact@birstbd.com" className="hover:text-[#1FB6FF]">contact@birstbd.com</a></p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-[#1FB6FF]/10 rounded-full flex items-center justify-center flex-shrink-0 text-[#1FB6FF]">
+                  <Phone className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Phone</h3>
+                  <p className="text-gray-600"><a href="tel:+880-XXXXXXXXXX" className="hover:text-[#1FB6FF]">+880-XXXXXXXXXX</a></p>
+                </div>
+              </div>
+
+              <div className="flex gap-4">
+                <div className="w-12 h-12 bg-[#1FB6FF]/10 rounded-full flex items-center justify-center flex-shrink-0 text-[#1FB6FF]">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg mb-1">Office Hours</h3>
+                  <p className="text-gray-600">Sunday – Thursday</p>
+                  <p className="text-gray-600">10:00 AM – 6:00 PM</p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Academic & Training Inquiries */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 border-b-2 border-[#1FB6FF] inline-block pb-2">Academic & Training Inquiries</h2>
+            <p className="mb-4 text-gray-700 font-medium">For questions related to:</p>
+            <ul className="space-y-2 mb-6 text-gray-600 list-disc pl-5 marker:text-[#1FB6FF]">
+              <li>Research methodology training</li>
+              <li>Statistical analysis workshops</li>
+              <li>AI-powered research tools</li>
+              <li>Seminars and academic sessions</li>
+              <li>Student enrollment and progress tracking</li>
+            </ul>
+            <p className="text-sm text-gray-500 italic">Please email us with a clear subject line, and our academic coordination team will respond as soon as possible.</p>
+          </motion.div>
+
+          {/* Collaboration & Partnership */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
+            <h2 className="text-2xl font-bold mb-6 border-b-2 border-[#1FB6FF] inline-block pb-2">Collaboration & Partnership</h2>
+            <p className="mb-4 text-gray-700 font-medium">We welcome collaboration with:</p>
+            <ul className="space-y-2 mb-6 text-gray-600 list-disc pl-5 marker:text-[#1FB6FF]">
+              <li>Universities and research institutions</li>
+              <li>Faculty members and researchers</li>
+              <li>Academic organizations and professionals</li>
+            </ul>
+            <p className="text-sm text-gray-500 italic">If you are interested in hosting seminars, conducting joint research, or contributing as a trainer, please contact us via email with your proposal.</p>
+          </motion.div>
+
         </div>
 
-        {/* Page Title */}
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-12">
-          Contact Us
-        </h1>
+        {/* Right Column: Contact Form */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="lg:sticky lg:top-24 h-fit"
+        >
+          <div className="bg-white p-8 md:p-10 rounded-3xl shadow-xl border border-gray-100">
+            <h2 className="text-3xl font-bold text-[#0B2340] mb-2">Send Us a Message</h2>
+            <p className="text-gray-500 mb-8">
+              Have a question or suggestion? Use the contact form below to send us a message. Our team will get back to you within 24–48 working hours.
+            </p>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Left Section - Contact Details */}
-          <div className="space-y-6 sm:space-y-8">
-            <div>
-              <h2 className="text-red-600 font-semibold text-xs sm:text-sm uppercase mb-2">CONTACT DETAILS</h2>
-              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">Get in Touch</h3>
-              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                Statistical Research Consultants Bangladesh (SRCBD) is a research-based consultancy firm from Dhaka, Bangladesh.
-              </p>
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] focus:border-transparent transition-all"
+                />
+              </div>
 
-            {/* Address */}
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">Our Address</h4>
-                <p className="text-xs sm:text-sm text-gray-600">
-                  118/1 Anol, Dakkhinkhan, Dhaka-1230, Bangladesh.
-                </p>
-              </div>
-            </div>
-
-            {/* Contact */}
-            <div className="flex items-start gap-3 sm:gap-4">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Phone className="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
-              </div>
-              <div className="flex-1">
-                <h4 className="text-sm sm:text-base font-semibold text-gray-900 mb-1">Contact</h4>
-                <p className="text-xs sm:text-sm text-gray-600 mb-1">
-                  <a href="tel:+8801792087904" className="hover:text-indigo-600 transition break-all">
-                    +8801792087904
-                  </a>
-                </p>
-                <p className="text-xs sm:text-sm text-gray-600">
-                  <a href="mailto:srcbd.org@gmail.com" className="hover:text-indigo-600 transition break-all">
-                    srcbd.org@gmail.com
-                  </a>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Section - Contact Form */}
-          <div className="relative w-full">
-            <div className="bg-gradient-to-br from-red-500 via-pink-500 to-red-600 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 relative overflow-hidden">
-              {/* Decorative wave pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <svg className="w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="none">
-                  <path
-                    d="M0,200 Q100,150 200,200 T400,200 L400,0 L0,0 Z"
-                    fill="currentColor"
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="john@example.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] focus:border-transparent transition-all"
                   />
-                </svg>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">University / Institute</label>
+                  <input
+                    type="text"
+                    name="university"
+                    placeholder="e.g. University of Dhaka"
+                    value={formData.university}
+                    onChange={handleChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] focus:border-transparent transition-all"
+                  />
+                </div>
               </div>
 
-              <div className="relative z-10">
-                <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 sm:mb-4">
-                  Ready to Get Started?
-                </h2>
-                <p className="text-white/90 text-xs sm:text-sm mb-4 sm:mb-6">
-                  Your email address will not be published. Required fields are marked *
-                </p>
-
-                <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="name"
-                      placeholder="Your Name*"
-                      value={formData.name}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-[44px]"
-                    />
-                  </div>
-
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder="Your Email*"
-                      value={formData.email}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-[44px]"
-                    />
-                  </div>
-
-                  <div>
-                    <input
-                      type="tel"
-                      name="mobile"
-                      placeholder="Your Mobile*"
-                      value={formData.mobile}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-[44px]"
-                    />
-                  </div>
-
-                  <div>
-                    <input
-                      type="text"
-                      name="subject"
-                      placeholder="Subject*"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-[44px]"
-                    />
-                  </div>
-
-                  <div>
-                    <textarea
-                      name="message"
-                      placeholder="Write your message..."
-                      rows="5"
-                      value={formData.message}
-                      onChange={handleChange}
-                      required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none min-h-[120px]"
-                    />
-                  </div>
-
-                  {/* Captcha */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3">
-                    <span className="text-white text-sm sm:text-base font-semibold">
-                      {captchaNum1} + {captchaNum2} =
-                    </span>
-                    <input
-                      type="number"
-                      name="captcha"
-                      placeholder="Answer"
-                      value={formData.captcha}
-                      onChange={handleChange}
-                      required
-                      className="w-full sm:w-24 px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg bg-red-600/20 backdrop-blur-sm border border-red-400/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 min-h-[44px]"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-h-[44px] touch-target"
-                  >
-                    {loading ? (
-                      <>
-                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5" />
-                        Send Message
-                      </>
-                    )}
-                  </button>
-                </form>
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Subject</label>
+                <input
+                  type="text"
+                  name="subject"
+                  placeholder="How can we help?"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] focus:border-transparent transition-all"
+                />
               </div>
-            </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Message</label>
+                <textarea
+                  name="message"
+                  placeholder="Write your message details here..."
+                  rows="5"
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] focus:border-transparent resize-none transition-all"
+                />
+              </div>
+
+              {/* Captcha */}
+              <div className="flex items-center gap-4 bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <span className="text-[#0B2340] font-bold text-lg whitespace-nowrap">
+                  {captchaNum1} + {captchaNum2} =
+                </span>
+                <input
+                  type="number"
+                  name="captcha"
+                  placeholder="?"
+                  value={formData.captcha}
+                  onChange={handleChange}
+                  required
+                  className="w-24 px-4 py-2 rounded-lg bg-white border border-gray-300 text-[#0B2340] focus:outline-none focus:ring-2 focus:ring-[#1FB6FF] text-center font-bold"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-[#1FB6FF] hover:bg-[#0099e6] text-white font-bold py-4 rounded-xl transition-all transform hover:scale-[1.01] shadow-lg shadow-blue-500/20 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5" />
+                    Send Message
+                  </>
+                )}
+              </button>
+            </form>
           </div>
-        </div>
+        </motion.div>
+
       </div>
     </div>
   );

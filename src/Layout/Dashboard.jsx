@@ -26,6 +26,7 @@ import Swal from "sweetalert2";
 import useAdmin from "../hooks/useAdmin";
 import Loading from "../components/Loading/Loading";
 import { AuthContext } from "../Providers/AuthProvider";
+import logo from "../assets/BIRST_LOGO.svg";
 
 const Dashboard = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -115,10 +116,9 @@ const Dashboard = () => {
       to={to}
       onClick={closeSidebar}
       className={({ isActive }) =>
-        `group flex items-center justify-between gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 min-h-[44px] touch-target ${
-          isActive
-            ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg shadow-indigo-500/30"
-            : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
+        `group flex items-center justify-between gap-3 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 min-h-[44px] touch-target ${isActive
+          ? "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg shadow-indigo-500/30"
+          : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 hover:shadow-md"
         }`
       }
     >
@@ -129,9 +129,8 @@ const Dashboard = () => {
         <span className="text-xs sm:text-sm font-semibold truncate">{label}</span>
       </div>
       <ChevronRight
-        className={`h-4 w-4 flex-shrink-0 transition-transform ${
-          location.pathname === to ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
-        }`}
+        className={`h-4 w-4 flex-shrink-0 transition-transform ${location.pathname === to ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0"
+          }`}
       />
     </NavLink>
   );
@@ -144,7 +143,7 @@ const Dashboard = () => {
       to: "/dashboard/profile",
       icon: <User className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "Profile",
-      show: user && isAdmin === false,
+      show: user,
     },
     {
       to: "/dashboard/manage-users",
@@ -198,13 +197,13 @@ const Dashboard = () => {
       to: "/dashboard/payment-history",
       icon: <History className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "Payment History",
-      show: user && isAdmin === false,
+      show: user && isAdmin,
     },
     {
       to: "/dashboard/my-bookings",
       icon: <BookMarked className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "My Bookings",
-      show: user && isAdmin === false,
+      show: user && isAdmin,
     },
   ].filter((item) => item.show);
 
@@ -236,9 +235,8 @@ const Dashboard = () => {
 
       {/* Sidebar */}
       <aside
-        className={`fixed lg:static h-full w-72 sm:w-80 lg:w-80 xl:w-96 bg-white border-r border-gray-200 shadow-2xl transition-transform duration-300 ease-in-out z-40 ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0`}
+        className={`fixed lg:static h-full w-72 sm:w-80 lg:w-80 xl:w-96 bg-white border-r border-gray-200 shadow-2xl transition-transform duration-300 ease-in-out z-40 ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:translate-x-0`}
       >
         <div className="h-full flex flex-col justify-between overflow-hidden">
           {/* Top Section */}
@@ -246,9 +244,7 @@ const Dashboard = () => {
             <div className="p-4 sm:p-5 lg:p-6">
               {/* Logo/Brand Section */}
               <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8 pb-4 sm:pb-6 border-b border-gray-200">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-gradient-to-br from-indigo-600 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Crown className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
-                </div>
+                <img src={logo} alt="BIRSTBD" className="h-10 w-auto" />
                 <div className="flex-1 min-w-0">
                   <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 tracking-wide truncate">
                     Dashboard

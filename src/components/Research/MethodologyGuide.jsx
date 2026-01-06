@@ -121,13 +121,13 @@ export default function MethodologyGuide() {
                 onClick={() => setSelectedMethod(method.id)}
                 className={`p-6 rounded-lg border-2 transition-all text-left ${
                   selectedMethod === method.id
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-indigo-300 hover:bg-gray-50'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300 hover:bg-gray-50'
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">
-                  <Icon className={`w-6 h-6 ${selectedMethod === method.id ? 'text-indigo-600' : 'text-gray-600'}`} />
-                  <h4 className={`font-bold text-lg ${selectedMethod === method.id ? 'text-indigo-900' : 'text-gray-900'}`}>
+                  <Icon className={`w-6 h-6 ${selectedMethod === method.id ? 'text-blue-600' : 'text-gray-600'}`} />
+                  <h4 className={`font-bold text-lg ${selectedMethod === method.id ? 'text-blue-900' : 'text-gray-900'}`}>
                     {method.name}
                   </h4>
                 </div>
@@ -160,7 +160,7 @@ export default function MethodologyGuide() {
             {currentMethodology.methods.map((method, methodIndex) => (
               <div
                 key={methodIndex}
-                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-indigo-500"
+                className="bg-white rounded-xl shadow-md p-6 border-l-4 border-blue-500"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -175,9 +175,9 @@ export default function MethodologyGuide() {
                     {method.steps.map((step, stepIndex) => (
                       <div
                         key={stepIndex}
-                        className="flex items-center gap-2 px-3 py-2 bg-indigo-50 rounded-lg"
+                        className="flex items-center gap-2 px-3 py-2 bg-blue-50 rounded-lg"
                       >
-                        <span className="w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                        <span className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
                           {stepIndex + 1}
                         </span>
                         <span className="text-sm text-gray-700">{step}</span>
@@ -192,12 +192,12 @@ export default function MethodologyGuide() {
       )}
 
       {/* Methodology Comparison */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl shadow-lg p-8 text-white">
         <h3 className="text-2xl font-bold mb-4">Choosing the Right Methodology</h3>
         <div className="grid md:grid-cols-3 gap-6">
           <div>
             <h4 className="font-bold mb-2">Use Quantitative When:</h4>
-            <ul className="space-y-1 text-sm text-indigo-100">
+            <ul className="space-y-1 text-sm text-blue-100">
               <li>• You need measurable, numerical data</li>
               <li>• You want to generalize findings</li>
               <li>• Testing hypotheses</li>
@@ -206,7 +206,7 @@ export default function MethodologyGuide() {
           </div>
           <div>
             <h4 className="font-bold mb-2">Use Qualitative When:</h4>
-            <ul className="space-y-1 text-sm text-indigo-100">
+            <ul className="space-y-1 text-sm text-blue-100">
               <li>• Exploring new phenomena</li>
               <li>• Understanding experiences</li>
               <li>• Context is important</li>
@@ -215,7 +215,7 @@ export default function MethodologyGuide() {
           </div>
           <div>
             <h4 className="font-bold mb-2">Use Mixed Methods When:</h4>
-            <ul className="space-y-1 text-sm text-indigo-100">
+            <ul className="space-y-1 text-sm text-blue-100">
               <li>• Need comprehensive understanding</li>
               <li>• Validating findings</li>
               <li>• Complex research questions</li>
@@ -227,6 +227,3 @@ export default function MethodologyGuide() {
     </div>
   );
 }
-
-
-

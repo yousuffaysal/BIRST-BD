@@ -84,8 +84,8 @@ export default function ResearchGuidance() {
       title: 'Citation Standards',
       description: 'APA, MLA, and Chicago style guides',
       icon: Book,
-      bgColor: 'bg-purple-100',
-      textColor: 'text-purple-600',
+      bgColor: 'bg-sky-100',
+      textColor: 'text-sky-600',
     },
     {
       title: 'Peer Review',
@@ -99,17 +99,17 @@ export default function ResearchGuidance() {
   return (
     <div className="space-y-12">
       {/* Introduction */}
-      <div className="bg-white rounded-2xl shadow-lg p-8">
+      <div className="bg-white rounded-2xl shadow-lg p-8 border border-blue-50">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-200">
             <Lightbulb className="w-8 h-8 text-white" />
           </div>
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Research Guidance</h2>
-            <p className="text-gray-600">Step-by-step guidance for conducting research</p>
+            <p className="text-gray-500">Step-by-step guidance for conducting research</p>
           </div>
         </div>
-        <p className="text-lg text-gray-700 leading-relaxed">
+        <p className="text-lg text-gray-600 leading-relaxed">
           Whether you're a beginner researcher or an experienced academic, our comprehensive guide will help you navigate the research process from conception to publication. Follow these structured steps to ensure your research is rigorous, ethical, and impactful.
         </p>
       </div>
@@ -120,18 +120,18 @@ export default function ResearchGuidance() {
         {guideSteps.map((step, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-l-4 border-indigo-500"
+            className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-l-4 border-blue-500 group"
           >
             <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                <span className="text-xl font-bold text-indigo-600">{step.step}</span>
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                <span className="text-xl font-bold text-blue-600">{step.step}</span>
               </div>
               <div className="flex-grow">
                 <h4 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h4>
-                <p className="text-gray-700 mb-4">{step.description}</p>
+                <p className="text-gray-600 mb-4">{step.description}</p>
                 <ul className="space-y-2">
                   {step.tips.map((tip, tipIndex) => (
-                    <li key={tipIndex} className="flex items-start gap-2 text-gray-600">
+                    <li key={tipIndex} className="flex items-start gap-2 text-gray-500">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <span>{tip}</span>
                     </li>
@@ -150,16 +150,16 @@ export default function ResearchGuidance() {
           {resources.map((resource, index) => {
             const Icon = resource.icon;
             return (
-                <div
-                  key={index}
-                  className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all cursor-pointer group"
-                >
-                  <div className={`w-12 h-12 ${resource.bgColor} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <Icon className={`w-6 h-6 ${resource.textColor}`} />
-                  </div>
+              <div
+                key={index}
+                className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all cursor-pointer group border border-gray-100 hover:border-blue-100"
+              >
+                <div className={`w-12 h-12 ${resource.bgColor} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                  <Icon className={`w-6 h-6 ${resource.textColor}`} />
+                </div>
                 <h4 className="text-lg font-bold text-gray-900 mb-2">{resource.title}</h4>
-                <p className="text-gray-600 text-sm mb-4">{resource.description}</p>
-                <button className="flex items-center gap-2 text-indigo-600 font-semibold text-sm group-hover:gap-3 transition-all">
+                <p className="text-gray-500 text-sm mb-4">{resource.description}</p>
+                <button className="flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-3 transition-all">
                   Learn More
                   <ArrowRight className="w-4 h-4" />
                 </button>

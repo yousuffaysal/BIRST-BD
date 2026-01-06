@@ -70,8 +70,8 @@ export default function ResearchTools() {
     {
       category: 'Survey & Data Collection',
       icon: Database,
-      bgColor: 'bg-purple-100',
-      textColor: 'text-purple-600',
+      bgColor: 'bg-sky-100',
+      textColor: 'text-sky-600',
       tools: [
         {
           name: 'Google Forms',
@@ -160,8 +160,8 @@ export default function ResearchTools() {
     {
       category: 'Data Visualization',
       icon: BarChart3,
-      bgColor: 'bg-indigo-100',
-      textColor: 'text-indigo-600',
+      bgColor: 'bg-blue-100',
+      textColor: 'text-blue-600',
       tools: [
         {
           name: 'Tableau',
@@ -196,7 +196,7 @@ export default function ResearchTools() {
       {/* Header */}
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center">
             <Database className="w-8 h-8 text-white" />
           </div>
           <div>
@@ -225,7 +225,7 @@ export default function ResearchTools() {
               {category.tools.map((tool, toolIndex) => (
                 <div
                   key={toolIndex}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all hover:border-indigo-300"
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-all hover:border-blue-300"
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
@@ -242,7 +242,7 @@ export default function ResearchTools() {
                     href={tool.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-indigo-600 font-semibold text-sm hover:gap-3 transition-all"
+                    className="inline-flex items-center gap-2 text-blue-600 font-semibold text-sm hover:gap-3 transition-all"
                   >
                     Visit Website
                     <ExternalLink className="w-4 h-4" />
@@ -255,15 +255,15 @@ export default function ResearchTools() {
       })}
 
       {/* Getting Started Guide */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-lg p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-sky-600 rounded-2xl shadow-lg p-8 text-white">
         <h3 className="text-2xl font-bold mb-4">Getting Started with Research Tools</h3>
-        <p className="mb-6 text-indigo-100">
+        <p className="mb-6 text-blue-100">
           Not sure which tools to use? Our beginner's guide will help you choose the right tools based on your research needs and field of study.
         </p>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-white/10 rounded-lg p-4">
             <h4 className="font-bold mb-2">For Beginners</h4>
-            <ul className="space-y-1 text-sm text-indigo-100">
+            <ul className="space-y-1 text-sm text-blue-100">
               <li>• Start with free, user-friendly tools</li>
               <li>• Take advantage of tutorials and documentation</li>
               <li>• Join user communities for support</li>
@@ -271,7 +271,7 @@ export default function ResearchTools() {
           </div>
           <div className="bg-white/10 rounded-lg p-4">
             <h4 className="font-bold mb-2">For Advanced Users</h4>
-            <ul className="space-y-1 text-sm text-indigo-100">
+            <ul className="space-y-1 text-sm text-blue-100">
               <li>• Explore specialized tools for your field</li>
               <li>• Consider tool integrations and workflows</li>
               <li>• Evaluate premium features if needed</li>
