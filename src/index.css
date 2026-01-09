@@ -50,6 +50,13 @@
 }
 
 @font-face {
+  font-family: 'Helvetica-Bold';
+  src: url('./assets/font/Helvetica-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
   font-family: 'HelveticaRoundedBold';
   src: url('./assets/font/helvetica-rounded-bold-5871d05ead8de.otf') format('opentype');
   font-weight: bold;

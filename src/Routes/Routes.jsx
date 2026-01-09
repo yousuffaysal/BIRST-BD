@@ -41,7 +41,7 @@
 //     path: "/",
 //     element: <Main />,
 //     children: [
-      
+
 
 //      {
 //         path: "/",
@@ -55,15 +55,15 @@
 //         path: "/contact",
 //         element: <ContactUs />,
 //       },
-      
-      
-      
+
+
+
 
 //       {
 //         path: "/service",
 //         element: <Services />,
 //       },
-      
+
 //       {
 //         path: "/aitools",
 //         element: <AiTools></AiTools>,
@@ -86,7 +86,7 @@
 //       },
 
 //       // end
-    
+
 //       {
 //         path: "login",
 //         element: <Login></Login>,
@@ -95,8 +95,8 @@
 //         path: "signup",
 //         element: <SignUp></SignUp>,
 //       },
-      
- 
+
+
 //     ],
 //   },
 //   {
@@ -114,33 +114,33 @@
 //          <AdminRoute>
 //                <ManageUsers />
 //          </AdminRoute>
-           
-          
+
+
 //         ),
 //       },
-    
-   
+
+
 //       {
 //         path: "showContact",
 //         element: (
 //          <AdminRoute>
 //             <ShowContactData></ShowContactData>
 //           </AdminRoute>
-           
-          
+
+
 //         ),
 //       },
-   
-     
+
+
 //       // user routes
 //       {
 //         path: "Profile",
 //         element: (
 //           <Profile></Profile>
-          
+
 //         ),
 //       },
-     
+
 //   {
 //   path: "*",
 //   element: <NotFound />,
@@ -170,6 +170,7 @@ import ContactUs from "../pages/ContactUs";
 import Services from "../pages/Services";
 import AiTools from "../pages/AiTools";
 import Coureses from "../pages/Coureses";
+import CourseDetails from "../pages/CourseDetails";
 import CourseCheckout from "../pages/CourseCheckout";
 import ResearchAndPublication from "../pages/ResearchAndPublication";
 import Publication from "../pages/Publication";
@@ -189,6 +190,10 @@ import ManageResearchResources from "../pages/Dashboard/ManageResearchResources"
 import ManagePayments from "../pages/Dashboard/ManagePayments";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory";
 import MyBookings from "../pages/Dashboard/MyBookings";
+import ShowCourseEnrollment from "../pages/Dashboard/ShowCourseEnrollment";
+import ShowEventEnrollment from "../pages/Dashboard/ShowEventEnrollment";
+import ShowProfileData from "../pages/Dashboard/ShowProfileData";
+import AddTeamMembers from "../pages/Dashboard/AddTeamMembers";
 
 // Custom Routes
 import PrivateRoute from "./PrivateRoute";
@@ -285,6 +290,10 @@ export const router = createBrowserRouter([
         element: <CourseCheckout />,
       },
       {
+        path: "/course-details/:id",
+        element: <CourseDetails />,
+      },
+      {
         path: "/researchAndPublication",
         element: <ResearchAndPublication />,
       },
@@ -327,7 +336,7 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageUsers />
-           </AdminRoute>
+          </AdminRoute>
         ),
       },
       {
@@ -335,7 +344,31 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ShowContactData />
-           </AdminRoute>
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "show-course-enrollments",
+        element: (
+          <AdminRoute>
+            <ShowCourseEnrollment />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "show-event-enrollments",
+        element: (
+          <AdminRoute>
+            <ShowEventEnrollment />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "show-profile-data",
+        element: (
+          <AdminRoute>
+            <ShowProfileData />
+          </AdminRoute>
         ),
       },
       {
@@ -387,6 +420,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManagePayments />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-team",
+        element: (
+          <AdminRoute>
+            <AddTeamMembers />
           </AdminRoute>
         ),
       },

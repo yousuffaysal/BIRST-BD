@@ -2,6 +2,7 @@ import React from "react";
 import { CheckCircle, Clock, Award, FileText, Bell, ChevronRight, User, Download, Plus, Star, BookOpen } from "lucide-react";
 import { motion } from "framer-motion";
 import { Safari } from "../ui/safari";
+import logo from '../../assets/BIRST_LOGO.svg';
 
 const TypingText = ({ text, className, isHighlight = false }) => {
     const container = {
@@ -88,7 +89,7 @@ const DashboardPreviewSection = () => {
                             <div className="w-64 bg-white border-r border-gray-100 hidden md:flex flex-col p-6">
                                 <div className="flex items-center gap-2 mb-10">
                                     <img
-                                        src="https://res.cloudinary.com/duh7c5x99/image/upload/v1766853461/BIRST_LOGO_rkjxm3.svg"
+                                        src={logo}
                                         alt="BIRST Logo"
                                         className="w-8 h-8 object-contain"
                                     />

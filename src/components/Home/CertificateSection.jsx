@@ -2,7 +2,11 @@ import React from "react";
 import { BadgeCheck, Medal, Share2, Award } from "lucide-react";
 import { motion } from "framer-motion";
 
+import logo from '../../assets/BIRST_LOGO.svg';
+
 const CertificateSection = () => {
+    // ... (rest of code)
+    // ... (rest of code)
     return (
         <section className="py-24 bg-[#fffff0] min-h-screen flex items-center justify-center" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
             <div className="container px-4 mx-auto">
@@ -77,7 +81,7 @@ const CertificateSection = () => {
                                 {/* Top Section: Logo & Header */}
                                 <div className="flex flex-col items-center w-full">
                                     <img
-                                        src="https://res.cloudinary.com/duh7c5x99/image/upload/v1766853461/BIRST_LOGO_rkjxm3.svg"
+                                        src={logo}
                                         alt="BIRST Logo"
                                         className="w-12 h-12 md:w-14 md:h-14 object-contain mb-2"
                                     />

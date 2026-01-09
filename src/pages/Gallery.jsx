@@ -23,8 +23,8 @@ export default function Gallery() {
         }
       } catch (error) {
         console.error('Error fetching gallery:', error);
-        setPhotoAlbums(samplePhotoAlbums);
-        setVideoAlbums(sampleVideoAlbums);
+        setPhotoAlbums([]);
+        setVideoAlbums([]);
       } finally {
         setLoading(false);
       }
@@ -33,44 +33,7 @@ export default function Gallery() {
     fetchGallery();
   }, []);
 
-  const samplePhotoAlbums = [
-    {
-      _id: '1',
-      title: 'Training on Statistics with Stata',
-      thumbnail: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800',
-      date: '2020-12-17',
-      type: 'photo',
-      imageCount: 25,
-    },
-    {
-      _id: '2',
-      title: 'Data Visualization and Analysis with MS Power BI',
-      thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800',
-      date: '2020-12-17',
-      type: 'photo',
-      imageCount: 18,
-    },
-    {
-      _id: '3',
-      title: 'Research Methodology Workshop',
-      thumbnail: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800',
-      date: '2021-03-15',
-      type: 'photo',
-      imageCount: 32,
-    },
-  ];
 
-  const sampleVideoAlbums = [
-    {
-      _id: '1',
-      title: 'Machine Learning in Bangla',
-      thumbnail: 'https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800',
-      date: '2020-12-17',
-      type: 'video',
-      videoUrl: '#',
-      youtubeId: null,
-    },
-  ];
 
   const currentAlbums = activeTab === 'photo' ? photoAlbums : videoAlbums;
   const totalPages = Math.ceil(currentAlbums.length / itemsPerPage);

@@ -1,49 +1,27 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, Users, Award, GraduationCap, Briefcase, Mail, Linkedin, Sparkles, UserCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 
 export default function OurTeam() {
   const containerRef = useRef(null);
+  const axiosPublic = useAxiosPublic();
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  const teamMembers = [
-    {
-      name: 'Dr. Mohammad Hasan',
-      role: 'Director & Lead Statistician',
-      expertise: 'Statistical Analysis, Research Methodology',
-      education: 'PhD in Statistics, University of Dhaka',
-      experience: '15+ years in research and statistical consulting',
-      image: null,
-      color: "from-blue-400 to-cyan-300"
-    },
-    {
-      name: 'Dr. Fatema Begum',
-      role: 'Senior Research Consultant',
-      expertise: 'Data Science, Machine Learning',
-      education: 'PhD in Data Science, International University',
-      experience: '12+ years in data analysis and research',
-      image: null,
-      color: "from-purple-400 to-pink-300"
-    },
-    {
-      name: 'Mr. Kamrul Hasan',
-      role: 'Training Program Coordinator',
-      expertise: 'Statistical Software, Research Training',
-      education: 'MSc in Applied Statistics, University of Dhaka',
-      experience: '10+ years in training and education',
-      image: null,
-      color: "from-amber-400 to-orange-300"
-    },
-    {
-      name: 'Ms. Rehana Khatun',
-      role: 'Research Methodology Specialist',
-      expertise: 'Survey Design, Qualitative Research',
-      education: 'MSc in Social Research, BRAC University',
-      experience: '8+ years in research methodology',
-      image: null,
-      color: "from-emerald-400 to-teal-300"
-    },
-  ];
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const res = await axiosPublic.get('/team-members');
+        setTeamMembers(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchTeam();
+  }, [axiosPublic]);
+
+  /* Removed static teamMembers array */
 
   const teamStats = [
     { label: 'Team Members', value: '20+', icon: Users },
@@ -217,8 +195,12 @@ export default function OurTeam() {
 
                 <div className="p-8 flex flex-col sm:flex-row gap-6">
                   <div className="flex-shrink-0">
-                    <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center text-white text-3xl font-bold shadow-lg`}>
-                      {member.name.split(' ').map(n => n[0]).join('')}
+                    <div className={`w-24 h-24 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden`}>
+                      {member.image ? (
+                        <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                      ) : (
+                        member.name.split(' ').map(n => n[0]).join('')
+                      )}
                     </div>
                   </div>
 

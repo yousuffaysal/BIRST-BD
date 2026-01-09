@@ -152,9 +152,33 @@ const Dashboard = () => {
       show: user && isAdmin,
     },
     {
+      to: "/dashboard/manage-team",
+      icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Manage Team",
+      show: user && isAdmin,
+    },
+    {
       to: "/dashboard/showContact",
       icon: <Eye className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "Contact Data",
+      show: user && isAdmin,
+    },
+    {
+      to: "/dashboard/show-course-enrollments",
+      icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Course Enrollments",
+      show: user && isAdmin,
+    },
+    {
+      to: "/dashboard/show-event-enrollments",
+      icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Event Enrollments",
+      show: user && isAdmin,
+    },
+    {
+      to: "/dashboard/show-profile-data",
+      icon: <Users className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Student Profiles",
       show: user && isAdmin,
     },
     {

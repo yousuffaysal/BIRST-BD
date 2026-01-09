@@ -7,7 +7,8 @@ import { Link } from "react-router-dom";
 // Using existing hero images as placeholders for Student/Instructor
 import imgStudent from "../../assets/images/hero/hero_collaboration_career_1766860470975.png";
 import imgInstructor from "../../assets/images/hero/hero_research_training_1766860036175.png";
-import useAuth from "../../hooks/UseAuth";
+import useAuth from "../../hooks/useAuth";
+
 
 const CountUp = ({ to, suffix = "", duration = 2, decimals = 0 }) => {
     const ref = useRef(null);

@@ -11,6 +11,11 @@ export default function ManageGallery() {
   const [activeTab, setActiveTab] = useState('photo');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+
+  // ImgBB API Key
+  const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+  const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
   const [formData, setFormData] = useState({
     title: '',
     type: 'photo',
@@ -20,6 +25,11 @@ export default function ManageGallery() {
     date: new Date().toISOString().split('T')[0],
     description: '',
   });
+
+  // File states
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [imageFiles, setImageFiles] = useState([]);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchGallery();
@@ -34,6 +44,27 @@ export default function ManageGallery() {
       toast.error('Failed to load gallery items');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Upload utility
+  const uploadImageToImgBB = async (imageFile) => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    try {
+      const response = await fetch(image_hosting_api, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        return data.data.url;
+      } else {
+        throw new Error('ImgBB upload failed');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      return null;
     }
   };
 
@@ -74,15 +105,28 @@ export default function ManageGallery() {
     }
   };
 
-  const handleImagesChange = (e) => {
-    const urls = e.target.value.split('\n').filter(url => url.trim());
-    setFormData(prev => ({
-      ...prev,
-      images: urls,
-    }));
+  const handleThumbnailFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setThumbnailFile(file);
+    }
   };
 
+  const handleImageFilesChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setImageFiles(files);
+    }
+  };
+
+  // Keep the old text-based handler for fallback/editing existing URLs if needed, 
+  // or just for the 'images' field if user pastes links. 
+  // But we will primarily rely on the file inputs now.
+
   const openModal = (item = null) => {
+    setThumbnailFile(null);
+    setImageFiles([]); // Reset files
+
     if (item) {
       setEditingItem(item);
       setFormData({
@@ -112,6 +156,9 @@ export default function ManageGallery() {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingItem(null);
+    setThumbnailFile(null);
+    setImageFiles([]);
+    setUploading(false);
     setFormData({
       title: '',
       type: 'photo',
@@ -125,8 +172,38 @@ export default function ManageGallery() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    setUploading(true);
+
     try {
+      let finalThumbnail = formData.thumbnail;
+      let finalImages = [...formData.images];
+
+      // Upload thumbnail only if a new file is selected
+      if (thumbnailFile) {
+        const url = await uploadImageToImgBB(thumbnailFile);
+        if (url) {
+          finalThumbnail = url;
+        } else {
+          toast.error('Failed to upload thumbnail');
+          setUploading(false);
+          return;
+        }
+      }
+
+      // Upload gallery images only if new files are selected
+      if (imageFiles.length > 0) {
+        try {
+          const uploadPromises = imageFiles.map(file => uploadImageToImgBB(file));
+          const newUrls = await Promise.all(uploadPromises);
+          // Filter out any failed uploads (nulls)
+          const validUrls = newUrls.filter(url => url !== null);
+          finalImages = [...finalImages, ...validUrls];
+        } catch (err) {
+          console.error('Error uploading images:', err);
+          toast.error('Failed to upload some images');
+        }
+      }
+
       const payload = {
         title: formData.title,
         type: formData.type,
@@ -137,16 +214,17 @@ export default function ManageGallery() {
       if (formData.type === 'video') {
         if (!formData.youtubeUrl) {
           toast.error('Please enter a YouTube URL');
+          setUploading(false);
           return;
         }
         payload.videoUrl = formData.youtubeUrl;
         payload.youtubeUrl = formData.youtubeUrl;
         payload.youtubeId = extractYouTubeId(formData.youtubeUrl);
-        payload.thumbnail = formData.thumbnail || getYouTubeThumbnail(formData.youtubeUrl);
+        payload.thumbnail = finalThumbnail || getYouTubeThumbnail(formData.youtubeUrl);
       } else {
-        payload.images = formData.images;
-        payload.thumbnail = formData.thumbnail || formData.images[0];
-        payload.imageCount = formData.images.length;
+        payload.images = finalImages;
+        payload.thumbnail = finalThumbnail || (finalImages.length > 0 ? finalImages[0] : '');
+        payload.imageCount = finalImages.length;
       }
 
       if (editingItem) {
@@ -169,6 +247,8 @@ export default function ManageGallery() {
     } catch (error) {
       console.error('Error saving gallery item:', error);
       toast.error('Failed to save gallery item');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -196,6 +276,13 @@ export default function ManageGallery() {
       }
     });
   };
+
+  const removeImage = (indexToRemove) => {
+    setFormData(prev => ({
+      ...prev,
+      images: prev.images.filter((_, index) => index !== indexToRemove)
+    }));
+  }
 
   if (loading) {
     return (
@@ -229,11 +316,10 @@ export default function ManageGallery() {
             setActiveTab('photo');
             setLoading(true);
           }}
-          className={`px-4 py-2 font-semibold border-b-2 transition ${
-            activeTab === 'photo'
+          className={`px-4 py-2 font-semibold border-b-2 transition ${activeTab === 'photo'
               ? 'border-indigo-600 text-indigo-600'
               : 'border-transparent text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           <Image className="w-4 h-4 inline mr-2" />
           Photo Gallery
@@ -243,11 +329,10 @@ export default function ManageGallery() {
             setActiveTab('video');
             setLoading(true);
           }}
-          className={`px-4 py-2 font-semibold border-b-2 transition ${
-            activeTab === 'video'
+          className={`px-4 py-2 font-semibold border-b-2 transition ${activeTab === 'video'
               ? 'border-indigo-600 text-indigo-600'
               : 'border-transparent text-gray-600 hover:text-gray-900'
-          }`}
+            }`}
         >
           <Video className="w-4 h-4 inline mr-2" />
           Video Gallery
@@ -412,38 +497,67 @@ export default function ManageGallery() {
                   </>
                 ) : (
                   <>
+                    {/* Thumbnail Upload */}
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Thumbnail Image URL (ImgBB) *
+                        Thumbnail Image *
                       </label>
+
+                      {formData.thumbnail && (
+                        <div className="mb-2 relative w-32 h-32">
+                          <img
+                            src={formData.thumbnail}
+                            alt="Current Thumbnail"
+                            className="w-full h-full object-cover rounded-lg border"
+                          />
+                          <div className="text-xs text-center text-gray-500 mt-1">Current</div>
+                        </div>
+                      )}
+
                       <input
-                        type="url"
-                        name="thumbnail"
-                        value={formData.thumbnail}
-                        onChange={handleInputChange}
-                        required
+                        type="file"
+                        accept="image/*"
+                        onChange={handleThumbnailFileChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                        placeholder="https://i.ibb.co/..."
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Upload your image to ImgBB and paste the direct link here.
+                        Select a file to upload as the thumbnail.
                       </p>
                     </div>
+
+                    {/* Multiple Images Upload */}
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Image URLs (ImgBB) * (One URL per line)
+                        Album Images
                       </label>
-                      <textarea
-                        name="images"
-                        value={formData.images.join('\n')}
-                        onChange={handleImagesChange}
-                        rows="6"
-                        required
+
+                      {/* Existing Images List */}
+                      {formData.images.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-3">
+                          {formData.images.map((img, idx) => (
+                            <div key={idx} className="relative w-20 h-20 group">
+                              <img src={img} alt={`Album ${idx}`} className="w-full h-full object-cover rounded border" />
+                              <button
+                                type="button"
+                                onClick={() => removeImage(idx)}
+                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageFilesChange}
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                        placeholder="https://i.ibb.co/...&#10;https://i.ibb.co/...&#10;https://i.ibb.co/..."
                       />
                       <p className="text-xs text-gray-500 mt-1">
-                        Upload images to ImgBB and paste one direct link per line.
+                        Select multiple files to add to this album.
                       </p>
                     </div>
                   </>
@@ -466,14 +580,16 @@ export default function ManageGallery() {
                 <div className="flex gap-3 pt-4">
                   <button
                     type="submit"
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold"
+                    disabled={uploading}
+                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-semibold ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <Save className="w-5 h-5" />
-                    {editingItem ? 'Update' : 'Save'}
+                    {uploading ? 'Uploading...' : (editingItem ? 'Update' : 'Save')}
                   </button>
                   <button
                     type="button"
                     onClick={closeModal}
+                    disabled={uploading}
                     className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition font-semibold"
                   >
                     Cancel

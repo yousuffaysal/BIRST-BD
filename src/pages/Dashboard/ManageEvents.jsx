@@ -26,6 +26,12 @@ export default function ManageEvents() {
       phone: '',
     },
     thumbnail: '',
+    speakers: '',
+    guests: '',
+    topics: '',
+    details: '',
+    location: '',
+    platform: '',
   });
 
   useEffect(() => {
@@ -46,7 +52,7 @@ export default function ManageEvents() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     if (name.startsWith('contact.')) {
       const contactField = name.split('.')[1];
       setFormData(prev => ({
@@ -79,6 +85,12 @@ export default function ManageEvents() {
         isFree: event.isFree || false,
         contact: event.contact || { website: '', email: '', phone: '' },
         thumbnail: event.thumbnail || '',
+        speakers: event.speakers ? event.speakers.join(', ') : '',
+        guests: event.guests ? event.guests.join(', ') : '',
+        topics: event.topics ? event.topics.join(', ') : '',
+        details: event.details || '',
+        location: event.location || '',
+        platform: event.platform || '',
       });
     } else {
       setEditingEvent(null);
@@ -94,6 +106,12 @@ export default function ManageEvents() {
         isFree: false,
         contact: { website: '', email: '', phone: '' },
         thumbnail: '',
+        speakers: '',
+        guests: '',
+        topics: '',
+        details: '',
+        location: '',
+        platform: '',
       });
     }
     setIsModalOpen(true);
@@ -106,17 +124,27 @@ export default function ManageEvents() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
+      // Helper to process arrays
+      const processArray = (str) => str ? str.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+      const payload = {
+        ...formData,
+        speakers: processArray(formData.speakers),
+        guests: processArray(formData.guests),
+        topics: processArray(formData.topics),
+      };
+
       if (editingEvent) {
-        const response = await axiosSecure.put(`/events/${editingEvent._id}`, formData);
+        const response = await axiosSecure.put(`/events/${editingEvent._id}`, payload);
         if (response.data) {
           toast.success('Event updated successfully');
           fetchEvents();
           closeModal();
         }
       } else {
-        const response = await axiosSecure.post('/events', formData);
+        const response = await axiosSecure.post('/events', payload);
         if (response.data.insertedId) {
           toast.success('Event added successfully');
           fetchEvents();
@@ -308,6 +336,62 @@ export default function ManageEvents() {
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Online or Rome, Italy"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Platform / Venue</label>
+                    <input
+                      type="text"
+                      name="platform"
+                      value={formData.platform}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Zoom or Hotel Grand"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Detailed Arrays */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Speakers (comma separated)</label>
+                  <input
+                    type="text"
+                    name="speakers"
+                    value={formData.speakers}
+                    onChange={handleInputChange}
+                    placeholder="Dr. John Doe, Prof. Jane Smith"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 mb-3"
+                  />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Guests (comma separated)</label>
+                  <input
+                    type="text"
+                    name="guests"
+                    value={formData.guests}
+                    onChange={handleInputChange}
+                    placeholder="Dean of Science, Director of Research"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 mb-3"
+                  />
+                  <label className="block text-sm font-semibold text-gray-700 mb-1">Topics (comma separated)</label>
+                  <input
+                    type="text"
+                    name="topics"
+                    value={formData.topics}
+                    onChange={handleInputChange}
+                    placeholder="Research Design, Data Analysis, Ethics"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Speaker</label>
                     <input
                       type="text"
@@ -341,10 +425,21 @@ export default function ManageEvents() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Short Description</label>
                   <textarea
                     name="description"
                     value={formData.description}
+                    onChange={handleInputChange}
+                    rows="2"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Full Details / About</label>
+                  <textarea
+                    name="details"
+                    value={formData.details}
                     onChange={handleInputChange}
                     rows="4"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"

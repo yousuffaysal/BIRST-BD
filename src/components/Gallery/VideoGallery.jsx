@@ -63,52 +63,44 @@ export default function VideoGallery() {
               key={video._id}
               className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all overflow-hidden group"
             >
-              <div className="relative h-48 bg-gradient-to-br from-green-500 to-blue-500">
-                {video.thumbnail ? (
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-full object-cover"
+              {/* Main Media Area - Shows Video if available, otherwise Thumbnail */}
+              <div className="relative aspect-video bg-black">
+                {video.youtubeId ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.youtubeId}`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="w-full h-full"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-white p-4">
-                    <div className="text-center">
-                      <p className="text-sm mb-2">SRCBD</p>
-                      <p className="text-lg font-bold">{video.title}</p>
-                    </div>
+                  <div className="relative w-full h-full">
+                    {video.thumbnail ? (
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white bg-gradient-to-br from-indigo-500 to-purple-600">
+                        <Video className="w-12 h-12" />
+                      </div>
+                    )}
+                    {/* Overlay for non-youtube videos or just visual flair if needed */}
+                    {!video.youtubeId && video.videoUrl && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition">
+                        <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Play className="w-8 h-8 text-indigo-600 ml-1" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition">
-                  <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="w-8 h-8 text-indigo-600 ml-1" />
-                  </div>
-                </div>
               </div>
 
               <div className="p-4">
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{video.title}</h3>
                 <div className="flex items-center justify-between">
-                  {video.youtubeId ? (
-                    <a
-                      href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-indigo-600 font-semibold hover:gap-3 transition-all"
-                    >
-                      Watch on YouTube
-                      <ExternalLink className="w-4 h-4" />
-                    </a>
-                  ) : video.videoUrl ? (
-                    <a
-                      href={video.videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-indigo-600 font-semibold hover:gap-3 transition-all"
-                    >
-                      See Video
-                      <Video className="w-4 h-4" />
-                    </a>
-                  ) : null}
                   <div className="flex items-center gap-1 text-gray-500 text-sm">
                     <Calendar className="w-4 h-4" />
                     {new Date(video.date).toLocaleDateString('en-US', {
@@ -117,18 +109,19 @@ export default function VideoGallery() {
                       year: 'numeric',
                     })}
                   </div>
+
+                  {!video.youtubeId && video.videoUrl && (
+                    <a
+                      href={video.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-indigo-600 font-semibold hover:gap-3 transition-all"
+                    >
+                      Watch Video
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  )}
                 </div>
-                {video.youtubeId && (
-                  <div className="mt-4 aspect-video">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${video.youtubeId}`}
-                      title={video.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                      className="w-full h-full rounded-lg"
-                    />
-                  </div>
-                )}
               </div>
             </div>
           ))}

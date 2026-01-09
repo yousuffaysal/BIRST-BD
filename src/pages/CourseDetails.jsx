@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react';
+import { useParams, Link, useLocation, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../Providers/AuthProvider';
+import Swal from 'sweetalert2';
 import {
     Star,
     Globe,
@@ -15,56 +17,54 @@ import {
     BookOpen
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import useAxiosPublic from '../hooks/useAxiosPublic';
 
 const CourseDetails = () => {
     const { id } = useParams();
     const { state } = useLocation();
+    const navigate = useNavigate();
+    const { user } = useContext(AuthContext);
+    const axiosPublic = useAxiosPublic();
+
+    const [fetchedCourse, setFetchedCourse] = useState(null);
+    const [loading, setLoading] = useState(!state?.course);
     const [activeTab, setActiveTab] = useState('about');
     const [isSticky, setIsSticky] = useState(false);
+    const [isEnrolled, setIsEnrolled] = useState(false);
 
-    // Default Mock Data Template (Research Focused)
-    const passedTitle = state?.course?.title || "Research Methodology & Data Analysis";
+    useEffect(() => {
+        const fetchCourse = async () => {
+            try {
+                const res = await axiosPublic.get(`/courses/${id}`);
+                setFetchedCourse(res.data);
+            } catch (error) {
+                console.error("Failed to fetch course details", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCourse();
+    }, [id, state, axiosPublic]);
 
-    const defaultCourse = {
-        title: passedTitle,
-        instructor: "Dr. Sarah Mitchell",
-        rating: 4.8,
-        reviews: 12543,
-        enrolled: "45,230",
-        level: "Intermediate level",
-        duration: "4 weeks at 5-7 hours a week",
-        schedule: "Flexible schedule",
-        partner: "BIRST",
-        modules: 6,
-        description: `Deep dive into ${passedTitle}. This comprehensive course is designed for researchers, students, and professionals looking to master advanced methodologies. You will learn to apply critical thinking and analytical tools to solve complex research problems effectively.`,
-        whatYouWillLearn: [
-            `Master the fundamental principles of ${passedTitle} and its applications in real-world scenarios.`,
-            "Design and execute robust research protocols adhering to ethical standards.",
-            "Analyze complex datasets using modern statistical tools and software.",
-            "Write high-impact research papers and proposals for academic publication."
-        ],
-        skills: [
-            "Research Design", "Data Analysis", "Academic Writing", "Critical Thinking", "Statistical Software", "Grant Writing",
-            "Ethics in Research", "Qualitative Methods", "Quantitative Methods", "Literature Review"
-        ],
-        syllabus: [
-            { title: "Introduction to Research Fundamentals", duration: "2 hours to complete", content: "Module 1" },
-            { title: "Designing Your Research Study", duration: "4 hours to complete", content: "Module 2" },
-            { title: "Data Collection & Management", duration: "5 hours to complete", content: "Module 3" },
-            { title: "Quantitative & Qualitative Analysis", duration: "8 hours to complete", content: "Module 4" },
-            { title: "Academic Writing & Publishing", duration: "6 hours to complete", content: "Module 5" },
-            { title: "Ethics & Future Directions", duration: "3 hours to complete", content: "Module 6" }
-        ],
-        instructorBio: "Dr. Sarah Mitchell is a Lead Researcher at BIRST with over 15 years of experience in academic research and policy analysis. She has mentored over 500 students and published widely in top-tier journals."
-    };
+    useEffect(() => {
+        if (user && id) {
+            const checkEnrollment = async () => {
+                try {
+                    const res = await axiosPublic.get(`/check-enrollment?email=${user.email}&courseId=${id}`);
+                    if (res.data.enrolled) {
+                        setIsEnrolled(true);
+                    }
+                } catch (error) {
+                    console.error("Failed to check enrollment", error);
+                }
+            };
+            checkEnrollment();
+        }
+    }, [user, id, axiosPublic]);
 
-    // Merge passed state with default structure (override default if state has specific fields)
-    const course = { ...defaultCourse, ...state?.course };
 
-    // Ensure description mentions the actual title if state passed one but description is missing
-    if (!state?.course?.description && state?.course?.title) {
-        course.description = `Master the art of ${state.course.title} with this specialized curriculum. Designed for aspiring researchers, this course covers all essential aspects from theory to practical application.`;
-    }
+
+    const course = fetchedCourse || state?.course;
 
     // Handle Scroll for Sticky Tab
     useEffect(() => {
@@ -84,6 +84,169 @@ const CourseDetails = () => {
             element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     };
+
+    const handleEnroll = () => {
+        if (isEnrolled) return;
+
+        if (!user) {
+            Swal.fire({
+                title: 'Login Required',
+                text: 'Please login to enroll in this course',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#000000',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login', { state: { from: `/course-details/${id}` } });
+                }
+            });
+            return;
+        }
+
+        // Show Form for BOTH Paid and Free courses
+        Swal.fire({
+            title: 'Enrollment Form',
+            html: `
+                <div style="text-align: left; overflow-y: auto; max-height: 60vh; padding: 0 5px;">
+                    <style>
+                        .swal2-input, .swal2-select { margin: 5px 0 15px !important; font-size: 14px !important; }
+                        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+                        @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+                    </style>
+                    <p style="margin-bottom: 15px; font-size: 14px; color: #666;">Please fill out this form to proceed with enrollment.</p>
+                    
+                    <label style="font-weight: 500; font-size: 13px;">Full Name</label>
+                    <input id="swal-name" class="swal2-input" placeholder="Full Name" value="${user?.displayName || ''}">
+                    
+                    <label style="font-weight: 500; font-size: 13px;">Email Address</label>
+                    <input id="swal-email" class="swal2-input" placeholder="Email" value="${user?.email || ''}" readonly style="background-color: #f3f4f6;">
+                    
+                    <div class="form-grid">
+                        <div>
+                            <label style="font-weight: 500; font-size: 13px;">Phone Number</label>
+                            <input id="swal-phone" class="swal2-input" placeholder="Phone">
+                        </div>
+                        <div>
+                            <label style="font-weight: 500; font-size: 13px;">Date of Birth</label>
+                            <input id="swal-dob" type="date" class="swal2-input">
+                        </div>
+                    </div>
+
+                    <label style="font-weight: 500; font-size: 13px;">Address</label>
+                    <input id="swal-address" class="swal2-input" placeholder="Full Address">
+                    
+                    <div class="form-grid">
+                        <div>
+                            <label style="font-weight: 500; font-size: 13px;">Gender</label>
+                            <select id="swal-gender" class="swal2-select" style="width: 100%;">
+                                <option value="" disabled selected>Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-weight: 500; font-size: 13px;">Qualification</label>
+                            <input id="swal-qualification" class="swal2-input" placeholder="Qualifications">
+                        </div>
+                    </div>
+
+                    <label style="font-weight: 500; font-size: 13px;">Institution Name</label>
+                    <input id="swal-institution" class="swal2-input" placeholder="Institution Name">
+                </div>
+            `,
+            width: '600px',
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: course.price && Number(course.price) > 0 ? 'Proceed to Checkout' : 'Submit Enrollment',
+            confirmButtonColor: '#0056D2',
+            preConfirm: () => {
+                const name = document.getElementById('swal-name').value;
+                const email = document.getElementById('swal-email').value;
+                const phone = document.getElementById('swal-phone').value;
+                const address = document.getElementById('swal-address').value;
+                const dob = document.getElementById('swal-dob').value;
+                const gender = document.getElementById('swal-gender').value;
+                const qualification = document.getElementById('swal-qualification').value;
+                const institution = document.getElementById('swal-institution').value;
+
+                if (!name || !phone || !address || !dob || !gender || !qualification || !institution) {
+                    Swal.showValidationMessage('Please fill all fields');
+                    return false;
+                }
+
+                return {
+                    name, email, phone, address, dob, gender, qualification, institution,
+                    courseId: course._id,
+                    courseTitle: course.title
+                };
+            }
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const enrollmentData = result.value;
+
+                if (course.price && Number(course.price) > 0) {
+                    // Paid Course: Navigate to Checkout with validation data
+                    navigate(`/courses/checkout/${course._id}`, { state: { course, enrollmentData } });
+                } else {
+                    // Free Course: Submit directly
+                    try {
+                        const response = await axiosPublic.post('/course-enrollments', enrollmentData);
+
+                        if (response.data.exists) {
+                            Swal.fire({
+                                title: 'Already Enrolled',
+                                text: response.data.message,
+                                icon: 'info',
+                                confirmButtonColor: '#0056D2'
+                            });
+                            setIsEnrolled(true);
+                        } else if (response.data.insertedId) {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: response.data.message,
+                                icon: 'success',
+                                confirmButtonColor: '#0056D2'
+                            });
+                            setIsEnrolled(true);
+                        }
+                    } catch (error) {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Failed to submit enrollment. Please try again.',
+                            icon: 'error',
+                            confirmButtonColor: '#d33'
+                        });
+                    }
+                }
+            }
+        });
+    };
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-white">
+                <div className="flex flex-col items-center">
+                    <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                    <p className="text-gray-500 font-medium">Loading Course Details...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!course) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-white pt-20">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-gray-900">Course Not Found</h2>
+                    <Link to="/courses" className="text-blue-600 hover:underline mt-2 inline-block">Browse Courses</Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-white font-sans text-gray-900 pt-20">
@@ -117,9 +280,9 @@ const CourseDetails = () => {
 
                             <div className="flex items-center gap-4 mb-8">
                                 <img
-                                    src="https://randomuser.me/api/portraits/men/32.jpg"
+                                    src={course.instructorImage || "https://randomuser.me/api/portraits/men/32.jpg"}
                                     alt={course.instructor}
-                                    className="w-10 h-10 rounded-full border border-gray-200"
+                                    className="w-10 h-10 rounded-full border border-gray-200 object-cover"
                                 />
                                 <div className="text-sm">
                                     <span className="text-gray-900 font-bold block">Instructor: <span className="underline decoration-blue-300">{course.instructor}</span></span>
@@ -127,14 +290,20 @@ const CourseDetails = () => {
                             </div>
 
                             <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                                <button className="px-8 py-4 bg-[#0056D2] text-white font-bold text-lg rounded-lg shadow-sm hover:bg-[#00419e] transition-colors flex flex-col items-center justify-center min-w-[200px]">
-                                    <span>Enroll for Free</span>
-                                    <span className="text-xs font-normal opacity-90">Start Learning Today</span>
+                                <button
+                                    onClick={handleEnroll}
+                                    disabled={isEnrolled}
+                                    className={`px-8 py-4 font-bold text-lg rounded-lg shadow-sm transition-colors flex flex-col items-center justify-center min-w-[200px] ${isEnrolled ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#0056D2] text-white hover:bg-[#00419e]'}`}
+                                >
+                                    <span>
+                                        {isEnrolled
+                                            ? 'Already Enrolled'
+                                            : (course.price && Number(course.price) > 0 ? `Enroll Now - $${course.price}` : 'Enroll for Free')
+                                        }
+                                    </span>
+                                    {!isEnrolled && <span className="text-xs font-normal opacity-90">Start Learning Today</span>}
                                 </button>
-                                <div className="flex flex-col justify-center">
-                                    <span className="font-bold text-gray-900">{course.enrolled}</span>
-                                    <span className="text-sm text-gray-600">already enrolled</span>
-                                </div>
+
                             </div>
                         </div>
 
@@ -177,7 +346,7 @@ const CourseDetails = () => {
                         <section id="about" className="scroll-mt-40">
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">What you'll learn</h2>
                             <div className="grid md:grid-cols-2 gap-x-8 gap-y-4">
-                                {course.whatYouWillLearn.map((item, idx) => (
+                                {course.whatYouWillLearn?.map((item, idx) => (
                                     <div key={idx} className="flex gap-3 text-sm text-gray-700 leading-relaxed">
                                         <CheckCircle className="w-5 h-5 text-gray-400 flex-shrink-0 mt-0.5" />
                                         <span>{item}</span>
@@ -190,7 +359,7 @@ const CourseDetails = () => {
                         <section>
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Skills you'll gain</h2>
                             <div className="flex flex-wrap gap-2">
-                                {course.skills.map((skill) => (
+                                {course.skills?.map((skill) => (
                                     <span key={skill} className="px-3 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded-md">
                                         {skill}
                                     </span>
@@ -220,7 +389,7 @@ const CourseDetails = () => {
                             <p className="text-gray-600 mb-8">{course.description}</p>
 
                             <div className="space-y-4">
-                                {course.syllabus.map((mod, idx) => (
+                                {course.syllabus?.map((mod, idx) => (
                                     <div key={idx} className="border-b border-gray-200 pb-4">
                                         <div className="flex justify-between items-start cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors group">
                                             <div className="flex gap-4">
@@ -251,7 +420,7 @@ const CourseDetails = () => {
                             <h2 className="text-2xl font-bold text-gray-900 mb-6">Instructor</h2>
                             <div className="flex items-start gap-4">
                                 <img
-                                    src="https://randomuser.me/api/portraits/men/32.jpg"
+                                    src={course.instructorImage || "https://randomuser.me/api/portraits/men/32.jpg"}
                                     alt={course.instructor}
                                     className="w-24 h-24 rounded-full object-cover border border-gray-100"
                                 />
@@ -297,8 +466,15 @@ const CourseDetails = () => {
                                     className="bg-white p-6 border border-gray-200 rounded-xl shadow-lg"
                                 >
                                     <h3 className="font-bold text-gray-900 mb-2">Interested in this course?</h3>
-                                    <button className="w-full py-3 bg-[#0056D2] text-white font-bold rounded-lg shadow-sm hover:bg-[#00419e] mb-3 transition-colors">
-                                        Enroll for Free
+                                    <button
+                                        onClick={handleEnroll}
+                                        disabled={isEnrolled}
+                                        className={`w-full py-3 font-bold rounded-lg shadow-sm mb-3 transition-colors ${isEnrolled ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-[#0056D2] text-white hover:bg-[#00419e]'}`}
+                                    >
+                                        {isEnrolled
+                                            ? 'Already Enrolled'
+                                            : (course.price && Number(course.price) > 0 ? `Enroll Now - $${course.price}` : 'Enroll for Free')
+                                        }
                                     </button>
                                     <p className="text-xs text-center text-gray-500">More than 1.3 million learners enrolled</p>
                                 </motion.div>

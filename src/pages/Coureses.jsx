@@ -7,169 +7,7 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// --- Demo Data ---
-const DEMO_COURSES = [
-  {
-    _id: "demo_001",
-    title: "Advanced Research Metholodogy & Data Analysis",
-    category: "Research Methods",
-    thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.9,
-    students: 1240,
-    price: 3500,
-    currency: "BDT",
-    duration: "8 Weeks",
-    level: "Advanced",
-    instructor: "Dr. A. Rahman",
-    description: "Master the art of research with comprehensive methodologies and data analysis techniques using latest tools.",
-    features: ["Live Sessions", "Certificate", "Capstone Project"],
-    startDate: "2024-02-15"
-  },
-  {
-    _id: "demo_002",
-    title: "SPSS Mastery: From Beginner to Pro",
-    category: "Statistics",
-    thumbnail: "https://images.unsplash.com/photo-1551434678-e076c2236033?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.8,
-    students: 850,
-    price: 2500,
-    currency: "BDT",
-    duration: "4 Weeks",
-    level: "All Levels",
-    instructor: "Sarah Karim",
-    description: "Complete guide to IBM SPSS Statistics. Learn data entry, management, and advanced statistical tests.",
-    features: ["Practice Datasets", "Lifetime Access"],
-    startDate: "2024-02-20"
-  },
-  {
-    _id: "demo_003",
-    title: "Python for Data Science Bootcamp",
-    category: "Data Science",
-    thumbnail: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.9,
-    students: 3200,
-    price: 5000,
-    currency: "BDT",
-    duration: "12 Weeks",
-    level: "Beginner",
-    instructor: "Tanvir Hasan",
-    description: "Learn Python from scratch and apply it to real-world data science problems with Pandas, NumPy and Matplotlib.",
-    features: ["10+ Projects", "Code Review"],
-    startDate: "2024-03-01"
-  },
-  {
-    _id: "demo_004",
-    title: "Qualitative Research Analysis with NVivo",
-    category: "Research Methods",
-    thumbnail: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.7,
-    students: 450,
-    price: 3000,
-    currency: "BDT",
-    duration: "5 Weeks",
-    level: "Intermediate",
-    instructor: "Prof. M. Chowdhury",
-    description: "Deep dive into qualitative data analysis using NVivo software for effective research outcomes.",
-    features: ["Software Guide", "Case Studies"],
-    startDate: "2024-03-10"
-  },
-  {
-    _id: "demo_005",
-    title: "Scientific Writing & Publication Mastery",
-    category: "Research Methods",
-    thumbnail: "https://images.unsplash.com/photo-1455390582262-044cdead277a?q=80&w=2073&auto=format&fit=crop",
-    rating: 4.9,
-    students: 1500,
-    price: 2000,
-    currency: "BDT",
-    duration: "4 Weeks",
-    level: "All Levels",
-    instructor: "Dr. S. Ahmed",
-    description: "Learn how to write high-impact scientific papers and get published in top-tier journals.",
-    features: ["Writing Templates", "Journal Selection Guide"],
-    startDate: "2024-02-25"
-  },
-  {
-    _id: "demo_006",
-    title: "Machine Learning with R",
-    category: "Machine Learning",
-    thumbnail: "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?q=80&w=2076&auto=format&fit=crop",
-    rating: 4.6,
-    students: 600,
-    price: 4500,
-    currency: "BDT",
-    duration: "10 Weeks",
-    level: "Intermediate",
-    instructor: "R. Islam",
-    description: "Implement machine learning algorithms using R programming language for predictive modeling.",
-    features: ["Model Deployment", "Live Coding"],
-    startDate: "2024-03-05"
-  },
-  {
-    _id: "demo_007",
-    title: "Data Visualization with Tableau",
-    category: "Data Science",
-    thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.8,
-    students: 900,
-    price: 4000,
-    currency: "BDT",
-    duration: "6 Weeks",
-    level: "Beginner",
-    instructor: "N. Huda",
-    description: "Transform raw data into compelling visual stories using Tableau dashboards.",
-    features: ["Portfolio Project", "Certification Prep"],
-    startDate: "2024-03-15"
-  },
-  {
-    _id: "demo_008",
-    title: "Structural Equation Modeling (SEM) with AMOS",
-    category: "Statistics",
-    thumbnail: "https://images.unsplash.com/photo-1543286386-713df548e617?q=80&w=2068&auto=format&fit=crop",
-    rating: 4.7,
-    students: 300,
-    price: 3500,
-    currency: "BDT",
-    duration: "6 Weeks",
-    level: "Advanced",
-    instructor: "Dr. K. Zaman",
-    description: "Advanced statistical modeling technique for testing complex theoretical models.",
-    features: ["Theory & Practice", "Software License Guide"],
-    startDate: "2024-04-01"
-  },
-  {
-    _id: "demo_009",
-    title: "Grant Writing for Researchers",
-    category: "Research Methods",
-    thumbnail: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=2070&auto=format&fit=crop",
-    rating: 4.9,
-    students: 400,
-    price: 2500,
-    currency: "BDT",
-    duration: "3 Weeks",
-    level: "Intermediate",
-    instructor: "Prof. L. Begum",
-    description: "Secure funding for your research with winning grant proposals.",
-    features: ["Proposal Review", "Funding Database"],
-    startDate: "2024-03-20"
-  },
-  {
-    _id: "demo_010",
-    title: "Excel for Business Analytics",
-    category: "Software Training",
-    thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
-    rating: 4.8,
-    students: 5000,
-    price: 1500,
-    currency: "BDT",
-    duration: "Self-paced",
-    level: "Beginner",
-    instructor: "M. Ali",
-    description: "Unlock the power of Excel for data analysis, reporting, and dashboard creation.",
-    features: ["Formula Cheat Sheet", "Real Business Cases"],
-    startDate: "Available Now"
-  }
-];
+// --- Demo Data Removed ---
 
 export default function Coureses() {
   const axiosPublic = useAxiosPublic();
@@ -186,23 +24,11 @@ export default function Coureses() {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        // Attempt to fetch from API
         const response = await axiosPublic.get('/courses');
-        if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-          // Merge API courses with Demo courses (or prefer API if you want)
-          // For this task, ensure we have at least 10 items.
-          // Let's combine them to ensure abundance of data for the user request.
-          // Prioritize API data, then append demo data that doesn't duplicate IDs (though demo IDs are specific strings)
-          setCourses([...response.data, ...DEMO_COURSES]);
-        } else {
-          // Fallback to Demo Data
-          setCourses(DEMO_COURSES);
-        }
+        setCourses(response.data || []);
       } catch (error) {
         console.error('Error fetching courses:', error);
-        // Fallback to Demo Data on error
-        setCourses(DEMO_COURSES);
-        // toast.error('Loaded demo courses due to network issue.'); 
+        toast.error('Failed to load courses.');
       } finally {
         setLoading(false);
       }
@@ -212,7 +38,7 @@ export default function Coureses() {
   }, [axiosPublic]);
 
   // Filter Logic
-  const uniqueCourses = courses.filter((v, i, a) => a.findIndex(v2 => (v2._id === v._id)) === i); // Remove duplicates if any
+  const uniqueCourses = courses; // API should handle uniqueness, but if needed: courses.filter((v, i, a) => a.findIndex(v2 => (v2._id === v._id)) === i);
 
   const filteredCourses = uniqueCourses.filter(course => {
     const matchesCategory = selectedCategory === 'all' || course.category === selectedCategory;

@@ -1,7 +1,7 @@
 import { FaGoogle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import useAuth from "../hooks/UseAuth";
-
+import useAuth from "../hooks/useAuth";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 import { toast } from "react-toastify";
 
 const GoogleIcon = () => (
@@ -48,7 +48,7 @@ const SocialLogin = () => {
             })
             .catch(error => {
                 let errorMessage = 'Failed to sign in with Google. Please try again.';
-                
+
                 // Firebase authentication errors
                 if (error?.code === 'auth/popup-closed-by-user') {
                     errorMessage = 'Sign-in was cancelled. Please try again.';
@@ -56,7 +56,7 @@ const SocialLogin = () => {
                     errorMessage = 'Popup was blocked. Please allow popups for this site and try again.';
                 } else if (error?.code === 'auth/network-request-failed') {
                     errorMessage = 'Network error. Please check your internet connection and try again.';
-                } 
+                }
                 // Backend API errors
                 else if (error?.response?.data?.message) {
                     errorMessage = error.response.data.message;
@@ -67,7 +67,7 @@ const SocialLogin = () => {
                 } else if (error?.message) {
                     errorMessage = error.message;
                 }
-                
+
                 toast.error(errorMessage);
             });
     }
@@ -75,8 +75,8 @@ const SocialLogin = () => {
     return (
         <div className="flex flex-col items-center w-full">
             <div className="divider text-gray-400 my-6">OR</div>
-            <button 
-                onClick={handleGoogleSignIn} 
+            <button
+                onClick={handleGoogleSignIn}
                 className="w-full flex items-center justify-center px-6 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 transition-colors duration-200 text-gray-600 font-medium shadow-sm hover:shadow-md group"
             >
                 <GoogleIcon />

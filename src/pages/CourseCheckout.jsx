@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
@@ -14,7 +14,7 @@ import PrivateRoute from '../Routes/PrivateRoute';
 // Load Stripe - use environment variable or default test key
 const stripePromise = loadStripe(import.meta.env.VITE_Payment_Gateway_PK || 'pk_test_51...');
 
-const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
+const CheckoutForm = ({ course, totalPrice, onSuccess, enrollmentData }) => {
   const [error, setError] = useState('');
   const [clientSecret, setClientSecret] = useState('');
   const [processing, setProcessing] = useState(false);
@@ -92,7 +92,7 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
         // Mock successful payment
         const mockTransactionId = 'txn_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         setTransactionId(mockTransactionId);
-        
+
         const payment = {
           email: user?.email,
           studentEmail: user?.email,
@@ -112,11 +112,11 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
         try {
           const res = await axiosSecure.post('/payments', payment);
           console.log('Payment saved response:', res.data);
-          
+
           // Invalidate payments queries to refetch data
           queryClient.invalidateQueries({ queryKey: ['payments'] });
           queryClient.invalidateQueries({ queryKey: ['payments', user?.email] });
-          
+
           if (res.data?.paymentResult?.insertedId || res.data?.message) {
             Swal.fire({
               icon: "success",
@@ -135,6 +135,25 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
             setTimeout(() => navigate('/dashboard/my-bookings'), 1500);
           } else {
             // Payment saved but no insertedId returned
+            // Save to course_enrollments for unified record
+            if (enrollmentData) {
+              const fullEnrollmentData = {
+                ...enrollmentData,
+                paymentId: res.data?.paymentResult?.insertedId || null,
+                transactionId: payment.transactionId,
+                paid: true,
+                amount: totalPrice,
+                status: 'active'
+              };
+              try {
+                // Use useAxiosPublic ideally if configured, but secure works too for auth user
+                // Using axiosSecure since user is logged in
+                await axiosSecure.post('/course-enrollments', fullEnrollmentData);
+              } catch (enrollErr) {
+                console.error("Failed to save enrollment record", enrollErr);
+              }
+            }
+
             Swal.fire({
               icon: "success",
               title: "Payment Successful!",
@@ -156,9 +175,9 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
           console.error("Error response:", paymentErr.response?.data);
           console.error("Error status:", paymentErr.response?.status);
           console.error("Error message:", paymentErr.message);
-          
+
           const errorMessage = paymentErr.response?.data?.message || paymentErr.response?.data?.error || paymentErr.message || "Unknown error occurred";
-          
+
           // Show error details to help debug
           Swal.fire({
             icon: "error",
@@ -229,12 +248,30 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
         try {
           const res = await axiosSecure.post('/payments', payment);
           console.log('Payment saved response:', res.data);
-          
+
           // Invalidate payments queries to refetch data
           queryClient.invalidateQueries({ queryKey: ['payments'] });
           queryClient.invalidateQueries({ queryKey: ['payments', user?.email] });
-          
+
           if (res.data?.paymentResult?.insertedId || res.data?.message) {
+
+            // Save to course_enrollments for unified record (Stripe Payment)
+            if (enrollmentData) {
+              const fullEnrollmentData = {
+                ...enrollmentData,
+                paymentId: res.data?.paymentResult?.insertedId || null,
+                transactionId: payment.transactionId,
+                paid: true,
+                amount: totalPrice,
+                status: 'active'
+              };
+              try {
+                await axiosSecure.post('/course-enrollments', fullEnrollmentData);
+              } catch (enrollErr) {
+                console.error("Failed to save enrollment record", enrollErr);
+              }
+            }
+
             Swal.fire({
               icon: "success",
               title: "Payment Successful!",
@@ -256,9 +293,9 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
           console.error("Error response:", paymentErr.response?.data);
           console.error("Error status:", paymentErr.response?.status);
           console.error("Error message:", paymentErr.message);
-          
+
           const errorMessage = paymentErr.response?.data?.message || paymentErr.response?.data?.error || paymentErr.message || "Unknown error occurred";
-          
+
           // Show error details to help debug
           Swal.fire({
             icon: "error",
@@ -376,11 +413,14 @@ const CheckoutForm = ({ course, totalPrice, onSuccess }) => {
 const CourseCheckout = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const axiosPublic = useAxiosPublic();
   const { user } = useContext(AuthContext);
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { enrollmentData } = location.state || {};
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -561,7 +601,7 @@ const CourseCheckout = () => {
               {/* Payment Form */}
               {user ? (
                 <Elements stripe={stripePromise}>
-                  <CheckoutForm course={course} totalPrice={totalPrice} />
+                  <CheckoutForm course={course} totalPrice={totalPrice} enrollmentData={enrollmentData} />
                 </Elements>
               ) : (
                 <div className="text-center py-8">

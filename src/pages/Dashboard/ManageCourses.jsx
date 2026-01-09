@@ -22,7 +22,9 @@ export default function ManageCourses() {
     students: 0,
     thumbnail: '',
     instructor: '',
-    features: [],
+    instructorImage: '',
+    instructorBio: '',
+    whatYouWillLearn: [],
   });
 
   useEffect(() => {
@@ -49,9 +51,9 @@ export default function ManageCourses() {
     }));
   };
 
-  const handleFeaturesChange = (e) => {
-    const features = e.target.value.split('\n').filter(f => f.trim());
-    setFormData(prev => ({ ...prev, features }));
+  const handleWhatYouWillLearnChange = (e) => {
+    const whatYouWillLearn = e.target.value.split('\n').filter(f => f.trim());
+    setFormData(prev => ({ ...prev, whatYouWillLearn }));
   };
 
   const openModal = (course = null) => {
@@ -69,7 +71,9 @@ export default function ManageCourses() {
         students: course.students || 0,
         thumbnail: course.thumbnail || '',
         instructor: course.instructor || '',
-        features: Array.isArray(course.features) ? course.features : [],
+        instructorImage: course.instructorImage || '',
+        instructorBio: course.instructorBio || '',
+        whatYouWillLearn: Array.isArray(course.whatYouWillLearn) ? course.whatYouWillLearn : (Array.isArray(course.features) ? course.features : []),
       });
     } else {
       setEditingCourse(null);
@@ -85,7 +89,9 @@ export default function ManageCourses() {
         students: 0,
         thumbnail: '',
         instructor: '',
-        features: [],
+        instructorImage: '',
+        instructorBio: '',
+        whatYouWillLearn: [],
       });
     }
     setIsModalOpen(true);
@@ -98,7 +104,7 @@ export default function ManageCourses() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       if (editingCourse) {
         const response = await axiosSecure.put(`/courses/${editingCourse._id}`, formData);
@@ -377,6 +383,20 @@ export default function ManageCourses() {
                     />
                   </div>
                   <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Instructor Image URL</label>
+                    <input
+                      type="url"
+                      name="instructorImage"
+                      value={formData.instructorImage}
+                      onChange={handleInputChange}
+                      placeholder="https://..."
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Thumbnail URL</label>
                     <input
                       type="url"
@@ -386,13 +406,24 @@ export default function ManageCourses() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Instructor Bio</label>
+                    <input
+                      type="text"
+                      name="instructorBio"
+                      value={formData.instructorBio}
+                      onChange={handleInputChange}
+                      placeholder="Brief bio..."
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Features (One per line)</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">What you'll learn (One per line)</label>
                   <textarea
-                    value={formData.features.join('\n')}
-                    onChange={handleFeaturesChange}
+                    value={formData.whatYouWillLearn.join('\n')}
+                    onChange={handleWhatYouWillLearnChange}
                     rows="4"
                     placeholder="Hands-on practice&#10;Real-world datasets&#10;Certificate of completion"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500"

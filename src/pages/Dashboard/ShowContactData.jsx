@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Trash2, MessageSquare, Mail, User, Calendar, Eye, X, Crown, 
+import {
+  Trash2, MessageSquare, Mail, User, Calendar, Eye, X, Crown,
   Search, RefreshCcw, Loader2, Clock, Phone, MapPin, FileText
 } from 'lucide-react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
@@ -23,7 +23,7 @@ const ShowContactData = () => {
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const response = await axiosSecure.get('/contacts');
+        const response = await axiosSecure.get('/contactCollection');
         setContacts(response.data);
         setFilteredContacts(response.data);
         setIsLoading(false);
@@ -33,7 +33,7 @@ const ShowContactData = () => {
         const status = error.response?.status;
         const statusText = error.response?.statusText;
         let errorMessage = 'Failed to fetch contact data';
-        
+
         if (status === 401) {
           errorMessage = 'Authentication required. Please log in again.';
         } else if (status === 403) {
@@ -49,7 +49,7 @@ const ShowContactData = () => {
         } else if (error.message) {
           errorMessage = error.message;
         }
-        
+
         setError(errorMessage);
         setIsLoading(false);
         Swal.fire({
@@ -116,7 +116,7 @@ const ShowContactData = () => {
 
     if (result.isConfirmed) {
       try {
-        await axiosSecure.delete(`/contacts/${id}`);
+        await axiosSecure.delete(`/contactCollection/${id}`);
         const updatedContacts = contacts.filter((contact) => contact._id !== id);
         setContacts(updatedContacts);
         setFilteredContacts(updatedContacts);
@@ -152,7 +152,7 @@ const ShowContactData = () => {
     const date = new Date(dateString);
     const now = new Date();
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) {
       return 'Just now';
     } else if (diffInHours < 24) {
@@ -203,7 +203,7 @@ const ShowContactData = () => {
                 className="px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#E5E0D5] bg-white hover:bg-[#0A3D91]/5 text-[#0A3D91] flex items-center gap-2 font-semibold transition-colors text-sm sm:text-base whitespace-nowrap"
                 title="Refresh"
               >
-                <RefreshCcw className="w-4 h-4" /> 
+                <RefreshCcw className="w-4 h-4" />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
             </div>
@@ -228,7 +228,7 @@ const ShowContactData = () => {
 
           {/* Mobile Overlay */}
           {showMobileSidebar && (
-            <div 
+            <div
               className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-10"
               onClick={() => setShowMobileSidebar(false)}
             />
@@ -242,11 +242,11 @@ const ShowContactData = () => {
                 <MessageSquare className="h-5 w-5" />
                 Messages ({filteredContacts.length})
               </h3>
-          </div>
+            </div>
 
             {/* Message List */}
             <div className="flex-1 overflow-y-auto">
-        {isLoading ? (
+              {isLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center">
                     <Loader2 className="h-8 w-8 animate-spin text-[#0A3D91] mx-auto mb-4" />
@@ -284,11 +284,10 @@ const ShowContactData = () => {
                           setShowMobileSidebar(false);
                         }
                       }}
-                      className={`p-3 sm:p-4 cursor-pointer hover:bg-[#0A3D91]/5 active:bg-[#0A3D91]/10 transition-colors border-l-4 touch-manipulation ${
-                        selectedContact?._id === contact._id 
-                          ? 'border-l-[#0A3D91] bg-[#0A3D91]/5' 
+                      className={`p-3 sm:p-4 cursor-pointer hover:bg-[#0A3D91]/5 active:bg-[#0A3D91]/10 transition-colors border-l-4 touch-manipulation ${selectedContact?._id === contact._id
+                          ? 'border-l-[#0A3D91] bg-[#0A3D91]/5'
                           : 'border-l-transparent'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 rounded-full bg-[#0A3D91]/10 flex items-center justify-center flex-shrink-0">
@@ -314,7 +313,7 @@ const ShowContactData = () => {
                           </p>
                         </div>
                         <div className="flex flex-col gap-1">
-                      <button
+                          <button
                             onClick={(e) => {
                               e.stopPropagation();
                               handleDelete(contact._id, contact.name);
@@ -323,7 +322,7 @@ const ShowContactData = () => {
                             title="Delete Message"
                           >
                             <Trash2 className="h-3 w-3" />
-                      </button>
+                          </button>
                         </div>
                       </div>
                     </motion.div>
@@ -347,7 +346,7 @@ const ShowContactData = () => {
                     <MessageSquare className="h-4 w-4" />
                     Back to Messages
                   </button>
-                  
+
                   <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-start gap-3 sm:gap-4">
                       <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0A3D91]/10 flex items-center justify-center flex-shrink-0">
@@ -418,9 +417,9 @@ const ShowContactData = () => {
                     View Messages
                   </button>
                 </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
         </div>
       </motion.div>
     </div>

@@ -59,7 +59,7 @@ export default function ContactUs() {
         message: `University: ${formData.university}\n\n${formData.message}`,
       };
 
-      const response = await axiosPublic.post('/contacts', payload);
+      const response = await axiosPublic.post('/contactCollection', payload);
 
       if (response.data.insertedId) {
         toast.success('Message sent successfully! We will get back to you soon.');
