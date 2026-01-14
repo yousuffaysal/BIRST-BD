@@ -41,6 +41,7 @@ const Navbar = () => {
     { label: "Courses", to: "/courses" },
     { label: "Services", to: "/service" },
     { label: "Research & Publication", to: "/researchAndPublication" },
+    { label: "Blogs", to: "/blogs" },
     {
       label: "News & Events",
       dropdown: [

@@ -8,7 +8,6 @@ import useAuth from "./useAuth";
 // Create Axios instance
 const AxiosSecure = axios.create({
   baseURL: "https://birstbd.vercel.app",
-  // baseURL: "http://localhost:5000", 
 
 });
 

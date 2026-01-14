@@ -194,6 +194,9 @@ import ShowCourseEnrollment from "../pages/Dashboard/ShowCourseEnrollment";
 import ShowEventEnrollment from "../pages/Dashboard/ShowEventEnrollment";
 import ShowProfileData from "../pages/Dashboard/ShowProfileData";
 import AddTeamMembers from "../pages/Dashboard/AddTeamMembers";
+import AddBlog from "../pages/Dashboard/AddBlog";
+import Blogs from "../pages/Blogs";
+import BlogDetails from "../pages/BlogDetails";
 
 // Custom Routes
 import PrivateRoute from "./PrivateRoute";
@@ -308,6 +311,14 @@ export const router = createBrowserRouter([
       {
         path: "/newsAndEvents",
         element: <NewsAndEvents />,
+      },
+      {
+        path: "/blogs",
+        element: <Blogs />,
+      },
+      {
+        path: "/blog/:id",
+        element: <BlogDetails />,
       },
 
       // --------- Auth Routes ----------
@@ -428,6 +439,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AddTeamMembers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-blogs",
+        element: (
+          <AdminRoute>
+            <AddBlog />
           </AdminRoute>
         ),
       },

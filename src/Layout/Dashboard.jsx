@@ -158,6 +158,12 @@ const Dashboard = () => {
       show: user && isAdmin,
     },
     {
+      to: "/dashboard/manage-blogs",
+      icon: <FileText className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Manage Blogs",
+      show: user && isAdmin,
+    },
+    {
       to: "/dashboard/showContact",
       icon: <Eye className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "Contact Data",

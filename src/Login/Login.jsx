@@ -488,15 +488,10 @@
 //                 </div>
 //             </div>
 //         </div>
-//     );
-// };
-
-// export default Login;
-
-
-import React, { useEffect, useState, useRef, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 
 import SocialLogin from '../components/SocialLogin';
@@ -507,9 +502,8 @@ const Login = () => {
     const [disabled, setDisabled] = useState(true);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
 
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const { signIn } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -520,9 +514,7 @@ const Login = () => {
         loadCaptchaEnginge(6);
     }, []);
 
-    const handleLogin = (event) => {
-        event.preventDefault();
-
+    const onSubmit = (data) => {
         if (!termsAccepted) {
             Swal.fire({
                 title: 'Terms & Conditions Required',
@@ -533,11 +525,7 @@ const Login = () => {
             return;
         }
 
-        const form = event.target;
-        const email = form.email.value;
-        const password = form.password.value;
-
-        signIn(email, password)
+        signIn(data.email, data.password)
             .then((result) => {
                 Swal.fire({
                     title: 'Login Successful!',
@@ -636,27 +624,26 @@ const Login = () => {
                     </div>
 
                     {/* Login Form */}
-                    <form onSubmit={handleLogin} className="space-y-6">
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div className="space-y-4">
                             <div>
                                 <input
-                                    ref={emailRef}
                                     type="email"
-                                    name="email"
                                     placeholder="Your email address *"
+                                    {...register("email", { required: "Email is required" })}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-                                    required
                                 />
+                                {errors.email && (
+                                    <span className="text-red-500 text-sm mt-1 font-dm-sans">{errors.email.message}</span>
+                                )}
                             </div>
                             <div>
                                 <div className="relative">
                                     <input
-                                        ref={passwordRef}
                                         type={showPassword ? "text" : "password"}
-                                        name="password"
                                         placeholder="Enter password *"
+                                        {...register("password", { required: "Password is required" })}
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-                                        required
                                     />
                                     <button
                                         type="button"
@@ -676,6 +663,9 @@ const Login = () => {
                                         )}
                                     </button>
                                 </div>
+                                {errors.password && (
+                                    <span className="text-red-500 text-sm mt-1 font-dm-sans">{errors.password.message}</span>
+                                )}
                             </div>
 
                             {/* Captcha Section */}
@@ -722,7 +712,7 @@ const Login = () => {
                         <button
                             type="submit"
                             disabled={disabled || !termsAccepted}
-                            className="w-full py-3 px-6 btn-elevated disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-3 px-6 btn-elevated rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-dm-sans"
                         >
                             <span>Sign in</span>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
