@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BarChart3,
   FileText,
@@ -160,13 +161,13 @@ export default function Services() {
               </p>
 
               <div className="flex flex-wrap gap-4">
-                <button className="relative px-8 py-4 bg-black text-white font-bold rounded-full overflow-hidden group shadow-xl shadow-gray-200/50 min-w-[220px]">
+                <Link to="/contact" className="relative px-8 py-4 bg-black !text-white font-bold rounded-full overflow-hidden group shadow-xl shadow-gray-200/50 min-w-[220px] text-center flex items-center justify-center">
                   <span className="absolute inset-0 w-full h-full bg-[#1FB6FF] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
-                  <span className="relative z-10">Get a Consultation</span>
-                </button>
-                <button className="px-8 py-4 bg-[#1FB6FF] text-white font-bold border border-[#1FB6FF] rounded-full hover:bg-blue-600 transition-colors shadow-lg shadow-blue-200/50 min-w-[220px]">
+                  <span className="relative z-10 text-white">Get a Consultation</span>
+                </Link>
+                <Link to="/courses" className="px-8 py-4 bg-[#1FB6FF] text-white font-bold border border-[#1FB6FF] rounded-full hover:bg-blue-600 transition-colors shadow-lg shadow-blue-200/50 min-w-[220px] text-center flex items-center justify-center">
                   Explore Courses
-                </button>
+                </Link>
               </div>
             </motion.div>
 

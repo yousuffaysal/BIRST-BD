@@ -1,4 +1,5 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
+import useAxiosPublic from '../../hooks/useAxiosPublic';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Star, Users, Briefcase, Award } from 'lucide-react';
 import { motion, useInView, animate } from 'framer-motion';
@@ -28,6 +29,20 @@ const CountUp = ({ to, suffix = "", duration = 2, decimals = 0 }) => {
 }
 
 const HeroBento = () => {
+    const [heroImage, setHeroImage] = useState(imgCollab);
+    const axiosPublic = useAxiosPublic();
+
+    // Fetch dynamic hero image
+    useEffect(() => {
+        axiosPublic.get('/site-settings/hero')
+            .then(res => {
+                if (res.data && res.data.heroImage) {
+                    setHeroImage(res.data.heroImage);
+                }
+            })
+            .catch(err => console.error("Failed to fetch hero image:", err));
+    }, [axiosPublic]);
+
     return (
         <div className="w-full bg-[#FFFFF0] pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen relative">
             {/* White Screen Entrance Animation */}
@@ -71,7 +86,7 @@ const HeroBento = () => {
 
                                 <div className="flex flex-wrap gap-4">
                                     <Link
-                                        to="/login"
+                                        to="/researchAndPublication"
                                         className="px-8 py-4 bg-[#00BFFF] text-white font-bold rounded-full shadow-lg shadow-blue-900/20 hover:bg-[#009ACD] hover:scale-105 transition-all duration-300 font-['Helvetica'] flex items-center gap-2 group/btn"
                                     >
                                         Get Started
@@ -171,7 +186,7 @@ const HeroBento = () => {
                             className="relative rounded-[2rem] overflow-hidden shadow-xl group h-full min-h-[500px]"
                         >
                             <img
-                                src={imgCollab}
+                                src={heroImage}
                                 alt="Students Collaborating"
                                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />

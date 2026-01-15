@@ -20,6 +20,7 @@ import {
   DollarSign,
   History,
   BookMarked,
+  Settings,
 } from "lucide-react";
 import Swal from "sweetalert2";
 
@@ -161,6 +162,12 @@ const Dashboard = () => {
       to: "/dashboard/manage-blogs",
       icon: <FileText className="h-4 w-4 sm:h-5 sm:w-5" />,
       label: "Manage Blogs",
+      show: user && isAdmin,
+    },
+    {
+      to: "/dashboard/manage-hero",
+      icon: <Settings className="h-4 w-4 sm:h-5 sm:w-5" />,
+      label: "Manage Hero",
       show: user && isAdmin,
     },
     {

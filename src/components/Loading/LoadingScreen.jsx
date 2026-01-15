@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import BIRST_LOGO from '../../assets/BIRST_LOGO.svg';
 
 const LoadingScreen = () => {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
-  const [loadingText, setLoadingText] = useState('Initializing...');
+  const [loadingText, setLoadingText] = useState('Initializing Research Modules...');
 
   const loadingMessages = [
-    'Initializing...',
-    'Loading assets...',
-    'Preparing interface...',
-    'Almost ready...',
-    'Welcome!'
+    'Initializing Research Modules...',
+    'Loading Scientific Data...',
+    'Preparing Analytics...',
+    ' almost ready...',
+    'Welcome to BIRSTBD'
   ];
 
   useEffect(() => {
@@ -50,9 +51,9 @@ const LoadingScreen = () => {
     <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
       <div className="text-center">
         {/* Company Logo */}
-        <img 
-          src="https://res.cloudinary.com/duh7c5x99/image/upload/v1759485852/lebas_emxxoc.png" 
-          alt="The Lebas Buying Logo" 
+        <img
+          src={BIRST_LOGO}
+          alt="BIRSTBD Logo"
           className="w-64 h-64 md:w-80 md:h-80 mx-auto object-contain animate-pulse"
         />
       </div>

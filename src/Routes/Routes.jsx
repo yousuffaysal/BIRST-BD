@@ -183,6 +183,7 @@ import ManageUsers from "../pages/Dashboard/ManageUsers";
 import ShowContactData from "../pages/Dashboard/ShowContactData";
 import Profile from "../pages/Dashboard/Profile";
 import ManageGallery from "../pages/Dashboard/ManageGallery";
+import ManageHero from "../pages/Dashboard/ManageHero";
 import ManageEvents from "../pages/Dashboard/ManageEvents";
 import ManageCourses from "../pages/Dashboard/ManageCourses";
 import ManagePublications from "../pages/Dashboard/ManagePublications";
@@ -391,6 +392,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <ManageGallery />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "manage-hero",
+        element: (
+          <AdminRoute>
+            <ManageHero />
           </AdminRoute>
         ),
       },
