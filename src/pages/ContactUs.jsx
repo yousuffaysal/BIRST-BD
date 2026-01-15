@@ -117,7 +117,7 @@ export default function ContactUs() {
           viewport={{ once: true }}
           className="text-lg md:text-xl text-[#0B2340]/80 leading-relaxed max-w-4xl mx-auto"
         >
-          At Bangladesh Institute of Research and Statistical Training (BIRST), we believe communication is the first step toward meaningful learning and impactful research. Feel free to reach out to us for academic support, institutional partnerships, or general inquiries.
+          At Bangladesh Institute for Research and Statistical Training (BIRST), we believe communication is the first step toward meaningful learning and impactful research. Feel free to reach out to us for academic support, institutional partnerships, or general inquiries.
         </motion.p>
       </section>
 
@@ -141,7 +141,7 @@ export default function ContactUs() {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg mb-1">Address</h3>
-                  <p className="text-gray-600">Bangladesh Institute of Research and Statistical Training (BIRST)</p>
+                  <p className="text-gray-600">Bangladesh Institute for Research and Statistical Training (BIRST)</p>
                   <p className="text-gray-600">Bangladesh</p>
                 </div>
               </div>

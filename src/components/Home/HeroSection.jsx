@@ -3,7 +3,10 @@ import { ArrowRight } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
 
+import useAuth from "../../hooks/useAuth";
+
 const HeroSection = () => {
+    const { user } = useAuth();
     return (
         <section className="relative bg-[var(--color-birst-dark)] text-white overflow-hidden py-24 lg:py-32">
             {/* Background Elements */}
@@ -36,10 +39,10 @@ const HeroSection = () => {
 
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
                     <Link
-                        to="/courses"
+                        to={user ? "/dashboard" : "/signup"}
                         className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white rounded-full bg-[var(--color-birst-primary)] hover:bg-[var(--color-srcbd-green-hover)] transition-all transform hover:scale-105 shadow-lg shadow-blue-500/25 font-semibold"
                     >
-                        Explore Courses
+                        Get Started
                         <ArrowRight className="w-5 h-5" />
                     </Link>
                     <Link

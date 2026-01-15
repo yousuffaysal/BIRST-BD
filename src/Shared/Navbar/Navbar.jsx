@@ -38,14 +38,20 @@ const Navbar = () => {
   // News & Events (Dropdown containing News, Gallery, About Us links), 
   // Contact Us
   const navItems = [
-    { label: "Courses", to: "/courses" },
-    { label: "Services", to: "/service" },
+    {
+      label: "Courses",
+      dropdown: [
+        { label: "All Courses", to: "/courses" },
+        { label: "Services", to: "/service" },
+      ]
+    },
+    { label: "AI Tools", to: "/aitools" },
     { label: "Research & Publication", to: "/researchAndPublication" },
-    { label: "Blogs", to: "/blogs" },
     {
       label: "News & Events",
       dropdown: [
         { label: "All News & Events", to: "/newsAndEvents" },
+        { label: "Blogs", to: "/blogs" },
         { label: "Gallery", to: "/gallery" },
         { label: "About Us", to: "/about/profile" },
         { label: "Our Mission", to: "/about/mission" },
@@ -72,7 +78,7 @@ const Navbar = () => {
       className={`fixed inset-x-0 top-0 z-50 w-full h-[100px] flex items-center transition-all duration-300 font-['Montserrat'] border-b-[2px] border-gray-200 ${isScrolled ? "bg-[#FFFFF0]/95 backdrop-blur-md shadow-sm" : "bg-[#FFFFF0]"
         }`}
     >
-      <div className="w-full mx-auto px-4 sm:px-6 lg:px-10">
+      <div className="w-full mx-auto px-4 sm:px-6 lg:px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group shrink-0">

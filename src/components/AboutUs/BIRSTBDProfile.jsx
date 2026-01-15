@@ -236,25 +236,35 @@ export default function BIRSTBDProfile() {
             <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
               <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden bg-white/5">
                 {/* Placeholder for Director Image */}
-                <div className="w-full h-full bg-slate-700 flex items-center justify-center text-slate-500">
-                  <Users className="w-20 h-20 opacity-50" />
-                </div>
+                <img
+                  src="https://ik.imagekit.io/2lax2ytm2/10001.png"
+                  alt="Professor Hafiz T.A. Khan"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex-1 text-center md:text-left">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1FB6FF]/20 text-[#1FB6FF] text-xs font-bold uppercase tracking-wider mb-4 border border-[#1FB6FF]/20">
                   <Award className="w-3 h-3" />
                   <span>Director & Lead Statistician</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-black text-white mb-2">Dr. Mohammad Hasan</h3>
-                <p className="text-[#1FB6FF] font-medium mb-6">PhD in Statistics, University of Dhaka</p>
-                <p className="text-slate-300 leading-relaxed mb-8 max-w-2xl">
-                  "Our mission is to bridge the critical gap between theoretical statistics and practical application. We assume the responsibility of nurturing the next generation of data scientists in Bangladesh."
+                <h3 className="text-3xl md:text-4xl font-black text-white mb-2">Professor Hafiz T.A. Khan</h3>
+                <p className="text-[#1FB6FF] font-medium mb-4">Professor of Public Health and Statistics</p>
+
+                <div className="space-y-1 mb-6 text-sm text-slate-300">
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#1FB6FF] mt-2 shrink-0"></span> Post-Doctoral in Population Ageing 2005 (University of Oxford)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> PhD in Applied Statistics 1996 (Edinburgh Napier University)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> MSc in Statistics 1987 (University of Chittagong)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> BSc in Statistics 1986 (University of Chittagong)</p>
+                </div>
+
+                <p className="text-slate-300 leading-relaxed mb-8 max-w-2xl italic opacity-80">
+                  "Prior to joining UWL, he held several academic positions including Reader in Health Statistics at Birmingham City University and Research Fellow at the University of Oxford (2006-2008)."
                 </p>
 
                 <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
                   <div className="flex flex-wrap gap-4 justify-center md:justify-start">
                     <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-sm text-slate-300">
-                      15+ Years Experience
+                      34+ Years Experience
                     </div>
                     <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-sm text-slate-300">
                       Research Methodology
@@ -263,13 +273,13 @@ export default function BIRSTBDProfile() {
 
                   {/* Social Links */}
                   <div className="flex items-center gap-3">
-                    <a href="#" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
+                    <a href="https://x.com/htakhan" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
                       <Twitter className="w-5 h-5" />
                     </a>
-                    <a href="#" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
+                    <a href="https://www.linkedin.com/in/hafiz-t-a-khan-phd-978a9353/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
                       <Linkedin className="w-5 h-5" />
                     </a>
-                    <a href="#" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20" title="Google Scholar">
+                    <a href="https://scholar.google.com/citations?user=z8-PmZcAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20" title="Google Scholar">
                       <BookOpen className="w-5 h-5" />
                     </a>
                   </div>
@@ -282,12 +292,17 @@ export default function BIRSTBDProfile() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                name: 'Dr. Fatema Begum',
-                designation: 'Associate Professor',
-                role: 'Senior Research Consultant',
-                edu: 'PhD in Data Science',
-                stats: '12+ Years Exp',
-                social: { twitter: '#', linkedin: '#', scholar: '#' }
+                name: 'Dr. Anamul Haque Sajib',
+                designation: 'Professor',
+                role: 'Department of Statistics, DU',
+                edu: 'PhD in Statistics (Nottingham)',
+                stats: '16+ Years Exp',
+                image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg',
+                social: {
+                  scholar: 'https://scholar.google.com/citations?user=rzyc9icAAAAJ&hl=en',
+                  researchgate: 'https://www.researchgate.net/profile/Anamul-Sajib',
+                  faculty: 'https://du.ac.bd/faculty/faculty_details/STA/2434'
+                }
               },
               {
                 name: 'Mr. Kamrul Hasan',
@@ -312,7 +327,11 @@ export default function BIRSTBDProfile() {
                 className="bg-white p-6 rounded-2xl shadow-lg border border-gray-50 group text-center flex flex-col items-center"
               >
                 <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-[#1FB6FF]/10 transition-colors relative overflow-hidden">
-                  <span className="text-2xl font-black text-gray-300 group-hover:text-[#1FB6FF] transition-colors z-10">{member.name.charAt(0)}</span>
+                  {member.image ? (
+                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <span className="text-2xl font-black text-gray-300 group-hover:text-[#1FB6FF] transition-colors z-10">{member.name.charAt(0)}</span>
+                  )}
                 </div>
 
                 <h4 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h4>
@@ -321,15 +340,31 @@ export default function BIRSTBDProfile() {
 
                 {/* Social Links */}
                 <div className="flex items-center gap-3 mb-4">
-                  <a href={member.social.twitter} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-400 transition-colors">
-                    <Twitter className="w-4 h-4" />
-                  </a>
-                  <a href={member.social.linkedin} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-700 transition-colors">
-                    <Linkedin className="w-4 h-4" />
-                  </a>
-                  <a href={member.social.scholar} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-colors" title="Google Scholar">
-                    <BookOpen className="w-4 h-4" />
-                  </a>
+                  {member.social.twitter && (
+                    <a href={member.social.twitter} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-400 transition-colors">
+                      <Twitter className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.social.linkedin && (
+                    <a href={member.social.linkedin} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-700 transition-colors">
+                      <Linkedin className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.social.scholar && (
+                    <a href={member.social.scholar} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-blue-600 transition-colors" title="Google Scholar">
+                      <BookOpen className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.social.researchgate && (
+                    <a href={member.social.researchgate} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-teal-600 transition-colors" title="ResearchGate">
+                      <Globe className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.social.faculty && (
+                    <a href={member.social.faculty} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-indigo-600 transition-colors" title="Faculty Profile">
+                      <Building2 className="w-4 h-4" />
+                    </a>
+                  )}
                 </div>
 
                 <div className="w-full pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">

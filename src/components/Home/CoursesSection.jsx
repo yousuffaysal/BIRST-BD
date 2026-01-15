@@ -11,12 +11,12 @@ const courses = [
         tasks: "12 Modules",
         projects: "3 Projects",
         capacity: 85,
-        meta: "Modules: 12/16",
-        startDate: "20 July",
-        button: "Enroll Now",
+        meta: "Start date: Coming soon",
+        startDate: "Coming soon",
+        button: "Pre-Register",
         color: "bg-pink-100",
         avatar: "👩‍🔬", // Using emoji as 3D avatar placeholder
-        isComingSoon: false
+        isComingSoon: true
     },
     {
         title: "Python for Data Analysis",
@@ -25,8 +25,8 @@ const courses = [
         tasks: "24 Modules",
         projects: "4 Projects",
         capacity: 15,
-        meta: "Start date: 15 Aug",
-        startDate: "15 Aug",
+        meta: "Start date: Coming soon",
+        startDate: "Coming soon",
         button: "Pre-Register",
         color: "bg-blue-100",
         avatar: "🧑‍💻",
@@ -39,12 +39,12 @@ const courses = [
         tasks: "8 Modules",
         projects: "Individual",
         capacity: 92,
-        meta: "Start date: 01 Sept",
-        startDate: "01 Sept",
-        button: "Enroll Now",
+        meta: "Start date: Coming soon",
+        startDate: "Coming soon",
+        button: "Pre-Register",
         color: "bg-yellow-100",
         avatar: "🧑‍🎓",
-        isComingSoon: false
+        isComingSoon: true
     },
     {
         title: "Quantitative Data Analysis",
@@ -53,12 +53,12 @@ const courses = [
         tasks: "16 Modules",
         projects: "Capstone",
         capacity: 45,
-        meta: "Start date: 10 Oct",
-        startDate: "10 Oct",
-        button: "Enroll Now",
+        meta: "Start date: Coming soon",
+        startDate: "Coming soon",
+        button: "Pre-Register",
         color: "bg-green-100",
         avatar: "📊",
-        isComingSoon: false
+        isComingSoon: true
     }
 ];
 
@@ -212,21 +212,32 @@ const CoursesSection = () => {
                                         </div>
                                     </div>
 
-                                    <div className="flex justify-between items-end mb-2">
-                                        <div className="flex items-center gap-2 text-xs font-bold text-gray-600">
-                                            <Users className="w-3.5 h-3.5" />
-                                            <span>Seats Filled</span>
+                                    {course.isComingSoon ? (
+                                        <div className="flex items-center justify-between py-2 border-t border-black/5 mt-2">
+                                            <span className="text-sm font-bold text-gray-800 italic flex items-center gap-2">
+                                                <Sparkles className="w-4 h-4 text-gray-500" />
+                                                Will be Started soon
+                                            </span>
                                         </div>
-                                        <span className="text-xs font-bold text-gray-900">{course.capacity}%</span>
-                                    </div>
-                                    <div className="w-full h-2 bg-white/40 rounded-full overflow-hidden">
-                                        <motion.div
-                                            initial={{ width: 0 }}
-                                            whileInView={{ width: `${course.capacity}%` }}
-                                            transition={{ delay: 0.5 + (index * 0.1), duration: 1, ease: "easeOut" }}
-                                            className="h-full bg-black rounded-full"
-                                        />
-                                    </div>
+                                    ) : (
+                                        <>
+                                            <div className="flex justify-between items-end mb-2">
+                                                <div className="flex items-center gap-2 text-xs font-bold text-gray-600">
+                                                    <Users className="w-3.5 h-3.5" />
+                                                    <span>Seats Filled</span>
+                                                </div>
+                                                <span className="text-xs font-bold text-gray-900">{course.capacity}%</span>
+                                            </div>
+                                            <div className="w-full h-2 bg-white/40 rounded-full overflow-hidden">
+                                                <motion.div
+                                                    initial={{ width: 0 }}
+                                                    whileInView={{ width: `${course.capacity}%` }}
+                                                    transition={{ delay: 0.5 + (index * 0.1), duration: 1, ease: "easeOut" }}
+                                                    className="h-full bg-black rounded-full"
+                                                />
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 

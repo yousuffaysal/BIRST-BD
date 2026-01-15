@@ -30,37 +30,43 @@ const ResourcesSection = () => {
                             title: "Thesis Template (APA Style)",
                             desc: "Standard formatted word document for thesis writing.",
                             type: "DOCX",
-                            size: "2.4 MB"
+                            size: "2.4 MB",
+                            link: "/resources/Thesis_Template_APA.docx"
                         },
                         {
                             title: "Research Proposal Sample",
                             desc: "A winning research proposal example with annotations.",
                             type: "PDF",
-                            size: "1.1 MB"
+                            size: "1.1 MB",
+                            link: "/resources/Research_Proposal_Sample.pdf"
                         },
                         {
                             title: "Statistical Test Cheat Sheet",
                             desc: "Quick reference guide for choosing the right test.",
                             type: "PDF",
-                            size: "0.5 MB"
+                            size: "0.5 MB",
+                            link: "/resources/Statistical_Test_Cheat_Sheet.pdf"
                         },
                         {
                             title: "Sample Dataset (SPSS)",
                             desc: "Practice dataset for quantitative analysis.",
-                            type: "SAV",
-                            size: "4.2 MB"
+                            type: "CSV",
+                            size: "4.2 KB",
+                            link: "/resources/Sample_Dataset.csv"
                         },
                         {
                             title: "Literature Review Matrix",
                             desc: "Excel sheet to organize your literature review.",
                             type: "XLSX",
-                            size: "0.8 MB"
+                            size: "0.8 MB",
+                            link: "/resources/Literature_Review_Matrix.xlsx"
                         },
                         {
                             title: "Consent Form Template",
                             desc: "Ethical clearance consent form for participants.",
                             type: "DOCX",
-                            size: "1.5 MB"
+                            size: "1.5 MB",
+                            link: "/resources/Consent_Form_Template.docx"
                         }
                     ].map((item, index) => (
                         <motion.div
@@ -80,10 +86,16 @@ const ResourcesSection = () => {
                                 <div className="flex items-center gap-4 text-xs font-semibold text-gray-400">
                                     <span className="px-2 py-1 bg-white border rounded">{item.type}</span>
                                     <span>{item.size}</span>
-                                    <button className="flex items-center gap-1 ml-auto text-[var(--color-birst-primary)] hover:underline">
+                                    <a
+                                        href={item.link}
+                                        download
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="flex items-center gap-1 ml-auto text-[var(--color-birst-primary)] hover:underline"
+                                    >
                                         <Download className="w-3 h-3" />
                                         Download
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         </motion.div>

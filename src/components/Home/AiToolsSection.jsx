@@ -1,49 +1,8 @@
 import React from "react";
-import { FileText, Search, Book, AlertTriangle, PieChart, Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-
-const tools = [
-    {
-        icon: FileText,
-        title: "Paper Structure Checker",
-        desc: "Analyze your research paper's structure against academic standards.",
-        tags: ["Writing", "Structure"],
-        button: "Check Paper",
-        color: "bg-blue-500"
-    },
-    {
-        icon: Search,
-        title: "Methodology Reviewer",
-        desc: "Get AI feedback on your chosen research methodology and sampling.",
-        tags: ["Analysis", "Review"],
-        button: "Review Method",
-        color: "bg-purple-500"
-    },
-    {
-        icon: Book,
-        title: "Literature Review Generator",
-        desc: "Generate comprehensive literature reviews from your selected sources.",
-        tags: ["Research", "Generation"],
-        button: "Generate Review",
-        color: "bg-green-500"
-    },
-    {
-        icon: AlertTriangle,
-        title: "Plagiarism Insights",
-        desc: "Detect potential plagiarism and get rewriting suggestions.",
-        tags: ["Ethics", "Writing"],
-        button: "Scan Text",
-        color: "bg-red-500"
-    },
-    {
-        icon: PieChart,
-        title: "Statistical Test Recommender",
-        desc: "Find the right statistical test for your data type and hypothesis.",
-        tags: ["Stats", "Data"],
-        button: "Find Test",
-        color: "bg-orange-500"
-    }
-];
+import { bots } from "../../data/bots";
+import { Link } from "react-router-dom";
 
 const AiToolsSection = () => {
     return (
@@ -132,9 +91,9 @@ const AiToolsSection = () => {
 
                     {/* Sticky Stack Container */}
                     <div className="max-w-5xl mx-auto relative space-y-6">
-                        {tools.map((tool, index) => (
+                        {bots.map((tool, index) => (
                             <div
-                                key={index}
+                                key={tool.id}
                                 className="sticky top-20 pt-4 pb-4 min-h-[50vh] flex items-center justify-center"
                                 style={{
                                     zIndex: index + 1
@@ -150,7 +109,7 @@ const AiToolsSection = () => {
                                 >
 
                                     {/* Background Glow */}
-                                    <div className={`absolute -right-20 -top-20 w-64 h-64 ${tool.color} opacity-5 blur-[100px] rounded-full`}></div>
+                                    <div className={`absolute -right-20 -top-20 w-64 h-64 bg-gradient-to-br ${tool.gradient} opacity-5 blur-[100px] rounded-full`}></div>
 
                                     <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 md:gap-16">
 
@@ -167,22 +126,27 @@ const AiToolsSection = () => {
                                         {/* Right: Content */}
                                         <div className="flex-grow text-left">
                                             <div className="flex flex-wrap gap-2 mb-4">
-                                                {tool.tags.map(tag => (
-                                                    <span key={tag} className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-100 rounded-lg">
-                                                        {tag}
-                                                    </span>
-                                                ))}
+                                                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-[var(--color-birst-primary)] rounded-lg">
+                                                    {tool.category}
+                                                </span>
+                                                <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-500 bg-gray-100 rounded-lg">
+                                                    {tool.version}
+                                                </span>
                                             </div>
                                             <h3 className="text-3xl font-bold text-[var(--color-birst-dark)] mb-3 font-['Helvetica-Bold']">
-                                                {tool.title}
+                                                {tool.name}
                                             </h3>
                                             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                                                {tool.desc}
+                                                {tool.description}
                                             </p>
-                                            <button className="group inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-birst-dark)] text-white rounded-xl font-bold hover:bg-[var(--color-birst-primary)] transition-all duration-300 text-sm uppercase tracking-wide">
-                                                {tool.button}
+                                            <Link
+                                                to={`/bot/${tool.id}`}
+                                                style={{ color: '#FFFFFF' }}
+                                                className="group inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-birst-dark)] text-[#FFFFFF] rounded-xl font-bold hover:bg-[var(--color-birst-primary)] transition-all duration-300 text-sm uppercase tracking-wide"
+                                            >
+                                                Launch Tool
                                                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                                            </button>
+                                            </Link>
                                         </div>
 
                                     </div>

@@ -169,6 +169,7 @@ import AboutUs from "../pages/AboutUs";
 import ContactUs from "../pages/ContactUs";
 import Services from "../pages/Services";
 import AiTools from "../pages/AiTools";
+import BotWorkspace from "../pages/BotWorkspace";
 import Coureses from "../pages/Coureses";
 import CourseDetails from "../pages/CourseDetails";
 import CourseCheckout from "../pages/CourseCheckout";
@@ -284,6 +285,10 @@ export const router = createBrowserRouter([
       {
         path: "/aitools",
         element: <AiTools />,
+      },
+      {
+        path: "/bot/:id",
+        element: <BotWorkspace />,
       },
       {
         path: "/courses",

@@ -571,12 +571,14 @@ const Login = () => {
     return (
         <div className="min-h-screen w-full bg-gradient-to-br from-deep-teal to-mint-green flex fixed inset-0">
             {/* Left Section with Illustration */}
-            <div className="hidden lg:flex lg:w-1/2 bg-warm-beige items-center justify-center p-12 relative overflow-hidden">
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                    <div className="absolute top-10 left-10 w-20 h-20 bg-mint-green/30 rounded-full animate-float"></div>
-                    <div className="absolute bottom-20 right-20 w-16 h-16 bg-deep-teal/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
-                    <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-light-sky-blue/20 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
+            <div className="hidden lg:flex lg:w-1/2 bg-[#0B2340] items-center justify-center p-12 relative overflow-hidden">
+                {/* Floating Illustration */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <img
+                        src="https://ik.imagekit.io/2lax2ytm2/Gemini_Generated_Image_479pjn479pjn479p.png"
+                        alt="Background Illustration"
+                        className="w-[400px] h-auto object-contain"
+                    />
                 </div>
 
                 <div className="max-w-lg relative z-10">
@@ -587,18 +589,18 @@ const Login = () => {
                             alt="BIRSTBD"
                             className="h-16 w-auto mx-auto mb-4"
                         />
-                        <h2 className="text-4xl font-bold font-space-grotesk text-charcoal text-center">
-                            Welcome Back to <span className="text-deep-teal">BIRSTBD</span>
+                        <h2 className="text-4xl font-bold font-space-grotesk text-white text-center">
+                            Welcome Back to <span className="text-[#1FB6FF]">BIRSTBD</span>
                         </h2>
                     </div>
 
-                    <p className="text-xl font-dm-sans text-charcoal/80 mb-8 leading-relaxed text-center">
+                    <p className="text-xl font-dm-sans text-white/90 mb-8 leading-relaxed text-center">
                         Crafting Quality<br className="hidden sm:inline" />Garments with Precision
                     </p>
 
                     {/* Sign Up Button */}
                     <div className="text-center">
-                        <p className="text-charcoal/70 font-dm-sans mb-4">Don't have an account?</p>
+                        <p className="text-white/80 font-dm-sans mb-4">Don't have an account?</p>
                         <Link
                             to="/signup"
                             className="btn-elevated px-8 py-4"

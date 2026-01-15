@@ -11,7 +11,7 @@ const ExpertCard = ({ expert }) => {
   };
 
   return (
-    <div className="w-[400px] relative group bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 flex-shrink-0 mx-4 flex flex-col">
+    <div className="w-[320px] md:w-[400px] relative group bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 hover:shadow-2xl transition-all duration-500 flex-shrink-0 mx-4 flex flex-col">
       {/* Cover Photo - Fixed Height */}
       <div className={`h-32 w-full bg-gradient-to-r ${expert.color || 'from-blue-500 to-cyan-500'} relative flex-shrink-0`}>
         <div className="absolute inset-0 bg-black/10"></div>

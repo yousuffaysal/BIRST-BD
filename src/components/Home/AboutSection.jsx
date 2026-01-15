@@ -151,12 +151,12 @@ const AboutSection = () => {
                             }}
                             className="relative rounded-[2rem] overflow-hidden aspect-[4/5] lg:w-full shadow-2xl origin-bottom"
                         >
-                            <img src={imgInstructor} alt="Instructor" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out" />
+                            <img src="https://ik.imagekit.io/2lax2ytm2/10001.png" alt="Professor Hafiz T.A. Khan" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out" />
 
                             {/* Name Overlay */}
                             <div className="absolute bottom-0 left-0 right-0 p-8 w-full bg-gradient-to-t from-[var(--color-birst-dark)] to-transparent">
-                                <h4 className="text-white text-xl font-bold">Dianne Russell</h4>
-                                <p className="text-[var(--color-birst-primary)] text-sm font-bold">Associate Professor</p>
+                                <h4 className="text-white text-xl font-bold">Professor Hafiz T.A. Khan</h4>
+                                <p className="text-[var(--color-birst-primary)] text-sm font-bold">Professor of Public Health and Statistics</p>
                             </div>
                         </motion.div>
 
@@ -171,7 +171,7 @@ const AboutSection = () => {
                                 damping: 20,
                                 delay: 0.6
                             }}
-                            className="absolute bottom-12 -right-4 lg:-right-24 bg-[var(--color-birst-light)] p-8 w-64 shadow-xl z-30 border border-gray-100"
+                            className="absolute -bottom-8 right-2 lg:bottom-12 lg:-right-24 bg-[var(--color-birst-light)] p-8 w-64 shadow-xl z-30 border border-gray-100"
                         >
                             <h3 className="text-5xl font-['Helvetica-Bold'] font-bold text-[var(--color-birst-dark)] mb-2">
                                 <CountUp to={20} suffix="+" />
