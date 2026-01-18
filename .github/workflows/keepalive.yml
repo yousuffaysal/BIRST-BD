@@ -1,0 +1,16 @@
+name: Keep Backend Alive
+
+on:
+  schedule:
+    - cron: '*/10 * * * *' # Runs every 10 minutes
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  wake-up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend
+        run: |
+          echo "Pinging backend to prevent sleep..."
+          curl -s https://birstbd-conf-bt.onrender.com/ > /dev/null
+          echo "Ping complete."
