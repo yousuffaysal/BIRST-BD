@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowLeft, Building2, MapPin, Calendar, Users, Target, Award, TrendingUp, Sparkles, CheckCircle, Globe, Twitter, Linkedin, BookOpen, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import imgAnamul from '../../assets/images/10001.jpg';
 
 export default function BIRSTBDProfile() {
   const highlights = [
@@ -297,7 +298,7 @@ export default function BIRSTBDProfile() {
                 role: 'Professor, Department of Statistics, DU',
                 edu: 'PhD in Statistics (Nottingham)',
                 stats: '16+ Years Exp',
-                image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg',
+                image: imgAnamul,
                 social: {
                   scholar: 'https://scholar.google.com/citations?user=rzyc9icAAAAJ&hl=en',
                   researchgate: 'https://www.researchgate.net/profile/Anamul-Sajib',
