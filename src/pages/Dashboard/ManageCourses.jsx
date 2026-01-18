@@ -324,7 +324,7 @@ export default function ManageCourses() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-[#0B2340]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 content-start overflow-y-auto"
+            className="fixed inset-0 bg-black/70 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
             onClick={(e) => {
               if (e.target === e.currentTarget) closeModal();
             }}
@@ -333,247 +333,254 @@ export default function ManageCourses() {
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="bg-white rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col my-8"
+              className="bg-white rounded-3xl w-full max-w-4xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+              onClick={(e) => e.stopPropagation()}
             >
-              <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50 shrink-0 sticky top-0 z-20 backdrop-blur-md">
-                <h3 className="text-2xl font-bold font-unbounded text-[#0B2340]">
+              {/* Sticky Header */}
+              <div className="px-8 py-6 border-b border-gray-100 flex items-center justify-between bg-gradient-to-r from-[#0B2340] to-[#02bfff] shrink-0 sticky top-0 z-20">
+                <h3 className="text-2xl font-bold font-unbounded text-white">
                   {editingCourse ? 'Edit Course' : 'Create New Course'}
                 </h3>
-                <button onClick={closeModal} className="p-2 hover:bg-gray-200 rounded-full transition-colors text-gray-500">
+                <button onClick={closeModal} className="p-2 hover:bg-white/20 rounded-full transition-colors text-white">
                   <X size={24} />
                 </button>
               </div>
 
-              <div className="p-8">
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  {/* Basic Info Section */}
-                  <div>
-                    <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2">
-                      <Layout size={16} /> Basic Information
-                    </h4>
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Course Title <span className="text-red-500">*</span></label>
-                        <input
-                          type="text"
-                          name="title"
-                          value={formData.title}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                          placeholder="Introduction to..."
-                        />
+              {/* Scrollable Form Content */}
+              <div className="overflow-y-auto flex-1 custom-scrollbar">
+                <div className="p-8">
+                  <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Basic Info Section */}
+                    <div>
+                      <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2">
+                        <Layout size={16} /> Basic Information
+                      </h4>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Course Title <span className="text-red-500">*</span></label>
+                          <input
+                            type="text"
+                            name="title"
+                            value={formData.title}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                            placeholder="Introduction to..."
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Category <span className="text-red-500">*</span></label>
+                          <select
+                            name="category"
+                            value={formData.category}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
+                          >
+                            <option value="Statistics">Statistics</option>
+                            <option value="Data Science">Data Science</option>
+                            <option value="Research Methods">Research Methods</option>
+                            <option value="Software Training">Software Training</option>
+                            <option value="Machine Learning">Machine Learning</option>
+                          </select>
+                        </div>
                       </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Category <span className="text-red-500">*</span></label>
-                        <select
-                          name="category"
-                          value={formData.category}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
-                        >
-                          <option value="Statistics">Statistics</option>
-                          <option value="Data Science">Data Science</option>
-                          <option value="Research Methods">Research Methods</option>
-                          <option value="Software Training">Software Training</option>
-                          <option value="Machine Learning">Machine Learning</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div className="mt-6 space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Description <span className="text-red-500">*</span></label>
-                      <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        required
-                        rows="3"
-                        className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        placeholder="Write a compelling summary..."
-                      />
-                    </div>
-                  </div>
-
-                  {/* Details & Pricing */}
-                  <div>
-                    <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
-                      <BarChart3 size={16} /> Level & Pricing
-                    </h4>
-                    <div className="grid md:grid-cols-3 gap-6 mb-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Level</label>
-                        <select
-                          name="level"
-                          value={formData.level}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
-                        >
-                          <option value="Beginner">Beginner</option>
-                          <option value="Intermediate">Intermediate</option>
-                          <option value="Advanced">Advanced</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Duration</label>
-                        <input
-                          type="text"
-                          name="duration"
-                          value={formData.duration}
-                          onChange={handleInputChange}
-                          required
-                          placeholder="e.g. 12 Weeks"
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Enrolled Students</label>
-                        <input
-                          type="number"
-                          name="students"
-                          value={formData.students}
-                          onChange={handleInputChange}
-                          min="0"
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Price</label>
-                        <input
-                          type="number"
-                          name="price"
-                          value={formData.price}
-                          onChange={handleInputChange}
-                          min="0"
-                          required
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Currency</label>
-                        <select
-                          name="currency"
-                          value={formData.currency}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
-                        >
-                          <option value="BDT">BDT</option>
-                          <option value="USD">USD</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Rating (0-5)</label>
-                        <input
-                          type="number"
-                          name="rating"
-                          value={formData.rating}
-                          onChange={handleInputChange}
-                          min="0"
-                          max="5"
-                          step="0.1"
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Instructor Section */}
-                  <div>
-                    <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
-                      <User size={16} /> Instructor Info
-                    </h4>
-                    <div className="grid md:grid-cols-2 gap-6 mb-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Instructor Name <span className="text-red-500">*</span></label>
-                        <input
-                          type="text"
-                          name="instructor"
-                          value={formData.instructor}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Instructor Image URL</label>
-                        <input
-                          type="url"
-                          name="instructorImage"
-                          value={formData.instructorImage}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-bold text-gray-700">Instructor Bio</label>
-                      <input
-                        type="text"
-                        name="instructorBio"
-                        value={formData.instructorBio}
-                        onChange={handleInputChange}
-                        placeholder="Brief professional bio..."
-                        className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Media & Content */}
-                  <div>
-                    <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
-                      <Image size={16} /> Course Content & Media
-                    </h4>
-                    <div className="space-y-6">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Course Thumbnail URL</label>
-                        <input
-                          type="url"
-                          name="thumbnail"
-                          value={formData.thumbnail}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                        {formData.thumbnail && (
-                          <div className="mt-2 h-32 w-48 rounded-xl overflow-hidden border border-gray-200">
-                            <img src={formData.thumbnail} className="w-full h-full object-cover" alt="Preview" />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">What You'll Learn (One point per line)</label>
+                      <div className="mt-6 space-y-2">
+                        <label className="text-sm font-bold text-gray-700">Description <span className="text-red-500">*</span></label>
                         <textarea
-                          value={formData.whatYouWillLearn.join('\n')}
-                          onChange={handleWhatYouWillLearnChange}
-                          rows="5"
-                          placeholder="• Master Python Programming&#10;• Build Real-world Projects&#10;• Get Certified"
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleInputChange}
+                          required
+                          rows="3"
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          placeholder="Write a compelling summary..."
                         />
                       </div>
                     </div>
-                  </div>
 
-                  <div className="pt-6 border-t border-gray-100 flex gap-4 sticky bottom-0 bg-white z-10 pb-2">
-                    <button
-                      type="button"
-                      onClick={closeModal}
-                      className="px-6 py-3 rounded-xl font-bold text-gray-600 hover:bg-gray-100 transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[#0B2340] text-white rounded-xl hover:bg-[#1a3a5f] transition-all font-bold shadow-lg shadow-blue-900/20"
-                    >
-                      <Save size={20} />
-                      {editingCourse ? 'Update Course' : 'Create Course'}
-                    </button>
-                  </div>
-                </form>
+                    {/* Details & Pricing */}
+                    <div>
+                      <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
+                        <BarChart3 size={16} /> Level & Pricing
+                      </h4>
+                      <div className="grid md:grid-cols-3 gap-6 mb-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Level</label>
+                          <select
+                            name="level"
+                            value={formData.level}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
+                          >
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                          </select>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Duration</label>
+                          <input
+                            type="text"
+                            name="duration"
+                            value={formData.duration}
+                            onChange={handleInputChange}
+                            required
+                            placeholder="e.g. 12 Weeks"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Enrolled Students</label>
+                          <input
+                            type="number"
+                            name="students"
+                            value={formData.students}
+                            onChange={handleInputChange}
+                            min="0"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Price</label>
+                          <input
+                            type="number"
+                            name="price"
+                            value={formData.price}
+                            onChange={handleInputChange}
+                            min="0"
+                            required
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Currency</label>
+                          <select
+                            name="currency"
+                            value={formData.currency}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
+                          >
+                            <option value="BDT">BDT</option>
+                            <option value="USD">USD</option>
+                          </select>
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Rating (0-5)</label>
+                          <input
+                            type="number"
+                            name="rating"
+                            value={formData.rating}
+                            onChange={handleInputChange}
+                            min="0"
+                            max="5"
+                            step="0.1"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Instructor Section */}
+                    <div>
+                      <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
+                        <User size={16} /> Instructor Info
+                      </h4>
+                      <div className="grid md:grid-cols-2 gap-6 mb-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Instructor Name <span className="text-red-500">*</span></label>
+                          <input
+                            type="text"
+                            name="instructor"
+                            value={formData.instructor}
+                            onChange={handleInputChange}
+                            required
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Instructor Image URL</label>
+                          <input
+                            type="url"
+                            name="instructorImage"
+                            value={formData.instructorImage}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-sm font-bold text-gray-700">Instructor Bio</label>
+                        <input
+                          type="text"
+                          name="instructorBio"
+                          value={formData.instructorBio}
+                          onChange={handleInputChange}
+                          placeholder="Brief professional bio..."
+                          className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Media & Content */}
+                    <div>
+                      <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
+                        <Image size={16} /> Course Content & Media
+                      </h4>
+                      <div className="space-y-6">
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">Course Thumbnail URL</label>
+                          <input
+                            type="url"
+                            name="thumbnail"
+                            value={formData.thumbnail}
+                            onChange={handleInputChange}
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                          {formData.thumbnail && (
+                            <div className="mt-2 h-32 w-48 rounded-xl overflow-hidden border border-gray-200">
+                              <img src={formData.thumbnail} className="w-full h-full object-cover" alt="Preview" />
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <label className="text-sm font-bold text-gray-700">What You'll Learn (One point per line)</label>
+                          <textarea
+                            value={formData.whatYouWillLearn.join('\n')}
+                            onChange={handleWhatYouWillLearnChange}
+                            rows="5"
+                            placeholder="• Master Python Programming&#10;• Build Real-world Projects&#10;• Get Certified"
+                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              {/* Sticky Footer */}
+              <div className="px-8 py-4 border-t border-gray-100 flex gap-4 bg-gray-50 shrink-0 sticky bottom-0 z-20">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-6 py-3 rounded-xl font-bold text-gray-600 hover:bg-gray-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  onClick={handleSubmit}
+                  className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#0B2340] to-[#02bfff] text-white rounded-xl hover:shadow-lg transition-all font-bold"
+                >
+                  <Save size={20} />
+                  {editingCourse ? 'Update Course' : 'Create Course'}
+                </button>
               </div>
             </motion.div>
           </motion.div>

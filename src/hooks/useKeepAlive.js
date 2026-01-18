@@ -18,8 +18,8 @@ const useKeepAlive = () => {
 
         pingBackend();
 
-        // Set up interval for every 60 seconds (Render sleeps after 15 mins inactive)
-        const interval = setInterval(pingBackend, 60 * 1000);
+        // Set up interval for every 5 minutes (Render sleeps after 15 mins inactive)
+        const interval = setInterval(pingBackend, 5 * 60 * 1000);
 
         return () => clearInterval(interval);
     }, []);
