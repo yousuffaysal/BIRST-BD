@@ -310,7 +310,7 @@ export default function BIRSTBDProfile() {
                 role: 'Post-doctoral Fellow, Division of Epidemiology and Biostatistics, HKU',
                 edu: 'PhD in Biomedical Sciences (CityU)',
                 stats: 'HKU Fellow',
-                image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg?updatedAt=1768594485417',
+                image: '', // TODO: Add correct image for Dr. Hossain
                 social: {
                   twitter: '#',
                   linkedin: 'https://www.linkedin.com/in/mphossain/?originalSubdomain=hk&skipRedirect=true&originalSubdomain=hk',
