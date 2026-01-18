@@ -29,13 +29,19 @@ import SmoothCursor from './components/ui/SmoothCursor';
 
 const queryClient = new QueryClient();
 
+import useKeepAlive from './hooks/useKeepAlive';
+
+import BirstAiChatbot from './components/Chatbot/BirstAiChatbot';
+
 const App = () => {
+  useKeepAlive(); // Prevent backend sleep
   return (
     <AuthProvider>
       <div>
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router} />
           <ToastContainer position="top-center" autoClose={3000} />
+          <BirstAiChatbot />
         </QueryClientProvider>
       </div>
     </AuthProvider>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_AI_API_URL || 'https://birstbd-conf-bt.onrender.com';
 
 export const useBotApi = () => {
     const [loading, setLoading] = useState(false);
@@ -27,7 +27,6 @@ export const useBotApi = () => {
             // but ready for streaming integration if needed.
             const res = await axios.post(`${API_BASE_URL}/bot/${botId}`, data, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
                     'Accept': 'application/json', // Request JSON from backend
                 },
             });

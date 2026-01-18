@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Save, X, User, Briefcase, GraduationCap, Award, Upload } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, User, Briefcase, GraduationCap, Award, Upload, Sparkles, Filter, Search, Linkedin, Mail, CheckCircle, Palette } from 'lucide-react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const GRADIENT_PRESETS = [
-    { label: 'Blue - Cyan', value: 'from-blue-400 to-cyan-300' },
-    { label: 'Purple - Pink', value: 'from-purple-400 to-pink-300' },
-    { label: 'Amber - Orange', value: 'from-amber-400 to-orange-300' },
-    { label: 'Emerald - Teal', value: 'from-emerald-400 to-teal-300' },
-    { label: 'Rose - Red', value: 'from-rose-400 to-red-300' },
-    { label: 'Indigo - Violet', value: 'from-indigo-400 to-violet-300' },
+    { label: 'Birst Sky', value: 'from-[#02bfff] to-cyan-300' },
+    { label: 'Ocean Blue', value: 'from-blue-500 to-[#02bfff]' },
+    { label: 'Azure Mist', value: 'from-cyan-400 to-sky-200' },
+    { label: 'Deep Sea', value: 'from-[#0B2340] to-[#02bfff]' },
+    { label: 'Clean Slate', value: 'from-gray-400 to-slate-300' },
 ];
 
 export default function AddTeamMembers() {
@@ -112,13 +112,18 @@ export default function AddTeamMembers() {
 
     const handleDelete = (member) => {
         Swal.fire({
-            title: 'Are you sure?',
-            text: 'This will permanently delete this team member',
+            title: 'Delete Member?',
+            text: `Remove ${member.name}?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#9CA3AF',
+            confirmButtonText: 'Yes, delete',
+            background: '#fff',
+            customClass: {
+                title: "font-unbounded text-[#0B2340]",
+                popup: "rounded-3xl",
+            }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
@@ -137,270 +142,340 @@ export default function AddTeamMembers() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="flex items-center justify-center min-h-[60vh]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#02bfff]"></div>
             </div>
         );
     }
 
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1 }
+    };
+
     return (
-        <div className="space-y-6 container mx-auto px-4 py-8">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-900">Manage Team Members</h2>
-                    <p className="text-gray-600 mt-1">Add, edit, and update your team profiles</p>
-                </div>
-                <button
-                    onClick={() => openModal()}
-                    className="flex items-center gap-2 px-6 py-3 bg-[var(--color-birst-primary)] text-white rounded-xl hover:bg-blue-600 transition shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                >
-                    <Plus className="w-5 h-5" />
-                    Add New Member
-                </button>
-            </div>
+        <div className="min-h-screen bg-[#FAFAFA] font-jakarta relative p-4 lg:p-8 overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#02bfff]/5 to-transparent pointer-events-none" />
+            <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#02bfff]/5 rounded-full blur-[100px] pointer-events-none" />
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {members.map((member) => (
-                    <div key={member._id} className="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden border border-gray-100 group">
-                        <div className={`h-24 bg-gradient-to-r ${member.color}`}></div>
-                        <div className="px-6 -mt-12 mb-4">
-                            <div className={`w-24 h-24 rounded-full border-4 border-white bg-gradient-to-br ${member.color} flex items-center justify-center text-white text-3xl font-bold shadow-md overflow-hidden`}>
-                                {member.image ? (
-                                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
-                                ) : (
-                                    member.name.split(' ').map(n => n[0]).join('')
-                                )}
-                            </div>
-                        </div>
+            <motion.div
+                className="max-w-7xl mx-auto relative z-10"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
+                {/* Header */}
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10">
+                    <motion.div variants={itemVariants}>
+                        <h1 className="text-4xl font-bold font-unbounded text-[#0B2340] mb-2">Our Team</h1>
+                        <p className="text-gray-500">Manage your team members, roles, and expertise.</p>
+                    </motion.div>
 
-                        <div className="px-6 pb-6">
-                            <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                            <p className="text-sm font-semibold text-[var(--color-birst-primary)] mb-3">{member.role}</p>
-
-                            <div className="space-y-2 text-sm text-gray-600 mb-6">
-                                <div className="flex items-start gap-2">
-                                    <GraduationCap size={16} className="mt-0.5 text-gray-400" />
-                                    <span className="line-clamp-1">{member.education}</span>
-                                </div>
-                                <div className="flex items-start gap-2">
-                                    <Briefcase size={16} className="mt-0.5 text-gray-400" />
-                                    <span className="line-clamp-1">{member.experience}</span>
-                                </div>
-                                <div className="flex items-start gap-2">
-                                    <Award size={16} className="mt-0.5 text-gray-400" />
-                                    <span className="line-clamp-2">{member.expertise}</span>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                                <button
-                                    onClick={() => openModal(member)}
-                                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition font-medium text-sm"
-                                >
-                                    <Edit className="w-4 h-4" />
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(member)}
-                                    className="p-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition"
-                                >
-                                    <Trash2 className="w-4 h-4" />
-                                </button>
-                            </div>
-                            {member.position && (
-                                <div className="absolute top-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded-full">
-                                    Pos: {member.position}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            {
-                members.length === 0 && (
-                    <div className="text-center py-20 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
-                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
-                            <User size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">No Team Members Found</h3>
-                        <p className="text-gray-500 mb-6">Start building your team by adding your first member.</p>
+                    <motion.div variants={itemVariants} className="flex items-center gap-4">
                         <button
                             onClick={() => openModal()}
-                            className="px-6 py-2 bg-[var(--color-birst-primary)] text-white rounded-lg hover:bg-blue-600 transition font-semibold"
+                            className="flex items-center gap-2 px-6 py-3 bg-[#02bfff] text-white rounded-xl hover:bg-[#0099cc] transition-all shadow-lg hover:shadow-cyan-500/25 transform hover:-translate-y-0.5 font-bold"
                         >
-                            Add New Member
+                            <Plus size={20} />
+                            Add Member
                         </button>
-                    </div>
-                )
-            }
+                    </motion.div>
+                </div>
+
+                {/* Team Grid (High Density Square Cards) */}
+                <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <AnimatePresence>
+                        {members.map((member) => (
+                            <motion.div
+                                key={member._id}
+                                layout
+                                initial={{ opacity: 0, scale: 0.8 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                exit={{ opacity: 0, scale: 0.8 }}
+                                whileHover={{ y: -5 }}
+                                className="aspect-square bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-2xl transition-all duration-300 relative overflow-hidden group border border-gray-100 flex flex-col"
+                            >
+                                {/* Subtle Top Gradient Bar */}
+                                <div className={`absolute top-0 left-0 w-full h-2 bg-gradient-to-r ${member.color}`} />
+
+                                <div className="absolute inset-0 flex flex-col items-center p-5 text-center z-10">
+                                    {/* Action Buttons (Top Right, minimal) */}
+                                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                                        <button onClick={() => openModal(member)} className="p-1.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-[#02bfff] hover:text-white transition-colors">
+                                            <Edit size={14} />
+                                        </button>
+                                        <button onClick={() => handleDelete(member)} className="p-1.5 bg-red-50 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors">
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+
+                                    {/* Avatar (Smaller to fit more content) */}
+                                    <div className="mt-2 mb-3 relative">
+                                        <div className="w-20 h-20 rounded-full p-1 bg-white shadow-md border border-gray-100 group-hover:scale-105 transition-transform duration-300">
+                                            <div className="w-full h-full rounded-full overflow-hidden bg-gray-50">
+                                                {member.image ? (
+                                                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                                                ) : (
+                                                    <div className={`w-full h-full bg-gradient-to-br ${member.color} flex items-center justify-center text-white text-xl font-bold uppercase`}>
+                                                        {member.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {member.position && (
+                                            <div className="absolute -bottom-1 -right-1 bg-[#0B2340] text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border border-white font-bold shadow-sm">
+                                                {member.position}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Basic Info */}
+                                    <h3 className="text-lg font-bold text-[#0B2340] font-unbounded line-clamp-1 w-full px-1 group-hover:text-[#02bfff] transition-colors leading-tight mb-0.5">{member.name}</h3>
+                                    <p className="text-sm font-bold text-[#02bfff] line-clamp-1 truncate mb-3">{member.role}</p>
+
+                                    {/* Content Details (Visible Now) */}
+                                    <div className="w-full space-y-2 mb-auto flex-1 flex flex-col justify-start">
+                                        {member.education && (
+                                            <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500 bg-gray-50 py-1 px-2 rounded-lg">
+                                                <GraduationCap size={12} className="text-gray-400 shrink-0" />
+                                                <span className="truncate font-medium max-w-[150px]">{member.education}</span>
+                                            </div>
+                                        )}
+                                        {member.expertise && (
+                                            <div className="flex items-center justify-center gap-1.5 text-xs text-gray-500 bg-gray-50 py-1 px-2 rounded-lg">
+                                                <Award size={12} className="text-gray-400 shrink-0" />
+                                                <span className="truncate font-medium max-w-[150px]">{member.expertise}</span>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Social Footer */}
+                                    {(member.linkedin || member.email) && (
+                                        <div className="mt-auto pt-3 border-t border-gray-100 w-full flex justify-center gap-3">
+                                            {member.linkedin && (
+                                                <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-colors">
+                                                    <Linkedin size={16} />
+                                                </a>
+                                            )}
+                                            {member.email && (
+                                                <a href={`mailto:${member.email}`} className="text-gray-400 hover:text-gray-900 transition-colors">
+                                                    <Mail size={16} />
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+
+                    {/* Add New Card Slot */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        whileHover={{ scale: 0.98 }}
+                        onClick={() => openModal()}
+                        className="aspect-square bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center cursor-pointer hover:border-[#02bfff] hover:bg-cyan-50/30 transition-all group"
+                    >
+                        <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-300 group-hover:text-[#02bfff] group-hover:scale-110 transition-all duration-300 mb-2">
+                            <Plus size={32} />
+                        </div>
+                        <span className="font-bold text-gray-400 text-sm group-hover:text-[#02bfff]">Add Member</span>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
 
             {/* Modal */}
-            {
-                isModalOpen && (
-                    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                        <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-fade-in">
-                            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                                <h3 className="text-2xl font-bold text-gray-900">
-                                    {editingMember ? 'Edit Team Member' : 'Add New Team Member'}
-                                </h3>
-                                <button onClick={closeModal} className="p-2 bg-gray-100 rounded-full text-gray-500 hover:bg-red-50 hover:text-red-500 transition">
-                                    <X className="w-5 h-5" />
-                                </button>
-                            </div>
-
-                            <div className="p-6">
-                                <form onSubmit={handleSubmit} className="space-y-4">
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Full Name *</label>
-                                            <input
-                                                type="text"
-                                                name="name"
-                                                value={formData.name}
-                                                onChange={handleInputChange}
-                                                required
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="e.g. Dr. Mohammad Hasan"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Role / Designation *</label>
-                                            <input
-                                                type="text"
-                                                name="role"
-                                                value={formData.role}
-                                                onChange={handleInputChange}
-                                                required
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="e.g. Director & Lead Statistician"
-                                            />
-                                        </div>
-                                    </div>
-
+            <AnimatePresence>
+                {isModalOpen && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                            onClick={closeModal}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
+                        >
+                            <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl pointer-events-auto border border-gray-100">
+                                <div className="p-6 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white/80 backdrop-blur-md z-10 transition-colors">
                                     <div>
-                                        <label className="block text-sm font-bold text-gray-700 mb-2">Expertise</label>
-                                        <input
-                                            type="text"
-                                            name="expertise"
-                                            value={formData.expertise}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                            placeholder="e.g. Statistical Analysis, Research Methodology"
-                                        />
+                                        <h3 className="text-2xl font-bold font-unbounded text-[#0B2340]">
+                                            {editingMember ? 'Edit Profile' : 'New Member'}
+                                        </h3>
+                                        <p className="text-sm text-gray-500">Team member details</p>
                                     </div>
+                                    <button onClick={closeModal} className="w-10 h-10 rounded-full bg-gray-50 hover:bg-red-50 text-gray-500 hover:text-red-500 flex items-center justify-center transition-colors">
+                                        <X size={20} />
+                                    </button>
+                                </div>
 
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Education</label>
+                                <div className="p-8">
+                                    <form onSubmit={handleSubmit} className="space-y-6">
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Full Name <span className="text-red-500">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="name"
+                                                    value={formData.name}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-semibold text-gray-900 placeholder-gray-400"
+                                                    placeholder="e.g. Dr. Jane Doe"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Role <span className="text-red-500">*</span></label>
+                                                <input
+                                                    type="text"
+                                                    name="role"
+                                                    value={formData.role}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-semibold text-gray-900 placeholder-gray-400"
+                                                    placeholder="e.g. Lead Researcher"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Expertise</label>
                                             <input
                                                 type="text"
-                                                name="education"
-                                                value={formData.education}
+                                                name="expertise"
+                                                value={formData.expertise}
                                                 onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="e.g. PhD in Statistics"
+                                                className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-gray-900 placeholder-gray-400"
+                                                placeholder="e.g. Data Analysis, AI, Statistics"
                                             />
                                         </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Experience</label>
-                                            <input
-                                                type="text"
-                                                name="experience"
-                                                value={formData.experience}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="e.g. 15+ years in research"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Position Order</label>
-                                            <input
-                                                type="number"
-                                                name="position"
-                                                value={formData.position}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="e.g. 1 (Lowest comes first)"
-                                            />
-                                        </div>
-                                    </div>
 
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Profile Image URL</label>
-                                            <input
-                                                type="url"
-                                                name="image"
-                                                value={formData.image}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="https://example.com/photo.jpg"
-                                            />
-                                            <p className="text-xs text-gray-400 mt-1">Leave empty to use initials avatar</p>
+                                        <div className="grid md:grid-cols-3 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1"><GraduationCap size={12} /> Education</label>
+                                                <input
+                                                    type="text"
+                                                    name="education"
+                                                    value={formData.education}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="PhD in Stats"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1"><Briefcase size={12} /> Experience</label>
+                                                <input
+                                                    type="text"
+                                                    name="experience"
+                                                    value={formData.experience}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="10+ Years"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Order</label>
+                                                <input
+                                                    type="number"
+                                                    name="position"
+                                                    value={formData.position}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="1"
+                                                />
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Theme Color</label>
-                                            <select
-                                                name="color"
-                                                value={formData.color}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
+
+                                        <div className="grid md:grid-cols-2 gap-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Image URL</label>
+                                                <div className="relative">
+                                                    <Upload className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                                                    <input
+                                                        type="url"
+                                                        name="image"
+                                                        value={formData.image}
+                                                        onChange={handleInputChange}
+                                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                        placeholder="https://..."
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1"><Palette size={12} /> Theme Color</label>
+                                                <select
+                                                    name="color"
+                                                    value={formData.color}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm cursor-pointer"
+                                                >
+                                                    {GRADIENT_PRESETS.map(preset => (
+                                                        <option key={preset.value} value={preset.value}>{preset.label}</option>
+                                                    ))}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid md:grid-cols-2 gap-6 pb-4">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1"><Linkedin size={12} /> LinkedIn</label>
+                                                <input
+                                                    type="url"
+                                                    name="linkedin"
+                                                    value={formData.linkedin}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="Profile URL"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1"><Mail size={12} /> Email</label>
+                                                <input
+                                                    type="email"
+                                                    name="email"
+                                                    value={formData.email}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="addr@example.com"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="pt-6 border-t border-gray-100 flex gap-4">
+                                            <button
+                                                type="submit"
+                                                className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-[#02bfff] text-white rounded-xl hover:bg-[#0099cc] transition-all font-bold shadow-lg hover:shadow-cyan-500/25"
                                             >
-                                                {GRADIENT_PRESETS.map(preset => (
-                                                    <option key={preset.value} value={preset.value}>{preset.label}</option>
-                                                ))}
-                                            </select>
+                                                <Save size={18} />
+                                                {editingMember ? 'Update Member' : 'Add to Team'}
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={closeModal}
+                                                className="px-6 py-4 bg-gray-50 text-gray-500 rounded-xl hover:bg-gray-100 transition font-bold"
+                                            >
+                                                Cancel
+                                            </button>
                                         </div>
-                                    </div>
-
-                                    <div className="grid md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">LinkedIn URL (Optional)</label>
-                                            <input
-                                                type="url"
-                                                name="linkedin"
-                                                value={formData.linkedin}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="https://linkedin.com/in/username"
-                                            />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-gray-700 mb-2">Email (Optional)</label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                value={formData.email}
-                                                onChange={handleInputChange}
-                                                className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[var(--color-birst-primary)] focus:bg-white transition"
-                                                placeholder="email@example.com"
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="flex gap-4 pt-6 mt-4 border-t border-gray-100">
-                                        <button
-                                            type="submit"
-                                            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-[var(--color-birst-primary)] text-white rounded-xl hover:bg-blue-600 transition font-bold shadow-lg"
-                                        >
-                                            <Save className="w-5 h-5" />
-                                            {editingMember ? 'Update Member' : 'Save Member'}
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={closeModal}
-                                            className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl hover:bg-gray-200 transition font-bold"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                )
-            }
-        </div >
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
+        </div>
     );
 }

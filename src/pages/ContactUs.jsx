@@ -142,6 +142,7 @@ export default function ContactUs() {
                 <div>
                   <h3 className="font-bold text-lg mb-1">Address</h3>
                   <p className="text-gray-600">Bangladesh Institute for Research and Statistical Training (BIRST)</p>
+                  <p className="text-gray-600">H-16, RD-02, SEC-6/KA SENPARA PARBATA MIRPUR</p>
                   <p className="text-gray-600">Bangladesh</p>
                 </div>
               </div>
@@ -163,7 +164,8 @@ export default function ContactUs() {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg mb-1">Phone</h3>
-                  <p className="text-gray-600"><a href="tel:+880-XXXXXXXXXX" className="hover:text-[#1FB6FF]">+880-XXXXXXXXXX</a></p>
+                  <p className="text-gray-600"><a href="tel:+8801827891389" className="hover:text-[#1FB6FF]">01827891389</a></p>
+                  <p className="text-gray-600"><a href="tel:+8801551245430" className="hover:text-[#1FB6FF]">01551245430</a></p>
                 </div>
               </div>
 

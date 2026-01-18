@@ -227,14 +227,14 @@ export default function Coureses() {
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.2 }}
                     key={course._id}
-                    className="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col group h-full aspect-square"
+                    className="bg-white rounded-[32px] overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-gray-100 flex flex-col group h-full"
                   >
                     {/* Image Part */}
-                    <div className="relative h-[45%] overflow-hidden">
+                    <div className="relative aspect-video overflow-hidden">
                       <img
                         src={course.thumbnail || 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800'}
                         alt={course.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-3 py-1 bg-white/90 backdrop-blur-md text-xs font-bold text-gray-900 rounded-lg shadow-sm">

@@ -1,427 +1,355 @@
-
-
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Trash2, MessageSquare, Mail, User, Calendar, Eye, X, Crown,
-  Search, RefreshCcw, Loader2, Clock, Phone, MapPin, FileText
+  Trash2, MessageSquare, Mail, User, Search, RefreshCcw, Loader,
+  ChevronRight, Inbox, Clock, Send, MoreVertical, Star, Archive
 } from 'lucide-react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const ShowContactData = () => {
   const axiosSecure = useAxiosSecure();
   const [contacts, setContacts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedContact, setSelectedContact] = useState(null);
   const [filteredContacts, setFilteredContacts] = useState([]);
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [showMobileSidebar, setShowMobileSidebar] = useState(true); // Default to list view on mobile
 
-  // Fetch contact data on component mount
+  // Fetch Data
   useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const response = await axiosSecure.get('/contactCollection');
-        setContacts(response.data);
-        setFilteredContacts(response.data);
-        setIsLoading(false);
-        setError(''); // Clear any previous errors
-      } catch (error) {
-        console.error('Error fetching contacts:', error);
-        const status = error.response?.status;
-        const statusText = error.response?.statusText;
-        let errorMessage = 'Failed to fetch contact data';
+    fetchContacts();
+  }, []);
 
-        if (status === 401) {
-          errorMessage = 'Authentication required. Please log in again.';
-        } else if (status === 403) {
-          errorMessage = 'Access denied. Admin privileges required to view contact data.';
-        } else if (status === 404) {
-          errorMessage = 'Contact endpoint not found. The server may not be fully deployed yet.';
-        } else if (status === 503) {
-          errorMessage = 'Database connection error. Please try again in a moment.';
-        } else if (status === 500) {
-          errorMessage = error.response?.data?.message || 'Server error. Please try again later.';
-        } else if (error.response?.data?.message) {
-          errorMessage = error.response.data.message;
-        } else if (error.message) {
-          errorMessage = error.message;
-        }
+  const fetchContacts = async () => {
+    try {
+      setIsLoading(true);
+      const [contactRes, profileRes] = await Promise.all([
+        axiosSecure.get('/contactCollection'),
+        axiosSecure.get('/profiles')
+      ]);
 
-        setError(errorMessage);
-        setIsLoading(false);
-        Swal.fire({
-          title: 'Error!',
-          text: errorMessage,
-          icon: 'error',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#dc2626',
-          background: "#FBF8F3",
-          customClass: {
-            title: "text-[#0A3D91] text-xl",
-            content: "text-[#6B7280]",
+      // Create a map of email -> photoURL for quick lookup
+      const profileMap = {};
+      if (Array.isArray(profileRes.data)) {
+        profileRes.data.forEach(profile => {
+          if (profile.email) {
+            profileMap[profile.email.toLowerCase()] = profile.photoURL;
           }
         });
       }
-    };
-    fetchContacts();
-  }, [axiosSecure]);
 
-  // Filter contacts based on search term
+      // Merge photoURL into enrollments
+      const mergedData = (contactRes.data || []).map(item => ({
+        ...item,
+        photoURL: profileMap[item.email?.toLowerCase()] || item.photoURL || item.image
+      }));
+
+      // Sort by newest first
+      const sortedData = mergedData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setContacts(sortedData);
+      setFilteredContacts(sortedData);
+    } catch (error) {
+      console.error('Error fetching contacts:', error);
+      toast.error("Failed to load messages");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Search Logic
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredContacts(contacts);
     } else {
+      const lowerTerm = searchTerm.toLowerCase();
       const filtered = contacts.filter(contact =>
-        contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        contact.message.toLowerCase().includes(searchTerm.toLowerCase())
+        contact.name.toLowerCase().includes(lowerTerm) ||
+        contact.email.toLowerCase().includes(lowerTerm) ||
+        contact.subject.toLowerCase().includes(lowerTerm)
       );
       setFilteredContacts(filtered);
     }
   }, [searchTerm, contacts]);
 
-  // Close mobile sidebar when window is resized to desktop
+  // Handle Resize
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
-        setShowMobileSidebar(false);
+        setShowMobileSidebar(true); // Always show sidebar on desktop
       }
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle delete contact
-  const handleDelete = async (id, name) => {
-    const result = await Swal.fire({
-      title: 'Are you sure?',
-      text: `You are about to delete the contact from ${name}. This action cannot be undone.`,
+  const handleDelete = async (id, e) => {
+    e.stopPropagation(); // Prevent selection when clicking delete
+
+    Swal.fire({
+      title: 'Delete Message?',
+      text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#dc2626',
-      cancelButtonColor: '#6b7280',
-      confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'Cancel',
-      background: "#FBF8F3",
+      confirmButtonColor: '#EF4444',
+      cancelButtonColor: '#9CA3AF',
+      confirmButtonText: 'Yes, delete it',
+      background: '#fff',
       customClass: {
-        title: "text-[#0A3D91] text-xl",
-        content: "text-[#6B7280]",
+        title: "font-unbounded text-[#0B2340]",
+        popup: "rounded-3xl",
+      }
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axiosSecure.delete(`/contactCollection/${id}`);
+          const updatedContacts = contacts.filter((c) => c._id !== id);
+          setContacts(updatedContacts);
+          setFilteredContacts(prev => prev.filter(c => c._id !== id));
+          if (selectedContact?._id === id) setSelectedContact(null);
+          toast.success("Message deleted");
+        } catch (error) {
+          toast.error("Failed to delete message");
+        }
       }
     });
-
-    if (result.isConfirmed) {
-      try {
-        await axiosSecure.delete(`/contactCollection/${id}`);
-        const updatedContacts = contacts.filter((contact) => contact._id !== id);
-        setContacts(updatedContacts);
-        setFilteredContacts(updatedContacts);
-        Swal.fire({
-          title: 'Deleted!',
-          text: 'Contact has been deleted successfully.',
-          icon: 'success',
-          confirmButtonColor: '#2563eb',
-          background: "#FBF8F3",
-          customClass: {
-            title: "text-[#0A3D91] text-xl",
-            content: "text-[#6B7280]",
-          }
-        });
-      } catch (error) {
-        Swal.fire({
-          title: 'Error!',
-          text: error.response?.data?.message || 'Failed to delete contact.',
-          icon: 'error',
-          confirmButtonColor: '#dc2626',
-          background: "#FBF8F3",
-          customClass: {
-            title: "text-[#0A3D91] text-xl",
-            content: "text-[#6B7280]",
-          }
-        });
-      }
-    }
   };
 
-  // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
-    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
+    const diffInHours = (now - date) / (1000 * 60 * 60);
 
-    if (diffInHours < 1) {
-      return 'Just now';
-    } else if (diffInHours < 24) {
-      return `${diffInHours}h ago`;
+    if (diffInHours < 24) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     } else if (diffInHours < 48) {
       return 'Yesterday';
     } else {
-      return date.toLocaleDateString();
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+  };
+
+  const selectContact = (contact) => {
+    setSelectedContact(contact);
+    if (window.innerWidth < 1024) {
+      setShowMobileSidebar(false); // Hide sidebar on mobile after selection
     }
   };
 
   return (
-    <div className="w-full">
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35 }}
-        className="bg-[#FBF8F3] rounded-3xl shadow-2xl border border-[#E5E0D5] overflow-hidden"
-      >
-        {/* Header */}
-        <div className="bg-gradient-to-r from-[#0A3D91] to-[#08306B] p-4 sm:p-6 lg:p-8 relative">
-          <div className="absolute top-2 right-2 sm:top-4 sm:right-4">
-            <MessageSquare className="h-6 w-6 sm:h-8 sm:w-8 text-[#D0A96A]" />
-          </div>
-          <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-[#D0A96A] rounded-2xl flex items-center justify-center flex-shrink-0">
-              <MessageSquare className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 text-white" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-1 sm:mb-2 truncate">Contact Messages</h2>
-              <p className="text-[#FDF6E9] text-sm sm:text-base lg:text-lg">View and manage contact form submissions</p>
-            </div>
-          </div>
+    <div className="h-[calc(100vh-100px)] min-h-[600px] bg-[#FAFAFA] font-jakarta overflow-hidden flex flex-col relative rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-4 lg:m-0">
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-            <div className="flex-1 relative">
-              <input
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search messages, names, or subjects..."
-                className="w-full pl-10 sm:pl-12 pr-4 py-2.5 sm:py-3 rounded-xl border border-[#E5E0D5] focus:outline-none focus:ring-2 focus:ring-[#0A3D91] focus:border-[#0A3D91] bg-white text-[#0A3D91] text-sm sm:text-base"
-              />
-              <Search className="w-4 h-4 sm:w-5 sm:h-5 text-[#D0A96A] absolute left-3 sm:left-4 top-1/2 -translate-y-1/2" />
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3">
-              <button
-                onClick={() => window.location.reload()}
-                className="px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#E5E0D5] bg-white hover:bg-[#0A3D91]/5 text-[#0A3D91] flex items-center gap-2 font-semibold transition-colors text-sm sm:text-base whitespace-nowrap"
-                title="Refresh"
-              >
-                <RefreshCcw className="w-4 h-4" />
-                <span className="hidden sm:inline">Refresh</span>
-              </button>
-            </div>
+      {/* Full Width Unified Header */}
+      <div className="px-8 py-8 border-b border-gray-100 bg-gradient-to-br from-[#0B2340] to-[#02bfff] text-white relative overflow-hidden shrink-0 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Background decoration */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[50px] -mr-20 -mt-20 pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#02bfff]/30 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
+
+        {/* Title Section */}
+        <div className="relative z-10 flex items-center gap-5 w-full md:w-auto">
+          <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white shrink-0 shadow-inner">
+            <Inbox size={28} />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold font-unbounded text-white flex items-center gap-3">
+              Contact Inbox
+            </h2>
+            <p className="text-white/80 text-base font-medium mt-1">Manage your messages and inquiries</p>
           </div>
         </div>
 
-        {/* Email-style Layout */}
-        <div className="flex flex-col lg:flex-row h-[500px] sm:h-[600px] lg:h-[600px] relative">
-          {/* Mobile Header for Sidebar Toggle */}
-          <div className="lg:hidden flex items-center justify-between p-4 border-b border-[#E5E0D5] bg-white">
-            <h3 className="text-lg font-semibold text-[#0A3D91] flex items-center gap-2">
-              <MessageSquare className="h-5 w-5" />
-              Messages ({filteredContacts.length})
-            </h3>
-            <button
-              onClick={() => setShowMobileSidebar(!showMobileSidebar)}
-              className="p-2 rounded-lg bg-[#0A3D91] text-white hover:bg-[#08306B] transition-colors"
-            >
-              <MessageSquare className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* Mobile Overlay */}
-          {showMobileSidebar && (
-            <div
-              className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-10"
-              onClick={() => setShowMobileSidebar(false)}
+        {/* Actions Section */}
+        <div className="relative z-10 flex items-center gap-4 w-full md:w-auto">
+          {/* Search */}
+          <div className="relative group flex-1 md:w-96">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-white/60 group-focus-within:text-white transition-colors w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Search messages..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 outline-none focus:bg-white/20 focus:border-white/30 text-white placeholder-white/50 transition-all font-medium text-lg"
             />
-          )}
-
-          {/* Left Sidebar - Message List */}
-          <div className={`${showMobileSidebar ? 'flex' : 'hidden'} lg:flex w-full lg:w-1/3 border-r border-[#E5E0D5] bg-white flex-col absolute lg:relative z-20 lg:z-auto h-full lg:h-auto transform transition-transform duration-300 ease-in-out ${showMobileSidebar ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
-            {/* Message List Header - Hidden on mobile */}
-            <div className="hidden lg:block p-4 border-b border-[#E5E0D5] bg-[#FDF6E9]">
-              <h3 className="text-lg font-semibold text-[#0A3D91] flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
-                Messages ({filteredContacts.length})
-              </h3>
-            </div>
-
-            {/* Message List */}
-            <div className="flex-1 overflow-y-auto">
-              {isLoading ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#0A3D91] mx-auto mb-4" />
-                    <p className="text-[#6B7280]">Loading messages...</p>
-                  </div>
-                </div>
-              ) : error ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <X className="h-8 w-8 text-[#B91C1C] mx-auto mb-4" />
-                    <p className="text-[#B91C1C] font-semibold">{error}</p>
-                  </div>
-                </div>
-              ) : filteredContacts.length === 0 ? (
-                <div className="flex items-center justify-center h-full">
-                  <div className="text-center">
-                    <MessageSquare className="h-12 w-12 text-[#0A3D91]/30 mx-auto mb-4" />
-                    <p className="text-[#6B7280]">
-                      {searchTerm ? 'No messages found' : 'No contact messages yet'}
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="divide-y divide-[#E5E0D5]">
-                  {filteredContacts.map((contact, idx) => (
-                    <motion.div
-                      key={contact._id}
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3, delay: idx * 0.05 }}
-                      onClick={() => {
-                        setSelectedContact(contact);
-                        // On mobile, hide sidebar after selection
-                        if (window.innerWidth < 1024) {
-                          setShowMobileSidebar(false);
-                        }
-                      }}
-                      className={`p-3 sm:p-4 cursor-pointer hover:bg-[#0A3D91]/5 active:bg-[#0A3D91]/10 transition-colors border-l-4 touch-manipulation ${selectedContact?._id === contact._id
-                          ? 'border-l-[#0A3D91] bg-[#0A3D91]/5'
-                          : 'border-l-transparent'
-                        }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-full bg-[#0A3D91]/10 flex items-center justify-center flex-shrink-0">
-                          <User className="h-5 w-5 text-[#0A3D91]" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <h4 className="text-sm font-semibold text-[#0A3D91] truncate">
-                              {contact.name}
-                            </h4>
-                            <span className="text-xs text-[#6B7280] flex-shrink-0 ml-2">
-                              {formatDate(contact.createdAt)}
-                            </span>
-                          </div>
-                          <p className="text-xs text-[#6B7280] mb-1 truncate">
-                            {contact.email}
-                          </p>
-                          <p className="text-sm font-medium text-[#0A3D91] mb-1 truncate">
-                            {contact.subject}
-                          </p>
-                          <p className="text-xs text-[#6B7280] line-clamp-2">
-                            {contact.message}
-                          </p>
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(contact._id, contact.name);
-                            }}
-                            className="p-1 text-[#B91C1C] hover:bg-[#B91C1C]/10 rounded transition-colors"
-                            title="Delete Message"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </div>
           </div>
+          <button
+            onClick={fetchContacts}
+            className="p-4 bg-white/10 hover:bg-white/20 rounded-2xl text-white/90 hover:text-white transition-colors backdrop-blur-md border border-white/10"
+            title="Refresh"
+          >
+            <RefreshCcw size={22} />
+          </button>
+        </div>
+      </div>
 
-          {/* Right Side - Message Content */}
-          <div className="flex-1 bg-white flex flex-col min-h-0">
-            {selectedContact ? (
-              <>
-                {/* Message Header */}
-                <div className="p-4 sm:p-6 border-b border-[#E5E0D5] bg-[#FDF6E9]">
-                  {/* Mobile back button */}
-                  <button
-                    onClick={() => setShowMobileSidebar(true)}
-                    className="lg:hidden mb-4 px-3 py-2 bg-[#0A3D91] text-white rounded-lg hover:bg-[#08306B] transition-colors flex items-center gap-2 text-sm font-semibold"
+      {/* Main Content Split Area */}
+      <div className="flex flex-1 overflow-hidden relative">
+
+        {/* Left Sidebar (List) */}
+        <div
+          className={`${showMobileSidebar ? 'flex' : 'hidden'} lg:flex w-full lg:w-[400px] xl:w-[450px] flex-col bg-white border-r border-gray-100 z-20 h-full`}
+        >
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center h-40 gap-3 text-gray-400 mt-10">
+                <Loader className="animate-spin text-[#02bfff]" />
+                <span className="text-xs font-bold uppercase tracking-widest">Loading messages...</span>
+              </div>
+            ) : filteredContacts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-center px-6">
+                <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                  <Inbox className="text-gray-300" size={32} />
+                </div>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-50">
+                {filteredContacts.map((contact) => (
+                  <motion.div
+                    key={contact._id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    onClick={() => selectContact(contact)}
+                    className={`p-5 cursor-pointer transition-all hover:bg-gray-50 group relative ${selectedContact?._id === contact._id ? 'bg-blue-50/50 hover:bg-blue-50/80' : ''}`}
                   >
-                    <MessageSquare className="h-4 w-4" />
-                    Back to Messages
-                  </button>
+                    {selectedContact?._id === contact._id && (
+                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#02bfff]" />
+                    )}
 
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                    <div className="flex items-start gap-3 sm:gap-4">
-                      <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0A3D91]/10 flex items-center justify-center flex-shrink-0">
-                        <User className="h-5 w-5 sm:h-6 sm:w-6 text-[#0A3D91]" />
+                    <div className="flex gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0B2340] to-[#02bfff] flex items-center justify-center text-white font-bold shrink-0 shadow-sm overflow-hidden mt-1">
+                        {contact.photoURL || contact.image ? (
+                          <img
+                            src={contact.photoURL || contact.image}
+                            alt={contact.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-xs">{contact.name.charAt(0).toUpperCase()}</span>
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg sm:text-xl font-bold text-[#0A3D91] mb-1 truncate">
-                          {selectedContact.name}
-                        </h3>
-                        <p className="text-[#6B7280] mb-2 text-sm sm:text-base truncate">{selectedContact.email}</p>
-                        <div className="flex items-center gap-4">
-                          <span className="text-xs sm:text-sm text-[#6B7280]">
-                            {new Date(selectedContact.createdAt).toLocaleString()}
+                        <div className="flex justify-between items-start mb-1">
+                          <h4 className={`text-sm font-bold truncate pr-2 ${selectedContact?._id === contact._id ? 'text-[#02bfff]' : 'text-[#0B2340]'}`}>
+                            {contact.name}
+                          </h4>
+                          <span className="text-[10px] sm:text-xs font-semibold text-gray-400 shrink-0 whitespace-nowrap">
+                            {formatDate(contact.createdAt)}
                           </span>
                         </div>
+                        <p className={`text-xs font-bold mb-1 truncate ${selectedContact?._id === contact._id ? 'text-[#0B2340]' : 'text-gray-600'}`}>
+                          {contact.subject}
+                        </p>
+                        <p className="text-xs text-gray-400 line-clamp-2 leading-relaxed">
+                          {contact.message}
+                        </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-2">
+
+                    {/* Hover Actions */}
+                    <div className="absolute right-4 bottom-4 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
                       <button
-                        onClick={() => {
-                          window.location.href = `mailto:${selectedContact.email}?subject=Re: ${selectedContact.subject}`;
-                        }}
-                        className="px-3 sm:px-4 py-2 bg-[#0A3D91] text-white rounded-lg hover:bg-[#08306B] transition-colors flex items-center gap-2 text-sm font-semibold touch-manipulation"
+                        onClick={(e) => handleDelete(contact._id, e)}
+                        className="p-1.5 bg-white shadow-sm border border-gray-100 rounded-lg text-red-500 hover:bg-red-500 hover:text-white transition-colors"
                       >
-                        <Mail className="h-4 w-4" />
-                        Reply
+                        <Trash2 size={12} />
                       </button>
                     </div>
-                  </div>
-                </div>
-
-                {/* Message Content */}
-                <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-                  <div className="space-y-4 sm:space-y-6">
-                    {/* Message */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-[#0A3D91] mb-3 flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4" />
-                        Message
-                      </h4>
-                      <div className="bg-[#FDF6E9] p-4 sm:p-6 rounded-2xl border border-[#E5E0D5]">
-                        <div className="prose prose-sm max-w-none">
-                          <p className="text-[#6B7280] leading-relaxed whitespace-pre-wrap break-words">
-                            {selectedContact.message}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="flex-1 flex items-center justify-center p-4">
-                <div className="text-center">
-                  <MessageSquare className="h-12 w-12 sm:h-16 sm:w-16 text-[#0A3D91]/30 mx-auto mb-4" />
-                  <h3 className="text-lg sm:text-xl font-semibold text-[#0A3D91] mb-2">
-                    Select a message
-                  </h3>
-                  <p className="text-[#6B7280] text-sm sm:text-base">
-                    Choose a message from the list to view its content
-                  </p>
-                  {/* Mobile back button */}
-                  <button
-                    onClick={() => setShowMobileSidebar(true)}
-                    className="lg:hidden mt-4 px-4 py-2 bg-[#0A3D91] text-white rounded-lg hover:bg-[#08306B] transition-colors flex items-center gap-2 mx-auto"
-                  >
-                    <MessageSquare className="h-4 w-4" />
-                    View Messages
-                  </button>
-                </div>
+                  </motion.div>
+                ))}
               </div>
             )}
           </div>
         </div>
-      </motion.div>
+
+        {/* Right Pane (Reading View) */}
+        <div className={`flex-1 bg-[#FAFAFA] flex flex-col ${!showMobileSidebar ? 'flex' : 'hidden lg:flex'} h-full relative`}>
+          {/* Mobile Back Button Overlay */}
+          {!showMobileSidebar && (
+            <div className="lg:hidden p-4 bg-white border-b border-gray-100 sticky top-0 z-30">
+              <button
+                onClick={() => setShowMobileSidebar(true)}
+                className="flex items-center gap-2 text-[#0B2340] font-bold"
+              >
+                <ChevronRight className="rotate-180" size={20} /> Back to Inbox
+              </button>
+            </div>
+          )}
+
+          {selectedContact ? (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              key={selectedContact._id}
+              className="h-full flex flex-col p-4 lg:p-8 overflow-y-auto"
+            >
+              <div className="max-w-4xl mx-auto w-full bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden flex flex-col min-h-full lg:min-h-0 lg:h-full">
+
+                {/* Message Header */}
+                <div className="p-8 border-b border-gray-100 bg-white relative">
+                  <div className="flex flex-col md:flex-row justify-between items-start gap-6">
+                    <div className="flex items-center gap-5">
+                      <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#0B2340] to-[#02bfff] flex items-center justify-center shadow-lg shadow-blue-900/20 overflow-hidden">
+                        {selectedContact.photoURL || selectedContact.image ? (
+                          <img
+                            src={selectedContact.photoURL || selectedContact.image}
+                            alt={selectedContact.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-white font-bold text-2xl font-unbounded">{selectedContact.name.charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold font-unbounded text-[#0B2340] mb-1">{selectedContact.name}</h2>
+                        <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                          <span className="font-medium text-[#02bfff] bg-blue-50 px-2 py-0.5 rounded-md">{selectedContact.email}</span>
+                          <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                          <span className="flex items-center gap-1"><Clock size={12} /> {new Date(selectedContact.createdAt).toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={(e) => handleDelete(selectedContact._id, e)}
+                      className="p-3 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-colors self-end md:self-auto"
+                      title="Delete"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subject & Body */}
+                <div className="p-8 flex-1 flex flex-col overflow-y-auto">
+                  <h3 className="text-xl font-bold text-[#0B2340] mb-6">
+                    {selectedContact.subject}
+                  </h3>
+                  <div className="prose prose-sm md:prose-base max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
+                    {selectedContact.message}
+                  </div>
+                </div>
+
+                {/* Action Footer */}
+                <div className="p-6 bg-gray-50 border-t border-gray-100 flex justify-end gap-4 shrink-0">
+                  <a
+                    href={`mailto:${selectedContact.email}`}
+                    className="flex items-center gap-2 px-6 py-3 bg-[#02bfff] text-white rounded-xl font-bold hover:bg-[#0099cc] transition-all shadow-lg shadow-cyan-200"
+                  >
+                    <Send size={18} /> Reply via Email
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="hidden lg:flex flex-col items-center justify-center h-full text-center p-12 opacity-50">
+              <div className="w-64 h-64 bg-gradient-to-tr from-gray-100 to-gray-50 rounded-full flex items-center justify-center mb-6">
+                <Mail size={80} className="text-gray-300" strokeWidth={1} />
+              </div>
+              <h3 className="text-2xl font-bold font-unbounded text-gray-300 mb-2">Select a Message</h3>
+              <p className="text-gray-400">Choose from the list on the left to read details.</p>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

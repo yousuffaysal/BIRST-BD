@@ -157,8 +157,8 @@ const ExpertsSection = () => {
   if (!experts.length) return null; // Don't render empty section (or render skeleton)
 
   return (
-    <section className="py-24 bg-[#ffffff] overflow-hidden">
-      <div className="container px-4 mx-auto mb-16 text-center">
+    <section className="py-16 lg:py-24 bg-[#ffffff] overflow-hidden">
+      <div className="container px-4 mx-auto mb-10 lg:mb-16 text-center">
         <span className="inline-block px-3 py-1 mb-4 text-sm font-semibold tracking-wider uppercase text-[var(--color-birst-primary)] bg-blue-50 rounded-full">
           Our Team
         </span>

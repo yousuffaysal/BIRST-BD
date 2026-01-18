@@ -24,7 +24,7 @@ export default function ResearchAndPublication() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-blue-100 selection:text-blue-900">
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-20 px-4 sm:px-6 bg-[#0F172A] overflow-hidden">
+      <section className="relative pt-24 md:pt-32 pb-16 md:pb-20 px-4 sm:px-6 bg-[#0F172A] overflow-hidden">
         {/* Abstract Background Elements */}
         <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-blue-900/20 to-transparent -z-10 pointer-events-none" />
         <div className="absolute top-20 left-10 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] -z-10 animate-pulse" />
@@ -40,7 +40,7 @@ export default function ResearchAndPublication() {
               <span>Knowledge Hub</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-6 leading-tight">
+            <h1 className="text-4xl md:text-7xl font-black text-white tracking-tight mb-6 leading-tight">
               Research & <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-blue-400">Publication Center</span>
             </h1>
@@ -85,7 +85,7 @@ export default function ResearchAndPublication() {
       </section>
 
       {/* --- CONTENT AREA --- */}
-      <section className="max-w-7xl mx-auto py-16 px-4 sm:px-6 min-h-[600px]">
+      <section className="max-w-7xl mx-auto py-10 md:py-16 px-4 sm:px-6 min-h-[600px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}

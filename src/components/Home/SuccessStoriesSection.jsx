@@ -22,7 +22,7 @@ const testimonials = [
 
 const SuccessStoriesSection = () => {
     return (
-        <section className="py-24 bg-[var(--color-birst-dark)] relative overflow-hidden">
+        <section className="py-16 lg:py-24 bg-[var(--color-birst-dark)] relative overflow-hidden">
             {/* Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
                 <div className="absolute top-10 left-10 w-32 h-32 border border-white rounded-full"></div>

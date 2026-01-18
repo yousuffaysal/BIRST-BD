@@ -57,7 +57,7 @@ const AiToolsSection = () => {
                 {/* Background Texture/Overlay */}
                 <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay pointer-events-none fixed"></div>
 
-                <div className="container relative z-10 px-4 pt-24 pb-48 mx-auto">
+                <div className="container relative z-10 px-4 pt-16 lg:pt-24 pb-24 lg:pb-48 mx-auto">
 
                     {/* Header */}
                     <div className="max-w-3xl mx-auto text-center mb-12">
@@ -74,7 +74,7 @@ const AiToolsSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: 0.1 }}
-                            className="mb-6 text-4xl font-bold text-white lg:text-6xl font-['Helvetica-Bold']"
+                            className="mb-6 text-3xl sm:text-5xl lg:text-6xl font-bold text-white font-['Helvetica-Bold']"
                         >
                             Smart Tools for <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#00ffff] to-[#00bfff]">Modern Scholars</span>
                         </motion.h2>
@@ -111,21 +111,21 @@ const AiToolsSection = () => {
                                     {/* Background Glow */}
                                     <div className={`absolute -right-20 -top-20 w-64 h-64 bg-gradient-to-br ${tool.gradient} opacity-5 blur-[100px] rounded-full`}></div>
 
-                                    <div className="relative z-10 flex flex-col md:flex-row items-center gap-8 md:gap-16">
+                                    <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-16">
 
                                         {/* Left: Icon & ID */}
                                         <div className="flex-shrink-0 relative">
-                                            <div className="w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-gradient-to-br from-gray-50 to-gray-200 border border-gray-100 flex items-center justify-center shadow-inner">
-                                                <tool.icon className="w-12 h-12 md:w-16 md:h-16 text-[var(--color-birst-dark)]" strokeWidth={1.5} />
+                                            <div className="w-20 h-20 md:w-32 md:h-32 rounded-3xl bg-gradient-to-br from-gray-50 to-gray-200 border border-gray-100 flex items-center justify-center shadow-inner">
+                                                <tool.icon className="w-10 h-10 md:w-16 md:h-16 text-[var(--color-birst-dark)]" strokeWidth={1.5} />
                                             </div>
-                                            <div className="absolute -top-3 -right-3 w-10 h-10 bg-[var(--color-birst-primary)] rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg border-2 border-white">
+                                            <div className="absolute -top-3 -right-3 w-8 h-8 md:w-10 md:h-10 bg-[var(--color-birst-primary)] rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm shadow-lg border-2 border-white">
                                                 {index + 1}
                                             </div>
                                         </div>
 
                                         {/* Right: Content */}
-                                        <div className="flex-grow text-left">
-                                            <div className="flex flex-wrap gap-2 mb-4">
+                                        <div className="flex-grow text-center md:text-left">
+                                            <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4">
                                                 <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-[var(--color-birst-primary)] rounded-lg">
                                                     {tool.category}
                                                 </span>
@@ -133,7 +133,7 @@ const AiToolsSection = () => {
                                                     {tool.version}
                                                 </span>
                                             </div>
-                                            <h3 className="text-3xl font-bold text-[var(--color-birst-dark)] mb-3 font-['Helvetica-Bold']">
+                                            <h3 className="text-2xl md:text-3xl font-bold text-[var(--color-birst-dark)] mb-3 font-['Helvetica-Bold']">
                                                 {tool.name}
                                             </h3>
                                             <p className="text-lg text-gray-600 mb-8 leading-relaxed">

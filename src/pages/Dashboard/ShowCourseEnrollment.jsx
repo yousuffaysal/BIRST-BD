@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
-import { Trash2, Search, Mail, Phone, MapPin, Calendar, Clock, User } from 'lucide-react';
+import {
+    Trash2, Search, Mail, Phone, MapPin, Calendar, Clock,
+    User, GraduationCap, RefreshCcw, Loader, BookOpen, Layers
+} from 'lucide-react';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 
@@ -16,37 +20,61 @@ const ShowCourseEnrollment = () => {
 
     const fetchEnrollments = async () => {
         try {
-            const res = await axiosSecure.get('/course-enrollments');
-            setEnrollments(res.data);
-            setLoading(false);
+            setLoading(true);
+            const [enrollRes, profileRes] = await Promise.all([
+                axiosSecure.get('/course-enrollments'),
+                axiosSecure.get('/profiles')
+            ]);
+
+            // Create a map of email -> photoURL for quick lookup
+            const profileMap = {};
+            if (Array.isArray(profileRes.data)) {
+                profileRes.data.forEach(profile => {
+                    if (profile.email) {
+                        profileMap[profile.email.toLowerCase()] = profile.photoURL;
+                    }
+                });
+            }
+
+            // Merge photoURL into enrollments
+            const mergedData = (enrollRes.data || []).map(item => ({
+                ...item,
+                photoURL: profileMap[item.email?.toLowerCase()] || item.photoURL || item.image
+            }));
+
+            // Sort by newest first
+            const sortedData = mergedData.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setEnrollments(sortedData);
         } catch (error) {
-            console.error('Error fetching enrollments:', error);
-            setLoading(false);
+            console.error('Error fetching data:', error);
             toast.error('Failed to load enrollments');
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleDelete = (id) => {
+    const handleDelete = (id, e) => {
+        e.stopPropagation();
         Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            title: 'Delete Enrollment?',
+            text: "This action cannot be undone!",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#3085d6',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#9CA3AF',
+            confirmButtonText: 'Yes, delete it',
+            background: '#fff',
+            customClass: {
+                title: "font-unbounded text-[#0B2340]",
+                popup: "rounded-3xl",
+            }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     const res = await axiosSecure.delete(`/course-enrollments/${id}`);
                     if (res.data.message === 'Enrollment deleted successfully') {
-                        Swal.fire(
-                            'Deleted!',
-                            'Enrollment has been deleted.',
-                            'success'
-                        );
-                        const remaining = enrollments.filter(item => item._id !== id);
-                        setEnrollments(remaining);
+                        toast.success('Enrollment deleted');
+                        setEnrollments(prev => prev.filter(item => item._id !== id));
                     }
                 } catch (error) {
                     toast.error('Failed to delete enrollment');
@@ -61,109 +89,174 @@ const ShowCourseEnrollment = () => {
         item.courseTitle.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-            </div>
-        );
-    }
+    // Group by Course Title
+    const groupedEnrollments = filteredEnrollments.reduce((acc, enrollment) => {
+        const course = enrollment.courseTitle || 'Unknown Course';
+        if (!acc[course]) acc[course] = [];
+        acc[course].push(enrollment);
+        return acc;
+    }, {});
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+    };
+
+    const sectionVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0 }
+    };
 
     return (
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900">Course Enrollments</h2>
-                    <p className="text-gray-600 mt-1">Manage free course enrollment requests</p>
+        <div className="h-[calc(100vh-100px)] min-h-[600px] bg-[#FAFAFA] font-jakarta overflow-hidden flex flex-col relative rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] m-4 lg:m-0">
+
+            {/* Unified Gradient Header */}
+            <div className="px-8 py-8 border-b border-gray-100 bg-gradient-to-br from-[#0B2340] to-[#02bfff] text-white relative overflow-hidden shrink-0 flex flex-col md:flex-row items-center justify-between gap-6">
+                {/* Background Decoration */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[50px] -mr-20 -mt-20 pointer-events-none"></div>
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#02bfff]/30 rounded-full blur-[40px] -ml-10 -mb-10 pointer-events-none"></div>
+
+                {/* Title Section */}
+                <div className="relative z-10 flex items-center gap-5 w-full md:w-auto">
+                    <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-white shrink-0 shadow-inner">
+                        <Layers size={28} />
+                    </div>
+                    <div>
+                        <h2 className="text-3xl font-bold font-unbounded text-white flex items-center gap-3">
+                            Course Enrollments
+                        </h2>
+                        <p className="text-white/80 text-base font-medium mt-1">Grouped by active courses</p>
+                    </div>
                 </div>
-                <div className="relative">
-                    <input
-                        type="text"
-                        placeholder="Search enrollments..."
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-64"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <Search className="w-5 h-5 text-gray-400 absolute left-3 top-2.5" />
+
+                {/* Actions Section */}
+                <div className="relative z-10 flex items-center gap-4 w-full md:w-auto">
+                    <div className="relative group flex-1 md:w-96">
+                        <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-white/60 group-focus-within:text-white transition-colors w-5 h-5" />
+                        <input
+                            type="text"
+                            placeholder="Search students or courses..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full pl-12 pr-6 py-4 bg-white/10 backdrop-blur-md rounded-2xl border border-white/10 outline-none focus:bg-white/20 focus:border-white/30 text-white placeholder-white/50 transition-all font-medium text-lg"
+                        />
+                    </div>
+                    <button
+                        onClick={fetchEnrollments}
+                        className="p-4 bg-white/10 hover:bg-white/20 rounded-2xl text-white/90 hover:text-white transition-colors backdrop-blur-md border border-white/10"
+                        title="Refresh"
+                    >
+                        <RefreshCcw size={22} />
+                    </button>
                 </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100">
-                <div className="overflow-x-auto">
-                    <table className="w-full">
-                        <thead className="bg-gray-50 border-b border-gray-200">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Student Info</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Course</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Details</th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200">
-                            {filteredEnrollments.length > 0 ? (
-                                filteredEnrollments.map((enrollment) => (
-                                    <tr key={enrollment._id} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-start gap-3">
-                                                <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center flex-shrink-0 text-indigo-600 font-bold">
-                                                    {enrollment.name.charAt(0)}
+            {/* Content Area */}
+            <div className="flex-1 overflow-y-auto custom-scrollbar p-6 lg:p-10">
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center h-64 gap-4 text-gray-400">
+                        <Loader className="animate-spin text-[#02bfff]" size={40} />
+                        <span className="font-bold text-sm uppercase tracking-widest">Loading Records...</span>
+                    </div>
+                ) : Object.keys(groupedEnrollments).length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center opacity-60">
+                        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                            <BookOpen size={48} className="text-gray-400" />
+                        </div>
+                        <h3 className="text-xl font-bold text-[#0B2340] mb-2 font-unbounded">No Enrollments Found</h3>
+                        <p className="text-gray-500">Try adjusting your search criteria</p>
+                    </div>
+                ) : (
+                    <motion.div
+                        variants={containerVariants}
+                        initial="hidden"
+                        animate="visible"
+                        className="space-y-10"
+                    >
+                        {Object.entries(groupedEnrollments).map(([courseTitle, students]) => (
+                            <motion.div key={courseTitle} variants={sectionVariants} className="space-y-4">
+                                <div className="flex items-center gap-4 pb-2 border-b border-gray-100">
+                                    <div className="w-1.5 h-8 bg-gradient-to-b from-[#0B2340] to-[#02bfff] rounded-full"></div>
+                                    <h3 className="text-xl font-bold font-unbounded text-[#0B2340]">
+                                        {courseTitle}
+                                    </h3>
+                                    <span className="px-3 py-1 bg-blue-50 text-[#02bfff] text-xs font-bold rounded-full border border-blue-100">
+                                        {students.length} Student{students.length !== 1 ? 's' : ''}
+                                    </span>
+                                </div>
+
+                                <div className="grid gap-4">
+                                    {students.map((enrollment) => (
+                                        <div
+                                            key={enrollment._id}
+                                            className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all group flex flex-col xl:flex-row gap-6 xl:items-center justify-between"
+                                        >
+                                            {/* Left: Student Info */}
+                                            <div className="flex items-start gap-5 min-w-0 xl:w-1/3">
+                                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0B2340] to-[#02bfff] flex items-center justify-center shrink-0 shadow-lg shadow-blue-900/10 overflow-hidden">
+                                                    {enrollment.photoURL || enrollment.image ? (
+                                                        <img
+                                                            src={enrollment.photoURL || enrollment.image}
+                                                            alt={enrollment.name}
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <span className="text-white font-bold text-xl font-unbounded">{enrollment.name.charAt(0)}</span>
+                                                    )}
                                                 </div>
-                                                <div>
-                                                    <div className="font-semibold text-gray-900">{enrollment.name}</div>
-                                                    <div className="text-sm text-gray-500 flex items-center gap-1">
-                                                        <Mail className="w-3 h-3" /> {enrollment.email}
-                                                    </div>
-                                                    <div className="text-sm text-gray-500 flex items-center gap-1">
-                                                        <Phone className="w-3 h-3" /> {enrollment.phone}
+                                                <div className="min-w-0">
+                                                    <h3 className="text-lg font-bold text-[#0B2340] mb-1 truncate">{enrollment.name}</h3>
+                                                    <div className="flex flex-col gap-1 text-sm text-gray-500">
+                                                        <span className="flex items-center gap-2 truncate">
+                                                            <Mail size={14} className="text-[#02bfff]" /> {enrollment.email}
+                                                        </span>
+                                                        <span className="flex items-center gap-2 truncate">
+                                                            <Phone size={14} className="text-[#02bfff]" /> {enrollment.phone}
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="font-medium text-gray-900">{enrollment.courseTitle}</div>
-                                            <div className="text-xs text-gray-500 bg-gray-100 inline-block px-2 py-0.5 rounded mt-1">
-                                                Free Course
+
+                                            {/* Middle: Details (Course info removed here as it's in header, showing other details instead) */}
+                                            <div className="flex flex-wrap items-center gap-x-8 gap-y-3 min-w-0 flex-1 text-sm text-gray-500">
+                                                <div className="flex items-center gap-2">
+                                                    <MapPin size={16} className="text-gray-400" />
+                                                    <span className="font-medium text-gray-700">{enrollment.address || 'No Address'}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <User size={16} className="text-gray-400" />
+                                                    <span className="font-medium text-gray-700">{enrollment.gender || 'N/A'}, {enrollment.dob || 'DOB N/A'}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <GraduationCap size={16} className="text-gray-400" />
+                                                    <span className="font-medium text-gray-700">{enrollment.qualification || 'N/A'}</span>
+                                                </div>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="space-y-1 text-sm text-gray-600">
-                                                <div className="flex items-center gap-1.5"><User className="w-3 h-3" /> {enrollment.gender}, {enrollment.dob}</div>
-                                                <div className="flex items-center gap-1.5"><MapPin className="w-3 h-3" /> {enrollment.address}</div>
-                                                <div className="flex items-center gap-1.5"><Calendar className="w-3 h-3" /> {enrollment.qualification}</div>
-                                                <div className="text-xs text-gray-500 italic">{enrollment.institution}</div>
+
+                                            {/* Right: Meta & Actions */}
+                                            <div className="flex xl:flex-col items-center xl:items-end justify-between xl:justify-center gap-4 xl:gap-2 border-t xl:border-t-0 border-gray-100 pt-4 xl:pt-0 mt-2 xl:mt-0 xl:w-40 shrink-0">
+                                                <div className="text-right">
+                                                    <div className="flex items-center gap-1.5 text-sm font-bold text-[#0B2340] justify-end">
+                                                        <Clock size={14} className="text-[#02bfff]" />
+                                                        {new Date(enrollment.createdAt).toLocaleDateString()}
+                                                    </div>
+                                                    <span className="text-xs text-gray-400 font-medium">{new Date(enrollment.createdAt).toLocaleTimeString()}</span>
+                                                </div>
+
+                                                <button
+                                                    onClick={(e) => handleDelete(enrollment._id, e)}
+                                                    className="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white rounded-lg font-bold text-sm transition-all shadow-sm"
+                                                >
+                                                    <Trash2 size={16} /> Delete
+                                                </button>
                                             </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-gray-900 flex items-center gap-1">
-                                                <Clock className="w-4 h-4 text-gray-400" />
-                                                {new Date(enrollment.createdAt).toLocaleDateString()}
-                                            </div>
-                                            <div className="text-xs text-gray-500">
-                                                {new Date(enrollment.createdAt).toLocaleTimeString()}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-right">
-                                            <button
-                                                onClick={() => handleDelete(enrollment._id)}
-                                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                title="Delete Enrollment"
-                                            >
-                                                <Trash2 className="w-5 h-5" />
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="5" className="px-6 py-12 text-center text-gray-500">
-                                        No enrollments found matching your criteria
-                                    </td>
-                                </tr>
-                            )}
-                        </tbody>
-                    </table>
-                </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                )}
             </div>
         </div>
     );

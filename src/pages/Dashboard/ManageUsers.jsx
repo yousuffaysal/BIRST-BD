@@ -1,18 +1,12 @@
-
-
-
-
-
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Search, Users, Shield, Trash2, ArrowUpDown, ArrowUp, ArrowDown, 
-  User, Mail, Calendar, MoreVertical, Eye, Edit, Crown, UserCheck
+import {
+  Search, Users, Shield, Trash2, ArrowUpDown,
+  User, Mail, Crown, CheckCircle, Filter,
+  RefreshCcw, Calendar, Download
 } from "lucide-react";
-
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const ManageUsers = () => {
@@ -22,7 +16,6 @@ const ManageUsers = () => {
   const [sortField, setSortField] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterRole, setFilterRole] = useState("all");
-  const [selectedUser, setSelectedUser] = useState(null);
   const usersPerPage = 10;
 
   // Fetch users
@@ -30,9 +23,9 @@ const ManageUsers = () => {
     queryKey: ["users", searchQuery, currentPage, sortField, sortOrder, filterRole],
     queryFn: async () => {
       const res = await axiosSecure.get("/users", {
-        params: { 
-          search: searchQuery, 
-          page: currentPage, 
+        params: {
+          search: searchQuery,
+          page: currentPage,
           limit: usersPerPage,
           sort: sortField,
           order: sortOrder,
@@ -57,17 +50,17 @@ const ManageUsers = () => {
 
   const handleMakeAdmin = (user) => {
     Swal.fire({
-      title: "Make Admin?",
-      text: `Are you sure you want to make ${user.name} an admin?`,
+      title: "Promote to Admin?",
+      text: `Are you sure you want to grant admin privileges to ${user.name}?`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#0A3D91",
-      cancelButtonColor: "#B91C1C",
-      confirmButtonText: "Yes, make admin",
-      background: "#FBF8F3",
+      confirmButtonColor: "#1FB6FF",
+      cancelButtonColor: "#EF4444",
+      confirmButtonText: "Yes, promote",
+      background: "#fff",
       customClass: {
-        title: "text-[#0A3D91] text-xl",
-        content: "text-[#6B7280]",
+        title: "font-unbounded text-[#0B2340]",
+        popup: "rounded-3xl",
       }
     }).then((result) => {
       if (result.isConfirmed) {
@@ -76,30 +69,22 @@ const ManageUsers = () => {
           .then((res) => {
             if (res.data.modifiedCount > 0) {
               refetch();
-              setSelectedUser(null);
               Swal.fire({
-                position: "center",
                 icon: "success",
-                title: `${user.name} is now an admin`,
+                title: "Promoted!",
+                text: `${user.name} is now an admin.`,
                 showConfirmButton: false,
                 timer: 1500,
-                background: "#FBF8F3",
-                customClass: {
-                  title: "text-[#0A3D91] text-xl",
-                }
+                confirmButtonColor: "#1FB6FF",
               });
             }
           })
           .catch((error) => {
             Swal.fire({
               icon: "error",
-              title: "Failed to make admin",
+              title: "Error",
               text: error.message,
-              background: "#FBF8F3",
-              customClass: {
-                title: "text-[#0A3D91] text-xl",
-                content: "text-[#6B7280]",
-              }
+              confirmButtonColor: "#1FB6FF",
             });
           });
       }
@@ -109,16 +94,16 @@ const ManageUsers = () => {
   const handleDeleteUser = (user) => {
     Swal.fire({
       title: "Delete User?",
-      text: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+      text: `This action cannot be undone. ${user.name} will be permanently removed.`,
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#0A3D91",
-      cancelButtonColor: "#B91C1C",
-      confirmButtonText: "Yes, delete",
-      background: "#FBF8F3",
+      confirmButtonColor: "#EF4444",
+      cancelButtonColor: "#9CA3AF",
+      confirmButtonText: "Delete User",
+      background: "#fff",
       customClass: {
-        title: "text-[#0A3D91] text-xl",
-        content: "text-[#6B7280]",
+        title: "font-unbounded text-[#0B2340]",
+        popup: "rounded-3xl",
       }
     }).then((result) => {
       if (result.isConfirmed) {
@@ -127,29 +112,22 @@ const ManageUsers = () => {
           .then((res) => {
             if (res.data.deletedCount > 0) {
               refetch();
-              setSelectedUser(null);
               Swal.fire({
                 icon: "success",
-                title: "User Deleted",
-                text: `${user.name} has been deleted successfully.`,
-                background: "#FBF8F3",
-                customClass: {
-                  title: "text-[#0A3D91] text-xl",
-                  content: "text-[#6B7280]",
-                }
+                title: "Deleted",
+                text: "User has been removed.",
+                showConfirmButton: false,
+                timer: 1500,
+                confirmButtonColor: "#1FB6FF",
               });
             }
           })
           .catch((error) => {
             Swal.fire({
               icon: "error",
-              title: "Failed to delete",
+              title: "Error",
               text: error.message,
-              background: "#FBF8F3",
-              customClass: {
-                title: "text-[#0A3D91] text-xl",
-                content: "text-[#6B7280]",
-              }
+              confirmButtonColor: "#1FB6FF",
             });
           });
       }
@@ -162,221 +140,312 @@ const ManageUsers = () => {
     }
   };
 
-  const handleSort = (field) => {
-    if (sortField === field) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortOrder("asc");
-    }
+  const calculateStats = () => {
+    const total = users.length;
+    const admins = users.filter(u => u.role === 'admin').length;
+    const regularUsers = total - admins;
+    return { total, admins, regularUsers };
   };
 
-  const getSortIcon = (field) => {
-    if (sortField !== field) return <ArrowUpDown className="ml-1 h-4 w-4" />;
-    return sortOrder === "asc" ? <ArrowUp className="ml-1 h-4 w-4" /> : <ArrowDown className="ml-1 h-4 w-4" />;
+  const stats = calculateStats();
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
   };
 
-  const SkeletonRow = () => (
-    <div className="bg-[#FBF8F3] rounded-2xl shadow-lg p-6 animate-pulse border border-[#E5E0D5]">
-      <div className="flex flex-col lg:flex-row items-start lg:items-center gap-6">
-        <div className="w-12 h-12 bg-[#0A3D91]/10 rounded-xl"></div>
-        <div className="flex-1 space-y-3">
-          <div className="h-5 bg-[#0A3D91]/10 rounded-lg w-1/4"></div>
-          <div className="h-4 bg-[#0A3D91]/10 rounded-lg w-1/2"></div>
-          <div className="flex gap-2">
-            <div className="h-6 bg-[#0A3D91]/10 rounded-lg w-16"></div>
-            <div className="h-6 bg-[#0A3D91]/10 rounded-lg w-20"></div>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-3 w-full lg:w-auto">
-          <div className="h-10 bg-[#0A3D91]/10 rounded-xl w-full sm:w-28"></div>
-          <div className="h-10 bg-[#0A3D91]/10 rounded-xl w-full sm:w-24"></div>
-        </div>
-      </div>
-    </div>
-  );
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
+  };
 
   if (error) {
     return (
-      <div className="flex items-center justify-center h-full p-8">
-        <div className="text-center p-8 bg-[#FBF8F3] rounded-2xl shadow-lg border border-[#E5E0D5]">
-          <div className="w-16 h-16 bg-[#B91C1C]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Users className="h-8 w-8 text-[#B91C1C]" />
+      <div className="flex items-center justify-center p-8 min-h-[50vh]">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Trash2 className="text-red-500" />
           </div>
-          <p className="text-[#0A3D91] text-lg font-semibold mb-2">Error Loading Users</p>
-          <p className="text-[#6B7280]">{error.message}</p>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h3>
+          <p className="text-gray-500">{error.message}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FDF6E9] p-3 sm:p-4 lg:p-6 xl:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="bg-[#FBF8F3] rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8 border border-[#E5E0D5] shadow-lg">
-          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 sm:gap-6">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-[#0A3D91] to-[#08306B] rounded-2xl flex items-center justify-center">
-                <Users className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
-              </div>
+    <div className="min-h-screen bg-[#FAFAFA] font-jakarta relative overflow-hidden p-4 lg:p-8">
+      {/* Background Decoration */}
+      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#1FB6FF]/5 to-transparent pointer-events-none" />
+      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#70C5D7]/5 rounded-full blur-[100px] pointer-events-none" />
+
+      <motion.div
+        className="max-w-7xl mx-auto relative z-10"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Premium Gradient Header */}
+        <motion.div
+          variants={itemVariants}
+          className="relative mb-8 bg-gradient-to-br from-[#0B2340] to-[#02bfff] rounded-3xl p-6 md:p-10 overflow-hidden shadow-xl shadow-blue-900/10"
+        >
+          {/* Decorative Elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[60px] -mr-20 -mt-20 pointer-events-none"></div>
+          <div className="absolute bottom-0 left-0 w-40 h-40 bg-[#02bfff]/30 rounded-full blur-[50px] -ml-10 -mb-10 pointer-events-none"></div>
+
+          <div className="relative z-10">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
               <div>
-                <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-[#0A3D91] mb-1 sm:mb-2">Manage Users</h2>
-                <p className="text-[#6B7280] text-sm sm:text-base lg:text-lg">Administrate user accounts and permissions</p>
+                <h1 className="text-3xl font-bold font-unbounded text-white mb-2 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center">
+                    <Users className="text-white w-6 h-6" />
+                  </div>
+                  Manage Users
+                </h1>
+                <p className="text-white/80 text-base ml-13">Administrate user accounts, roles, and permissions.</p>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => refetch()}
+                  className="inline-flex items-center px-4 py-2 rounded-xl bg-white/10 text-white backdrop-blur-md border border-white/10 text-sm font-medium hover:bg-white/20 transition-all hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  <RefreshCcw className="mr-2 w-4 h-4 text-[#02bfff]" />
+                  Refresh Data
+                </button>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
-              <div className="bg-[#0A3D91]/10 px-3 sm:px-4 py-2 rounded-xl border border-[#0A3D91]/20">
-                <span className="text-[#0A3D91] font-semibold text-sm sm:text-base lg:text-lg">Total: {users.length}</span>
+
+            {/* Stats Cards Row */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {/* Total Users */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Total Users</p>
+                    <h3 className="text-2xl font-bold text-white font-unbounded">{stats.total}</h3>
+                  </div>
+                  <div className="p-2 rounded-lg bg-[#02bfff]/20 text-[#02bfff]">
+                    <Users size={20} className="text-white" />
+                  </div>
+                </div>
               </div>
+
+              {/* Admins */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Administrators</p>
+                    <h3 className="text-2xl font-bold text-white font-unbounded">{stats.admins}</h3>
+                  </div>
+                  <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400">
+                    <Crown size={20} className="text-white" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Regular Users */}
+              <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/10 hover:bg-white/15 transition-all duration-300">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <p className="text-white/60 text-xs font-bold uppercase tracking-wider mb-1">Regular Users</p>
+                    <h3 className="text-2xl font-bold text-white font-unbounded">{stats.regularUsers}</h3>
+                  </div>
+                  <div className="p-2 rounded-lg bg-green-500/20 text-green-400">
+                    <User size={20} className="text-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Filters & Search - Glassmorphic Bar */}
+        <motion.div
+          variants={itemVariants}
+          className="mb-8 bg-white/80 backdrop-blur-xl rounded-2xl p-4 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-gray-100 flex flex-col md:flex-row items-center gap-4 sticky top-4 z-20"
+        >
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 group-focus-within:text-[#1FB6FF] transition-colors" />
+            <input
+              type="text"
+              placeholder="Search users by name or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#1FB6FF]/20 focus:bg-white transition-all text-gray-700 font-medium placeholder-gray-400"
+            />
+          </div>
+
+          <div className="flex items-center gap-3 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+            <div className="relative group min-w-[140px]">
+              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <select
                 value={filterRole}
                 onChange={(e) => setFilterRole(e.target.value)}
-                className="w-full sm:w-auto px-3 sm:px-4 py-2 sm:py-3 rounded-xl border border-[#E5E0D5] text-[#0A3D91] text-sm font-medium focus:outline-none focus:ring-2 focus:ring-[#0A3D91] focus:border-[#0A3D91] bg-white shadow-sm"
+                className="w-full pl-10 pr-8 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#1FB6FF]/20 cursor-pointer font-bold text-gray-600 text-sm appearance-none hover:bg-gray-100 transition-colors"
               >
                 <option value="all">All Roles</option>
-                <option value="admin">Admin</option>
+                <option value="admin">Admins</option>
+                <option value="user">Users</option>
+              </select>
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                <ArrowUpDown size={14} className="text-gray-400" />
+              </div>
+            </div>
 
-                <option value="user">User</option>
+            <div className="relative group min-w-[140px]">
+              <ArrowUpDown className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <select
+                value={`${sortField}-${sortOrder}`}
+                onChange={(e) => {
+                  const [field, order] = e.target.value.split('-');
+                  setSortField(field);
+                  setSortOrder(order);
+                }}
+                className="w-full pl-10 pr-8 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#1FB6FF]/20 cursor-pointer font-bold text-gray-600 text-sm appearance-none hover:bg-gray-100 transition-colors"
+              >
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+                <option value="email-asc">Email (A-Z)</option>
               </select>
             </div>
           </div>
-        </div>
-
-        {/* Search Section */}
-        <div className="mb-6 sm:mb-8">
-          <div className="bg-[#FBF8F3] rounded-2xl p-4 sm:p-6 border border-[#E5E0D5] shadow-sm">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by name or email..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 pl-10 sm:pl-14 rounded-xl border border-[#E5E0D5] text-[#0A3D91] text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#0A3D91] focus:border-[#0A3D91] bg-white shadow-sm"
-              />
-              <Search className="absolute left-3 sm:left-5 top-1/2 transform -translate-y-1/2 text-[#D0A96A] h-4 w-4 sm:h-5 sm:w-5" />
-            </div>
-          </div>
-        </div>
-
-        {/* Users List */}
-        <motion.div
-          className="space-y-4 sm:space-y-6"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          {isLoading ? (
-            Array.from({ length: 5 }).map((_, index) => <SkeletonRow key={index} />)
-          ) : paginatedUsers.length === 0 ? (
-            <div className="bg-[#FBF8F3] rounded-2xl p-8 sm:p-12 text-center border border-[#E5E0D5] shadow-sm">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#0A3D91]/10 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
-                <Users className="h-8 w-8 sm:h-10 sm:w-10 text-[#0A3D91]" />
-              </div>
-              <p className="text-[#0A3D91] text-lg sm:text-xl font-semibold mb-2">No users found</p>
-              <p className="text-[#6B7280] text-sm sm:text-base">Try adjusting your search criteria or filters</p>
-            </div>
-          ) : (
-            <AnimatePresence>
-              {paginatedUsers.map((user, index) => (
-                <motion.div
-                  key={user._id}
-                  className="bg-[#FBF8F3] rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 border border-[#E5E0D5] hover:border-[#D0A96A]/30"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 sm:gap-6">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-[#0A3D91] to-[#08306B] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold text-sm sm:text-lg">{index + 1 + (currentPage - 1) * usersPerPage}</span>
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 sm:gap-3 mb-2">
-                        <h3 className="text-lg sm:text-xl font-bold text-[#0A3D91] truncate">{user.name}</h3>
-                        {user.role === 'admin' && <Crown className="h-4 w-4 sm:h-5 sm:w-5 text-[#D0A96A]" />}
-                      </div>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Mail className="h-4 w-4 text-[#6B7280]" />
-                        <p className="text-[#6B7280] truncate">{user.email}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-                          user.role === 'admin' ? 'bg-[#0A3D91] text-white' :
-                          user.role === 'teacher' ? 'bg-[#D0A96A] text-white' :
-                          'bg-[#0A3D91]/10 text-[#0A3D91] border border-[#0A3D91]/20'
-                        }`}>
-                          {user.role === 'admin' ? <><Shield className="inline h-4 w-4 mr-1" />Admin</> :
-                           user.role === 'teacher' ? <><UserCheck className="inline h-4 w-4 mr-1" />Teacher</> :
-                           <><User className="inline h-4 w-4 mr-1" />User</>}
-                        </span>
-                        <span className="px-3 py-1 rounded-lg text-sm font-medium bg-[#D0A96A]/10 text-[#D0A96A] border border-[#D0A96A]/20">
-                          {user.status || "Active"}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-3 w-full lg:w-auto">
-                      {user.role !== "admin" && (
-                        <button
-                          onClick={() => handleMakeAdmin(user)}
-                          className="flex items-center px-4 py-3 bg-gradient-to-r from-[#0A3D91] to-[#08306B] text-white rounded-xl hover:from-[#08306B] hover:to-[#0A3D91] transition-all duration-300 text-sm font-semibold w-full sm:w-auto justify-center sm:justify-start shadow-md hover:shadow-lg"
-                        >
-                          <Shield className="mr-2 h-4 w-4" /> Make Admin
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleDeleteUser(user)}
-                        className="flex items-center px-4 py-3 bg-gradient-to-r from-[#B91C1C] to-[#991B1B] text-white rounded-xl hover:from-[#991B1B] hover:to-[#B91C1C] transition-all duration-300 text-sm font-semibold w-full sm:w-auto justify-center sm:justify-start shadow-md hover:shadow-lg"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" /> Delete
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          )}
         </motion.div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center mt-8">
-            <div className="bg-[#FBF8F3] rounded-2xl p-4 border border-[#E5E0D5] shadow-sm">
-            <nav className="inline-flex rounded-xl shadow-sm -space-x-px">
-              <button
-                onClick={() => handlePageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-                  className="relative inline-flex items-center px-4 py-3 rounded-l-xl border border-[#E5E0D5] bg-white text-sm font-semibold text-[#0A3D91] hover:bg-[#0A3D91]/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Previous
-              </button>
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                    className={`relative inline-flex items-center px-4 py-3 border border-[#E5E0D5] text-sm font-semibold transition-colors ${
-                    currentPage === page
-                        ? "bg-[#0A3D91] text-white border-[#0A3D91]"
-                        : "bg-white text-[#0A3D91] hover:bg-[#0A3D91]/5"
-                  }`}
-                >
-                  {page}
-                </button>
+        {/* Users Table / Grid */}
+        <motion.div variants={itemVariants} className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 overflow-hidden min-h-[400px]">
+          {isLoading ? (
+            <div className="p-8 space-y-4">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="h-20 bg-gray-50 rounded-2xl animate-pulse" />
               ))}
-              <button
-                onClick={() => handlePageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                  className="relative inline-flex items-center px-4 py-3 rounded-r-xl border border-[#E5E0D5] bg-white text-sm font-semibold text-[#0A3D91] hover:bg-[#0A3D91]/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                Next
-              </button>
-            </nav>
             </div>
-          </div>
-        )}
-      </div>
+          ) : paginatedUsers.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                <User className="w-10 h-10 text-gray-300" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-1">No users found</h3>
+              <p className="text-gray-500">Try adjusting your search or filters</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-100 text-left">
+                    <th className="p-6 font-bold text-xs text-gray-400 uppercase tracking-wider font-unbounded">User Info</th>
+                    <th className="p-6 font-bold text-xs text-gray-400 uppercase tracking-wider font-unbounded">Role</th>
+                    <th className="p-6 font-bold text-xs text-gray-400 uppercase tracking-wider font-unbounded text-center">Status</th>
+                    <th className="p-6 font-bold text-xs text-gray-400 uppercase tracking-wider font-unbounded text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <AnimatePresence>
+                    {paginatedUsers.map((user, idx) => (
+                      <motion.tr
+                        key={user._id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ delay: idx * 0.05 }}
+                        className="group hover:bg-blue-50/30 transition-colors border-b border-gray-50 last:border-none"
+                      >
+                        <td className="p-6">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-100 to-cyan-100 text-[#1FB6FF] flex items-center justify-center text-lg font-bold shadow-inner uppercase">
+                              {user.photoURL ? <img src={user.photoURL} className="w-full h-full rounded-full object-cover" /> : user.name?.charAt(0)}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-[#0B2340] text-base group-hover:text-[#1FB6FF] transition-colors">{user.name}</h4>
+                              <p className="text-sm text-gray-500 flex items-center gap-1 font-medium">
+                                <Mail size={12} /> {user.email}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${user.role === 'admin'
+                            ? 'bg-purple-50 text-purple-600 border-purple-100'
+                            : 'bg-blue-50 text-blue-600 border-blue-100'
+                            }`}>
+                            {user.role === 'admin' ? <Crown size={14} fill="currentColor" /> : <User size={14} />}
+                            <span className="capitalize">{user.role || 'User'}</span>
+                          </div>
+                        </td>
+                        <td className="p-6 text-center">
+                          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold bg-green-50 text-green-600 border border-green-100">
+                            <CheckCircle size={14} />
+                            Active
+                          </div>
+                        </td>
+                        <td className="p-6">
+                          <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            {user.role !== 'admin' && (
+                              <button
+                                onClick={() => handleMakeAdmin(user)}
+                                className="p-2 rounded-lg text-purple-600 hover:bg-purple-50 transition-colors tooltip tooltip-left"
+                                title="Make Admin"
+                              >
+                                <Shield size={18} />
+                              </button>
+                            )}
+                            <button
+                              onClick={() => handleDeleteUser(user)}
+                              className="p-2 rounded-lg text-red-500 hover:bg-red-50 transition-colors"
+                              title="Delete User"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </motion.tr>
+                    ))}
+                  </AnimatePresence>
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {/* Footer Pagination */}
+          {totalPages > 1 && (
+            <div className="p-6 border-t border-gray-100 flex items-center justify-between bg-gray-50/50">
+              <p className="text-sm text-gray-500 font-medium">
+                Showing <span className="text-gray-900 font-bold">{((currentPage - 1) * usersPerPage) + 1}</span> to <span className="text-gray-900 font-bold">{Math.min(currentPage * usersPerPage, users.length)}</span> of {users.length}
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Previous
+                </button>
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => handlePageChange(i + 1)}
+                    className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold transition-all ${currentPage === i + 1
+                      ? 'bg-[#1FB6FF] text-white shadow-lg shadow-cyan-200'
+                      : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
+                      }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-sm font-bold text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

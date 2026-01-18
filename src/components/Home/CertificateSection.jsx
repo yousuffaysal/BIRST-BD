@@ -8,7 +8,7 @@ const CertificateSection = () => {
     // ... (rest of code)
     // ... (rest of code)
     return (
-        <section className="py-24 bg-[#fffff0] min-h-screen flex items-center justify-center" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
+        <section className="py-16 lg:py-24 bg-[#fffff0] min-h-screen flex items-center justify-center" style={{ fontFamily: 'Helvetica, Arial, sans-serif' }}>
             <div className="container px-4 mx-auto">
                 <div className="grid items-center gap-16 lg:grid-cols-2">
                     <motion.div

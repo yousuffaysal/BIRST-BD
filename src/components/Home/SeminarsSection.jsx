@@ -13,41 +13,41 @@ const SeminarModal = ({ seminar, onClose, onRegister }) => {
     if (!seminar) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in">
-            <div className="bg-white rounded-[32px] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-scale-up border border-white/20">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6 bg-black/80 backdrop-blur-md animate-fade-in">
+            <div className="bg-white rounded-[24px] md:rounded-[32px] w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl relative animate-scale-up border border-white/20">
                 {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-6 right-6 p-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white hover:bg-white hover:text-red-500 transition-all z-20"
+                    className="absolute top-4 right-4 md:top-6 md:right-6 p-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full text-white hover:bg-white hover:text-red-500 transition-all z-20"
                 >
-                    <X size={24} />
+                    <X size={20} className="md:w-6 md:h-6" />
                 </button>
 
                 {/* Hero Header */}
-                <div className="relative h-80 md:h-96">
+                <div className="relative h-64 md:h-96">
                     <img src={seminar.thumbnail || seminarImage} alt="Cover" className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B2340] via-[#0B2340]/50 to-transparent"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B2340] via-[#0B2340]/60 to-transparent"></div>
 
-                    <div className="absolute bottom-0 left-0 w-full p-8 md:p-12">
-                        <span className="inline-block px-4 py-1.5 mb-4 text-xs font-bold text-[#0B2340] bg-[#FFD700] rounded-full uppercase tracking-widest shadow-lg">
+                    <div className="absolute bottom-0 left-0 w-full p-5 md:p-12">
+                        <span className="inline-block px-3 py-1 md:px-4 md:py-1.5 mb-3 md:mb-4 text-[10px] md:text-xs font-bold text-[#0B2340] bg-[#FFD700] rounded-full uppercase tracking-widest shadow-lg">
                             {seminar.category || seminar.type || 'Event'}
                         </span>
-                        <h2 className="text-4xl md:text-5xl font-black text-white leading-tight mb-6 max-w-3xl font-[var(--font-family-space-grotesk)]">
+                        <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-white leading-tight mb-4 md:mb-6 max-w-3xl font-[var(--font-family-space-grotesk)]">
                             {seminar.title}
                         </h2>
 
-                        <div className="flex flex-wrap items-center gap-6 text-white/90 font-medium text-sm md:text-base">
-                            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                                <span className="text-[#FFD700] font-bold text-lg">
+                        <div className="flex flex-wrap items-center gap-3 md:gap-6 text-white/90 font-medium text-xs md:text-base">
+                            <div className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
+                                <span className="text-[#FFD700] font-bold text-sm md:text-lg">
                                     {new Date(seminar.date).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                                <Clock size={16} className="text-[#FFD700]" />
+                            <div className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
+                                <Clock size={14} className="text-[#FFD700] md:w-4 md:h-4" />
                                 <span>{seminar.time}</span>
                             </div>
-                            <div className="flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/10">
-                                <MapPin size={16} className="text-[#FFD700]" />
+                            <div className="flex items-center gap-1.5 md:gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10">
+                                <MapPin size={14} className="text-[#FFD700] md:w-4 md:h-4" />
                                 <span>{seminar.location || 'Online'}</span>
                             </div>
                         </div>
@@ -56,7 +56,7 @@ const SeminarModal = ({ seminar, onClose, onRegister }) => {
 
                 <div className="grid md:grid-cols-3 gap-0">
                     {/* Main Content */}
-                    <div className="md:col-span-2 p-8 md:p-12 space-y-10">
+                    <div className="md:col-span-2 p-5 md:p-12 space-y-8 md:space-y-10">
                         {/* About */}
                         <section>
                             <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -301,9 +301,9 @@ const SeminarsSection = () => {
     };
 
     return (
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-16 lg:py-24 bg-white relative overflow-hidden">
             <div className="container px-4 mx-auto">
-                <div className="flex flex-col items-end justify-between mb-16 gap-6 md:flex-row">
+                <div className="flex flex-col items-end justify-between mb-10 lg:mb-16 gap-6 md:flex-row">
                     <div className="max-w-2xl">
                         <motion.span
                             initial={{ opacity: 0, y: 30 }}
@@ -319,7 +319,7 @@ const SeminarsSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-                            className="text-3xl font-bold text-[var(--color-birst-dark)] lg:text-4xl"
+                            className="text-3xl sm:text-4xl font-bold text-[var(--color-birst-dark)]"
                         >
                             Featured Seminars & Workshops
                         </motion.h2>
@@ -354,10 +354,10 @@ const SeminarsSection = () => {
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true, margin: "-50px" }}
                                     transition={{ duration: 1.2, delay: index * 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                    className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-gray-200 hover:border-[var(--color-birst-primary)] hover:shadow-2xl transition-all duration-300 h-full"
+                                    className="group flex flex-col bg-white rounded-lg overflow-hidden border border-gray-200 hover:border-[var(--color-birst-primary)] hover:shadow-2xl transition-all duration-300 h-full"
                                 >
-                                    {/* Image Header - Aspect Video for better fit with text */}
-                                    <div className="h-64 relative overflow-hidden">
+                                    {/* Image Header - Compact height for mobile */}
+                                    <div className="h-40 md:h-64 relative overflow-hidden">
                                         <img
                                             src={seminar.thumbnail || seminarImage}
                                             alt="Seminar"
@@ -365,39 +365,39 @@ const SeminarsSection = () => {
                                         />
                                         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
                                         <div className="absolute top-4 left-4">
-                                            <span className="px-4 py-1.5 bg-[#FFD700] text-black font-bold text-sm rounded shadow-sm">
+                                            <span className="px-2.5 py-1 bg-[#FFD700] text-black font-bold text-[10px] uppercase tracking-wider rounded shadow-sm">
                                                 {seminar.category || seminar.type || 'Event'}
                                             </span>
                                         </div>
                                     </div>
 
                                     {/* Card Content */}
-                                    <div className="p-8 flex flex-col flex-1">
+                                    <div className="p-5 md:p-8 flex flex-col flex-1">
                                         {/* Date & Month Row */}
-                                        <div className="flex items-center gap-4 mb-4">
+                                        <div className="flex items-center gap-4 mb-3">
                                             <div className="flex items-baseline gap-1 text-[var(--color-birst-primary)]">
-                                                <span className="text-4xl font-extrabold">{day}</span>
-                                                <span className="text-lg font-bold uppercase">{month}</span>
+                                                <span className="text-3xl md:text-4xl font-extrabold">{day}</span>
+                                                <span className="text-base md:text-lg font-bold uppercase">{month}</span>
                                             </div>
                                             <div className="h-8 w-[1px] bg-gray-200"></div>
-                                            <div className="flex items-center gap-2 text-gray-500 font-medium text-sm">
-                                                <Video size={16} className="text-purple-500" />
+                                            <div className="flex items-center gap-2 text-gray-500 font-medium text-xs md:text-sm">
+                                                <Video size={14} className="text-purple-500" />
                                                 {seminar.platform || 'Online'}
                                             </div>
                                         </div>
 
                                         {/* Title */}
-                                        <h3 className="text-2xl font-bold text-[var(--color-birst-dark)] mb-3 leading-snug group-hover:text-[var(--color-birst-primary)] transition-colors">
+                                        <h3 className="text-xl md:text-2xl font-bold text-[var(--color-birst-dark)] mb-3 leading-snug group-hover:text-[var(--color-birst-primary)] transition-colors line-clamp-2">
                                             {seminar.title}
                                         </h3>
 
-                                        {/* Description */}
-                                        <p className="text-gray-600 mb-6 line-clamp-2 leading-relaxed">
+                                        {/* Description - Hidden on Mobile for Square aspect */}
+                                        <p className="hidden sm:block text-gray-600 mb-6 line-clamp-2 leading-relaxed">
                                             {seminar.description}
                                         </p>
 
-                                        {/* Meta Info Grid */}
-                                        <div className="grid grid-cols-2 gap-4 mb-8">
+                                        {/* Meta Info Grid - Hidden on Mobile */}
+                                        <div className="hidden sm:grid grid-cols-2 gap-4 mb-8">
                                             <div className="flex items-center gap-2 text-sm text-gray-500">
                                                 <Clock size={16} className="text-gray-400" />
                                                 <span>{seminar.time}</span>

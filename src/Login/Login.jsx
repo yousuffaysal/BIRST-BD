@@ -1,498 +1,10 @@
-
-
-
-
-
-
-// import React, { useEffect, useState, useRef, useContext } from 'react';
-
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-// import Swal from 'sweetalert2';
-
-// import SocialLogin from '../components/SocialLogin';
-// import { AuthContext } from '../Providers/AuthProvider';
-
-// const Login = () => {
-//     const [disabled, setDisabled] = useState(true);
-//     const [termsAccepted, setTermsAccepted] = useState(false);
-//     const [showPassword, setShowPassword] = useState(false);
-//     const emailRef = useRef(null);
-//     const passwordRef = useRef(null);
-
-//     const { signIn } = useContext(AuthContext);
-
-//     const navigate = useNavigate();
-//     const location = useLocation();
-//     const from = location.state?.from?.pathname || "/";
-
-//     useEffect(() => {
-//         loadCaptchaEnginge(6);
-//     }, []);
-
-//     const handleLogin = (event) => {
-//         event.preventDefault();
-
-//         if (!termsAccepted) {
-//             Swal.fire({
-//                 title: 'Terms & Conditions Required',
-//                 text: 'Please accept the terms and conditions to continue',
-//                 icon: 'warning',
-//                 confirmButtonText: 'Ok'
-//             });
-//             return;
-//         }
-
-//         const form = event.target;
-//         const email = form.email.value;
-//         const password = form.password.value;
-
-//         signIn(email, password)
-//             .then((result) => {
-//                 Swal.fire({
-//                     title: 'Login Successful!',
-//                     icon: 'success',
-//                     showClass: { popup: 'animate__animated animate__fadeInDown' },
-//                     hideClass: { popup: 'animate__animated animate__fadeOutUp' },
-//                 });
-//                 navigate(from, { replace: true });
-//             })
-//             .catch((error) => {
-//                 let errorMessage = error.message;
-//                 Swal.fire({
-//                     title: 'Login Failed',
-//                     text: errorMessage,
-//                     icon: 'error',
-//                     confirmButtonText: 'OK',
-//                     confirmButtonColor: '#0A3D91'
-//                 });
-//             });
-//     };
-
-//     const handleValidateCaptcha = (e) => {
-//         const captchaValue = e.target.value;
-//         if (validateCaptcha(captchaValue)) {
-//             setDisabled(false);
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: 'Captcha Validated!',
-//                 showConfirmButton: false,
-//                 timer: 1500
-//             });
-//         } else {
-//             setDisabled(true);
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Invalid Captcha',
-//                 text: 'Please try again',
-//                 confirmButtonText: 'Ok'
-//             });
-//         }
-//     };
-
-//     return (
-//         <div className="min-h-screen w-full bg-gradient-to-br from-deep-teal to-mint-green flex fixed inset-0">
-//             {/* Left Section with Illustration */}
-//             <div className="hidden lg:flex lg:w-1/2 bg-warm-beige items-center justify-center p-12 relative overflow-hidden">
-//                 {/* Background Pattern */}
-//                 <div className="absolute inset-0 opacity-10">
-//                     <div className="absolute top-10 left-10 w-20 h-20 bg-mint-green/30 rounded-full animate-float"></div>
-//                     <div className="absolute bottom-20 right-20 w-16 h-16 bg-deep-teal/20 rounded-full animate-float" style={{ animationDelay: '2s' }}></div>
-//                     <div className="absolute top-1/2 left-1/4 w-12 h-12 bg-light-sky-blue/20 rounded-full animate-float" style={{ animationDelay: '4s' }}></div>
-//                 </div>
-
-//                 <div className="max-w-lg relative z-10">
-//                     {/* Logo */}
-//                     <div className="mb-8">
-//                         <img
-//                             src="/src/assets/logo_lebas.png"
-//                             alt="The Lebas Buying"
-//                             className="h-16 w-auto mx-auto mb-4"
-//                         />
-//                         <h2 className="text-4xl font-bold font-space-grotesk text-charcoal text-center">
-//                             Welcome Back to <span className="text-deep-teal">The Lebas Buying</span>
-//                         </h2>
-//                     </div>
-
-//                     <p className="text-xl font-dm-sans text-charcoal/80 mb-8 leading-relaxed text-center">
-//                         Crafting Quality<br className="hidden sm:inline" />Garments with Precision
-//                     </p>
-
-//                     {/* Sign Up Button */}
-//                     <div className="text-center">
-//                         <p className="text-charcoal/70 font-dm-sans mb-4">Don't have an account?</p>
-//                         <Link 
-//                             to="/signup" 
-//                             className="btn-elevated px-8 py-4 rounded-xl"
-//                         >
-//                             Sign Up Here
-//                         </Link>
-//                     </div>
-//                 </div>
-//             </div>
-
-//             {/* Right Section with Form */}
-//             <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-6 overflow-y-auto">
-//                 <div className="w-full max-w-md space-y-8">
-//                     {/* Logo and Welcome Text */}
-//                     <div className="text-center">
-//                         <img
-//                             src="/src/assets/logo_lebas.png"
-//                             alt="The Lebas Buying"
-//                             className="h-12 w-auto mx-auto mb-4 lg:hidden"
-//                         />
-//                         <h1 className="text-3xl font-bold font-space-grotesk text-deep-teal mb-2">Welcome!</h1>
-//                         <p className="text-charcoal/70 font-dm-sans">It's really nice to see you</p>
-//                     </div>
-
-//                     {/* Login Form */}
-//                     <form onSubmit={handleLogin} className="space-y-6">
-//                         <div className="space-y-4">
-//                             <div>
-//                                 <input
-//                                     ref={emailRef}
-//                                     type="email"
-//                                     name="email"
-//                                     placeholder="Your email address *"
-//                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-//                                     required
-//                                 />
-//                             </div>
-//                             <div>
-//                                 <div className="relative">
-//                                     <input
-//                                         ref={passwordRef}
-//                                         type={showPassword ? "text" : "password"}
-//                                         name="password"
-//                                         placeholder="Enter password *"
-//                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-//                                         required
-//                                     />
-//                                     <button
-//                                         type="button"
-//                                         onClick={() => setShowPassword(!showPassword)}
-//                                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-charcoal/60 hover:text-charcoal transition-colors"
-//                                     >
-//                                         {showPassword ? (
-//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-//                                                 <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-//                                             </svg>
-//                                         ) : (
-//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
-//                                                 <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-//                                             </svg>
-//                                         )}
-//                                     </button>
-//                                 </div>
-//                             </div>
-
-//                             {/* Captcha Section */}
-//                             <div className="space-y-3 p-4 bg-warm-beige rounded-lg border border-gray-300">
-//                                 <LoadCanvasTemplate />
-//                                 <div className="flex gap-2">
-//                                     <input
-//                                         type="text"
-//                                         name="captcha"
-//                                         id="captcha"
-//                                         placeholder="Enter captcha *"
-//                                         className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-//                                         required
-//                                     />
-//                                     <button
-//                                         type="button"
-//                                         onClick={() => handleValidateCaptcha({ target: document.getElementById('captcha') })}
-//                                         className="px-6 py-3 bg-soft-sand hover:bg-soft-sand/80 text-charcoal font-medium rounded-lg transition-all font-dm-sans"
-//                                     >
-//                                         Verify
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         {/* Terms and Conditions */}
-//                         <div className="flex items-center">
-//                             <input
-//                                 type="checkbox"
-//                                 id="terms"
-//                                 checked={termsAccepted}
-//                                 onChange={(e) => setTermsAccepted(e.target.checked)}
-//                                 className="w-4 h-4 border-gray-300 rounded text-deep-teal focus:ring-deep-teal"
-//                             />
-//                             <label htmlFor="terms" className="ml-2 text-sm text-charcoal/70 font-dm-sans">
-//                                 I have read and agree to all{' '}
-//                                 <Link to="/terms" className="text-deep-teal hover:text-mint-green transition-colors" target="_blank">
-//                                     Terms & conditions
-//                                 </Link>
-//                             </label>
-//                         </div>
-
-//                         {/* Login Button */}
-//                         <button
-//                             type="submit"
-//                             disabled={disabled || !termsAccepted}
-//                             className="w-full py-3 px-6 btn-elevated rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-dm-sans"
-//                         >
-//                             <span>Sign in</span>
-//                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-//                             </svg>
-//                         </button>
-
-//                         {/* Google Sign In */}
-//                         <SocialLogin />
-
-//                         {/* Sign Up Link */}
-//                         <div className="flex items-center justify-between mt-6 text-sm">
-//                             <Link to="/signup" className="text-deep-teal hover:text-mint-green font-medium transition-colors font-dm-sans">
-//                                 Sign up
-//                             </Link>
-//                             <Link to="/forgot-password" className="text-deep-teal hover:text-mint-green transition-colors font-dm-sans">
-//                                 Lost password?
-//                             </Link>
-//                         </div>
-//                     </form>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Login;
-
-
-
-
-// import React, { useEffect, useState, useRef, useContext } from 'react';
-// import { Link, useLocation, useNavigate } from 'react-router-dom';
-// import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-// import Swal from 'sweetalert2';
-
-// import SocialLogin from '../components/SocialLogin';
-// import { AuthContext } from '../Providers/AuthProvider';
-// // import { AuthContext } from '../providers/AuthProvider';
-// // import imge1 from '../assets/img-signup-PhotoRoom.png';
-
-// const Login = () => {
-//     const [disabled, setDisabled] = useState(true);
-//     const [termsAccepted, setTermsAccepted] = useState(false);
-//     const [showPassword, setShowPassword] = useState(false);
-//     const emailRef = useRef(null);
-//     const passwordRef = useRef(null);
-
-//     const { signIn } = useContext(AuthContext);
-
-//     const navigate = useNavigate();
-//     const location = useLocation();
-//     const from = location.state?.from?.pathname || "/";
-
-//     useEffect(() => {
-//         loadCaptchaEnginge(6);
-//     }, []);
-
-//     const handleLogin = (event) => {
-//         event.preventDefault();
-
-//         if (!termsAccepted) {
-//             Swal.fire({
-//                 title: 'Terms & Conditions Required',
-//                 text: 'Please accept the terms and conditions to continue',
-//                 icon: 'warning',
-//                 confirmButtonText: 'Ok'
-//             });
-//             return;
-//         }
-
-//         const form = event.target;
-//         const email = form.email.value;
-//         const password = form.password.value;
-
-//         signIn(email, password)
-//             .then((result) => {
-//                 Swal.fire({
-//                     title: 'Login Successful!',
-//                     icon: 'success',
-//                     showClass: { popup: 'animate__animated animate__fadeInDown' },
-//                     hideClass: { popup: 'animate__animated animate__fadeOutUp' },
-//                 });
-//                 navigate(from, { replace: true });
-//             })
-//             .catch((error) => {
-//                 let errorMessage = error.message;
-//                 Swal.fire({
-//                     title: 'Login Failed',
-//                     text: errorMessage,
-//                     icon: 'error',
-//                     confirmButtonText: 'OK',
-//                     confirmButtonColor: '#DA3A60'
-//                 });
-//             });
-//     };
-
-//     const handleValidateCaptcha = (e) => {
-//         const captchaValue = e.target.value;
-//         if (validateCaptcha(captchaValue)) {
-//             setDisabled(false);
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: 'Captcha Validated!',
-//                 showConfirmButton: false,
-//                 timer: 1500
-//             });
-//         } else {
-//             setDisabled(true);
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Invalid Captcha',
-//                 text: 'Please try again',
-//                 confirmButtonText: 'Ok'
-//             });
-//         }
-//     };
-
-//     return (
-//         <div className="min-h-screen w-full bg-[#005482] flex fixed inset-0">
-//             {/* Left Section with Illustration */}
-//             <div className="hidden lg:flex lg:w-1/2 bg-[#70C5D7] items-center justify-center p-12">
-//                 <div className="max-w-lg">
-//                     <h2 className="text-4xl font-bold text-white mb-6">Yes! we're making progress</h2>
-//                     <p className="text-xl text-white/90">every minute & every second</p>
-//                     {/* <div className="mt-8">
-//                         <img 
-//                             src={imge1} 
-//                             alt="Progress Illustration"
-//                             className="w-full max-w-md mx-auto"
-//                         />
-//                     </div> */}
-//                 </div>
-//             </div>
-
-//             {/* Right Section with Form */}
-//             <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-6 overflow-y-auto">
-//                 <div className="w-full max-w-md space-y-8">
-//                     {/* Logo and Welcome Text */}
-//                     <div className="text-center">
-//                         <h1 className="text-3xl font-bold text-[#005482] mb-2">Welcome!</h1>
-//                         <p className="text-gray-600">It's really nice to see you</p>
-//                     </div>
-
-//                     {/* Login Form */}
-//                     <form onSubmit={handleLogin} className="space-y-6">
-//                         <div className="space-y-4">
-//                             <div>
-//                                 <input
-//                                     ref={emailRef}
-//                                     type="email"
-//                                     name="email"
-//                                     placeholder="Your email address *"
-//                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
-//                                     required
-//                                 />
-//                             </div>
-//                             <div>
-//                                 <div className="relative">
-//                                     <input
-//                                         ref={passwordRef}
-//                                         type={showPassword ? "text" : "password"}
-//                                         name="password"
-//                                         placeholder="Enter password *"
-//                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
-//                                         required
-//                                     />
-//                                     <button
-//                                         type="button"
-//                                         onClick={() => setShowPassword(!showPassword)}
-//                                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-//                                     >
-//                                         {showPassword ? (
-//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-//                                                 <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-//                                             </svg>
-//                                         ) : (
-//                                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                                 <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
-//                                                 <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-//                                             </svg>
-//                                         )}
-//                                     </button>
-//                                 </div>
-//                             </div>
-
-//                             {/* Captcha Section */}
-//                             <div className="space-y-3 p-4 bg-gray-50 rounded-lg">
-//                                 <LoadCanvasTemplate />
-//                                 <div className="flex gap-2">
-//                                     <input
-//                                         type="text"
-//                                         name="captcha"
-//                                         id="captcha"
-//                                         placeholder="Enter captcha *"
-//                                         className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#70C5D7] text-[#005482]"
-//                                         required
-//                                     />
-//                                     <button
-//                                         type="button"
-//                                         onClick={() => handleValidateCaptcha({ target: document.getElementById('captcha') })}
-//                                         className="px-6 py-3 bg-[#FCBB45] hover:bg-[#FCBB45]/90 text-white font-medium rounded-lg transition-all"
-//                                     >
-//                                         Verify
-//                                     </button>
-//                                 </div>
-//                             </div>
-//                         </div>
-
-//                         {/* Terms and Conditions */}
-//                         <div className="flex items-center">
-//                             <input
-//                                 type="checkbox"
-//                                 id="terms"
-//                                 checked={termsAccepted}
-//                                 onChange={(e) => setTermsAccepted(e.target.checked)}
-//                                 className="w-4 h-4 border-gray-300 rounded text-[#DA3A60] focus:ring-[#DA3A60]"
-//                             />
-//                             <label htmlFor="terms" className="ml-2 text-sm text-gray-600">
-//                                 I have read and agree to all{' '}
-//                                 <Link to="/terms" className="text-[#70C5D7] hover:text-[#005482]" target="_blank">
-//                                     Terms & conditions
-//                                 </Link>
-//                             </label>
-//                         </div>
-
-//                         {/* Login Button */}
-//                         <button
-//                             type="submit"
-//                             disabled={disabled || !termsAccepted}
-//                             className="w-full py-3 px-6 bg-[#DA3A60] hover:bg-[#DA3A60]/90 text-white font-medium rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-//                         >
-//                             <span>Sign in</span>
-//                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-//                                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-//                             </svg>
-//                         </button>
-
-//                         {/* Google Sign In */}
-//                         <SocialLogin />
-
-//                         {/* Sign Up Link */}
-//                         <div className="flex items-center justify-between mt-6 text-sm">
-//                             <Link to="/signup" className="text-[#005482] hover:text-[#70C5D7] font-medium">
-//                                 Sign up
-//                             </Link>
-//                             <Link to="/forgot-password" className="text-[#005482] hover:text-[#70C5D7]">
-//                                 Lost password?
-//                             </Link>
-//                         </div>
-//                     </form>
-//                 </div>
-//             </div>
-//         </div>
 import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
 
 import SocialLogin from '../components/SocialLogin';
 import { AuthContext } from '../Providers/AuthProvider';
@@ -502,6 +14,7 @@ const Login = () => {
     const [disabled, setDisabled] = useState(true);
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const { signIn } = useContext(AuthContext);
@@ -511,27 +24,37 @@ const Login = () => {
     const from = location.state?.from?.pathname || "/";
 
     useEffect(() => {
-        loadCaptchaEnginge(6);
+        // Delay to ensure DOM is ready and explicit colors for contrast
+        setTimeout(() => {
+            loadCaptchaEnginge(6, 'white', 'black');
+        }, 100);
     }, []);
 
     const onSubmit = (data) => {
         if (!termsAccepted) {
             Swal.fire({
-                title: 'Terms & Conditions Required',
+                title: 'Terms Required',
                 text: 'Please accept the terms and conditions to continue',
                 icon: 'warning',
-                confirmButtonText: 'Ok'
+                confirmButtonColor: '#1FB6FF',
+                background: '#0B2340',
+                color: '#fff'
             });
             return;
         }
 
+        setIsLoading(true);
+
         signIn(data.email, data.password)
             .then((result) => {
                 Swal.fire({
-                    title: 'Login Successful!',
+                    title: 'Welcome Back!',
+                    text: 'Login Successful',
                     icon: 'success',
-                    showClass: { popup: 'animate__animated animate__fadeInDown' },
-                    hideClass: { popup: 'animate__animated animate__fadeOutUp' },
+                    timer: 1500,
+                    showConfirmButton: false,
+                    background: '#0B2340',
+                    color: '#fff'
                 });
                 navigate(from, { replace: true });
             })
@@ -541,201 +64,214 @@ const Login = () => {
                     title: 'Login Failed',
                     text: errorMessage,
                     icon: 'error',
-                    confirmButtonText: 'OK',
-                    confirmButtonColor: '#0A3D91'
+                    confirmButtonText: 'Try Again',
+                    confirmButtonColor: '#EF4444',
+                    background: '#0B2340',
+                    color: '#fff'
                 });
-            });
+            })
+            .finally(() => setIsLoading(false));
     };
 
     const handleValidateCaptcha = (e) => {
         const captchaValue = e.target.value;
-        if (validateCaptcha(captchaValue)) {
-            setDisabled(false);
-            Swal.fire({
-                icon: 'success',
-                title: 'Captcha Validated!',
-                showConfirmButton: false,
-                timer: 1500
-            });
+        if (captchaValue.length === 6) {
+            if (validateCaptcha(captchaValue)) {
+                setDisabled(false);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#0B2340',
+                    color: '#fff',
+                    iconColor: '#10B981'
+                });
+                Toast.fire({ icon: 'success', title: 'Captcha Verified' });
+            } else {
+                setDisabled(true);
+            }
         } else {
             setDisabled(true);
-            Swal.fire({
-                icon: 'error',
-                title: 'Invalid Captcha',
-                text: 'Please try again',
-                confirmButtonText: 'Ok'
-            });
         }
     };
 
+    const inputClasses = "w-full pl-9 pr-3 py-2 bg-transparent border-b border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#1FB6FF] transition-all duration-300 font-jakarta text-sm";
+
     return (
-        <div className="min-h-screen w-full bg-gradient-to-br from-deep-teal to-mint-green flex fixed inset-0">
-            {/* Left Section with Illustration */}
-            <div className="hidden lg:flex lg:w-1/2 bg-[#0B2340] items-center justify-center p-12 relative overflow-hidden">
-                {/* Floating Illustration */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <img
-                        src="https://ik.imagekit.io/2lax2ytm2/Gemini_Generated_Image_479pjn479pjn479p.png"
-                        alt="Background Illustration"
-                        className="w-[400px] h-auto object-contain"
-                    />
+        <div className="h-screen w-full bg-[#0B2340] flex flex-col lg:flex-row relative overflow-hidden font-jakarta">
+            {/* Left Side - Visual & Branding */}
+            <div className="hidden lg:flex lg:w-1/2 relative bg-[#06182c] items-center justify-center p-8 overflow-hidden h-full">
+                {/* Abstract Background Elements */}
+                <div className="absolute inset-0 pointer-events-none">
+                    <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#1FB6FF]/10 rounded-full blur-[100px] animate-pulse" />
+                    <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#70C5D7]/10 rounded-full blur-[100px]" />
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
                 </div>
 
-                <div className="max-w-lg relative z-10">
-                    {/* Logo */}
-                    <div className="mb-8">
-                        <img
-                            src={birstLogo}
-                            alt="BIRSTBD"
-                            className="h-16 w-auto mx-auto mb-4"
-                        />
-                        <h2 className="text-4xl font-bold font-space-grotesk text-white text-center">
-                            Welcome Back to <span className="text-[#1FB6FF]">BIRSTBD</span>
-                        </h2>
-                    </div>
+                <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="relative z-10 text-center max-w-lg"
+                >
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="inline-block p-4 rounded-full bg-white/5 backdrop-blur-md border border-white/10 mb-6 aspect-square flex items-center justify-center"
+                    >
+                        <img src={birstLogo} alt="BIRSTBD" className="h-40 w-auto" />
+                    </motion.div>
 
-                    <p className="text-xl font-dm-sans text-white/90 mb-8 leading-relaxed text-center">
-                        Crafting Quality<br className="hidden sm:inline" />Garments with Precision
+                    <h1 className="text-4xl lg:text-5xl font-bold text-white font-unbounded mb-4 leading-tight">
+                        Research <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-cyan-400">Excellence</span>
+                    </h1>
+
+                    <p className="text-gray-400 text-base leading-relaxed mb-6">
+                        Join the premier platform for statistical <br /> training and research development.
                     </p>
 
-                    {/* Sign Up Button */}
-                    <div className="text-center">
-                        <p className="text-white/80 font-dm-sans mb-4">Don't have an account?</p>
-                        <Link
-                            to="/signup"
-                            className="btn-elevated px-8 py-4"
-                        >
-                            Sign Up Here
-                        </Link>
+                    <div className="flex justify-center gap-4">
+                        <div className="h-1 w-12 bg-[#1FB6FF] rounded-full"></div>
+                        <div className="h-1 w-3 bg-gray-600 rounded-full"></div>
+                        <div className="h-1 w-3 bg-gray-600 rounded-full"></div>
                     </div>
-                </div>
+                </motion.div>
             </div>
 
-            {/* Right Section with Form */}
-            <div className="w-full lg:w-1/2 bg-white flex items-center justify-center p-6 overflow-y-auto">
-                <div className="w-full max-w-md space-y-8">
-                    {/* Logo and Welcome Text */}
-                    <div className="text-center">
-                        <img
-                            src={birstLogo}
-                            alt="BIRSTBD"
-                            className="h-12 w-auto mx-auto mb-4 lg:hidden"
-                        />
-                        <h1 className="text-3xl font-bold font-space-grotesk text-deep-teal mb-2">Welcome!</h1>
-                        <p className="text-charcoal/70 font-dm-sans">It's really nice to see you</p>
+            {/* Right Side - Login Form */}
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8 relative bg-[#0B2340] h-full overflow-y-auto">
+                <div className="absolute inset-0 overflow-hidden pointer-events-none lg:hidden">
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10" />
+                </div>
+
+                <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className="w-full max-w-sm"
+                >
+                    <div className="mb-6 text-center lg:text-left">
+                        <img src={birstLogo} alt="BIRSTBD" className="h-10 w-auto lg:hidden mx-auto mb-4" />
+                        <h2 className="text-2xl font-bold text-white font-unbounded mb-1">Welcome Back</h2>
+                        <p className="text-gray-400 text-sm">Please enter your details to sign in</p>
                     </div>
 
-                    {/* Login Form */}
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <div className="space-y-4">
-                            <div>
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        {/* Email Input */}
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider ml-1">Email</label>
+                            <div className="relative group/input">
+                                <Mail className="absolute left-0 top-2.5 w-4 h-4 text-gray-500 group-focus-within/input:text-[#1FB6FF] transition-colors" />
                                 <input
                                     type="email"
-                                    placeholder="Your email address *"
+                                    placeholder="name@example.com"
                                     {...register("email", { required: "Email is required" })}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
+                                    className={inputClasses}
                                 />
-                                {errors.email && (
-                                    <span className="text-red-500 text-sm mt-1 font-dm-sans">{errors.email.message}</span>
-                                )}
                             </div>
-                            <div>
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        placeholder="Enter password *"
-                                        {...register("password", { required: "Password is required" })}
-                                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-charcoal/60 hover:text-charcoal transition-colors"
-                                    >
-                                        {showPassword ? (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                                <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                                            </svg>
-                                        ) : (
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z" clipRule="evenodd" />
-                                                <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                </div>
-                                {errors.password && (
-                                    <span className="text-red-500 text-sm mt-1 font-dm-sans">{errors.password.message}</span>
-                                )}
-                            </div>
+                            {errors.email && (
+                                <span className="text-red-400 text-[10px] mt-0.5 block">{errors.email.message}</span>
+                            )}
+                        </div>
 
-                            {/* Captcha Section */}
-                            <div className="space-y-3 p-4 bg-warm-beige rounded-lg border border-gray-300">
-                                <LoadCanvasTemplate />
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        name="captcha"
-                                        id="captcha"
-                                        placeholder="Enter captcha *"
-                                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-mint-green text-charcoal transition-colors"
-                                        required
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => handleValidateCaptcha({ target: document.getElementById('captcha') })}
-                                        className="px-6 py-3 bg-soft-sand hover:bg-soft-sand/80 text-charcoal font-medium rounded-lg transition-all font-dm-sans"
-                                    >
-                                        Verify
-                                    </button>
-                                </div>
+                        {/* Password Input */}
+                        <div className="space-y-1">
+                            <div className="flex justify-between items-center">
+                                <label className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider ml-1">Password</label>
+                                <Link to="/forgot-password" className="text-[10px] text-[#1FB6FF] hover:text-cyan-400 transition-colors">Forgot?</Link>
+                            </div>
+                            <div className="relative group/input">
+                                <Lock className="absolute left-0 top-2.5 w-4 h-4 text-gray-500 group-focus-within/input:text-[#1FB6FF] transition-colors" />
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    placeholder="••••••••"
+                                    {...register("password", { required: "Password is required" })}
+                                    className={inputClasses}
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    className="absolute right-2 top-2.5 text-gray-500 hover:text-white transition-colors"
+                                >
+                                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
+                            </div>
+                            {errors.password && (
+                                <span className="text-red-400 text-[10px] mt-0.5 block">{errors.password.message}</span>
+                            )}
+                        </div>
+
+                        {/* Captcha */}
+                        <div className="bg-black/20 rounded-lg p-3 border border-white/5 space-y-2">
+                            <div className="bg-white rounded p-1.5 flex justify-center">
+                                <LoadCanvasTemplate reloadText="Reload Captcha" reloadColor="#1FB6FF" />
+                            </div>
+                            <div className="flex gap-2 relative">
+                                <ShieldCheck className="absolute left-3 top-2.5 w-4 h-4 text-gray-500" />
+                                <input
+                                    type="text"
+                                    name="captcha"
+                                    placeholder="Type captcha"
+                                    onChange={handleValidateCaptcha}
+                                    className="w-full pl-9 pr-3 py-1.5 bg-white/5 border border-white/10 rounded text-white text-xs focus:outline-none focus:border-[#1FB6FF] transition-colors"
+                                />
                             </div>
                         </div>
 
-                        {/* Terms and Conditions */}
-                        <div className="flex items-center">
+                        {/* Terms checkbox */}
+                        <div className="flex items-center gap-2 group/terms cursor-pointer">
                             <input
                                 type="checkbox"
                                 id="terms"
                                 checked={termsAccepted}
                                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                                className="w-4 h-4 border-gray-300 rounded text-deep-teal focus:ring-deep-teal"
+                                className="w-3.5 h-3.5 rounded border-gray-600 bg-transparent text-[#1FB6FF] focus:ring-offset-[#0B2340] focus:ring-[#1FB6FF]"
                             />
-                            <label htmlFor="terms" className="ml-2 text-sm text-charcoal/70 font-dm-sans">
-                                I have read and agree to all{' '}
-                                <Link to="/terms" className="text-deep-teal hover:text-mint-green transition-colors" target="_blank">
-                                    Terms & conditions
-                                </Link>
+                            <label htmlFor="terms" className="text-xs text-gray-400 group-hover/terms:text-gray-300 transition-colors cursor-pointer select-none">
+                                I agree to the <Link to="/terms" className="text-[#1FB6FF] hover:underline">Terms & Conditions</Link>
                             </label>
                         </div>
 
-                        {/* Login Button */}
-                        <button
+                        {/* Submit Button */}
+                        <motion.button
                             type="submit"
-                            disabled={disabled || !termsAccepted}
-                            className="w-full py-3 px-6 btn-elevated rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 font-dm-sans"
+                            disabled={disabled || !termsAccepted || isLoading}
+                            whileHover={{ scale: 1.01 }}
+                            whileTap={{ scale: 0.99 }}
+                            className={`w-full py-3 rounded-lg font-bold text-white text-sm shadow-lg flex items-center justify-center gap-2 transition-all duration-300 ${disabled || !termsAccepted
+                                ? 'bg-[#1FB6FF]/50 text-white/50 cursor-not-allowed'
+                                : 'bg-[#1FB6FF] hover:bg-[#0ea5e9] hover:shadow-[#1FB6FF]/25'
+                                }`}
                         >
-                            <span>Sign in</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                            </svg>
-                        </button>
+                            {isLoading ? (
+                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            ) : (
+                                <>
+                                    Sign In <ArrowRight size={16} />
+                                </>
+                            )}
+                        </motion.button>
 
-                        {/* Google Sign In */}
-                        <SocialLogin />
-
-                        {/* Sign Up Link */}
-                        <div className="flex items-center justify-between mt-6 text-sm">
-                            <Link to="/signup" className="text-deep-teal hover:text-mint-green font-medium transition-colors font-dm-sans">
-                                Sign up
-                            </Link>
-                            <Link to="/forgot-password" className="text-deep-teal hover:text-mint-green transition-colors font-dm-sans">
-                                Lost password?
-                            </Link>
+                        <div className="relative flex py-1 items-center">
+                            <div className="flex-grow border-t border-white/10"></div>
+                            <span className="flex-shrink-0 mx-2 text-gray-500 text-[10px] uppercase tracking-widest">Or</span>
+                            <div className="flex-grow border-t border-white/10"></div>
                         </div>
+
+                        {/* Social Login - Compact */}
+                        <div className="[&>*]:w-full [&_button]:w-full [&_button]:bg-white/5 [&_button]:border-white/10 [&_button]:text-white [&_button]:hover:bg-white/10 [&_button]:py-2.5 [&_button]:text-sm">
+                            <SocialLogin />
+                        </div>
+
+                        <p className="text-center text-xs text-gray-400 mt-2">
+                            Don't have an account? <Link to="/signup" className="text-[#1FB6FF] hover:text-white transition-colors font-semibold">Sign up</Link>
+                        </p>
                     </form>
-                </div>
+                </motion.div>
             </div>
         </div>
     );

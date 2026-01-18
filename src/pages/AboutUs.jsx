@@ -8,7 +8,7 @@ export default function AboutUs() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-blue-100 selection:text-blue-900">
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-24 px-4 sm:px-6 bg-[#0F172A] overflow-hidden min-h-[60vh] flex items-center justify-center">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-4 sm:px-6 bg-[#0F172A] overflow-hidden min-h-[50vh] md:min-h-[60vh] flex items-center justify-center">
         {/* Abstract Cinematic Background */}
         <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-20 -z-10" />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0F172A]/80 via-[#0F172A]/90 to-[#0F172A] -z-10" />
@@ -26,12 +26,12 @@ export default function AboutUs() {
               <span>Who We Are</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-8 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-white tracking-tight mb-6 md:mb-8 leading-tight">
               Driving Excellence <br className="hidden md:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-sky-300">Through Data</span>
             </h1>
 
-            <p className="text-lg md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
+            <p className="text-base md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
               Statistical Research Consultants Bangladesh (SRCBD) is bridging the gap between theoretical knowledge and practical application.
             </p>
           </motion.div>
@@ -39,22 +39,22 @@ export default function AboutUs() {
       </section>
 
       {/* --- BENTO GRID INFO SECTION --- */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-20 relative z-20 pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 -mt-10 md:-mt-20 relative z-20 pb-12 md:pb-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-6">
 
           {/* Box 1: Mission (Large) */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="md:col-span-2 md:row-span-1 bg-white rounded-3xl p-8 shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col justify-center relative overflow-hidden group"
+            className="md:col-span-2 md:row-span-1 bg-white rounded-3xl p-6 md:p-8 shadow-xl shadow-gray-200/50 border border-gray-100 flex flex-col justify-center relative overflow-hidden group"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10 group-hover:bg-blue-100 transition-colors duration-500" />
-            <div className="flex items-center gap-4 mb-6">
+            <div className="flex items-center gap-4 mb-4 md:mb-6">
               <div className="w-12 h-12 bg-[#1FB6FF]/10 rounded-xl flex items-center justify-center text-[#1FB6FF]">
                 <Target className="w-6 h-6" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">Our Mission</h3>
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900">Our Mission</h3>
             </div>
             <p className="text-lg text-gray-600 leading-relaxed max-w-2xl">
               To empower researchers and professionals with advanced statistical knowledge, research methodologies, and data analysis skills through comprehensive training and consultancy services.
@@ -120,20 +120,20 @@ export default function AboutUs() {
               <p className="text-gray-600">We are committed to excellence, integrity, innovation, and continuous learning.</p>
             </div>
 
-            <div className="flex gap-4">
-              <div className="text-center px-4">
-                <div className="text-3xl font-bold text-gray-900">5k+</div>
-                <div className="text-xs text-gray-400 font-bold uppercase">Students</div>
+            <div className="flex flex-wrap justify-center gap-4">
+              <div className="text-center px-2 md:px-4">
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">5k+</div>
+                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase">Students</div>
               </div>
-              <div className="w-px h-12 bg-gray-200" />
-              <div className="text-center px-4">
-                <div className="text-3xl font-bold text-gray-900">50+</div>
-                <div className="text-xs text-gray-400 font-bold uppercase">Courses</div>
+              <div className="hidden sm:block w-px h-12 bg-gray-200" />
+              <div className="text-center px-2 md:px-4">
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">50+</div>
+                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase">Courses</div>
               </div>
-              <div className="w-px h-12 bg-gray-200" />
-              <div className="text-center px-4">
-                <div className="text-3xl font-bold text-gray-900">200+</div>
-                <div className="text-xs text-gray-400 font-bold uppercase">Projects</div>
+              <div className="hidden sm:block w-px h-12 bg-gray-200" />
+              <div className="text-center px-2 md:px-4">
+                <div className="text-2xl md:text-3xl font-bold text-gray-900">200+</div>
+                <div className="text-[10px] md:text-xs text-gray-400 font-bold uppercase">Projects</div>
               </div>
             </div>
           </motion.div>
@@ -142,12 +142,12 @@ export default function AboutUs() {
       </section>
 
       {/* --- CINEMATIC VIDEO SECTION --- */}
-      <section className="py-20 bg-black relative overflow-hidden">
+      <section className="py-12 md:py-20 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-blue-900/10" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
-          <div className="flex flex-col md:flex-row items-end justify-between mb-12 gap-6">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-8 md:mb-12 gap-6">
             <div className="max-w-2xl">
-              <h2 className="text-4xl md:text-5xl font-black text-white mb-6">See Us <span className="text-[#1FB6FF]">In Action</span></h2>
+              <h2 className="text-3xl md:text-5xl font-black text-white mb-4 md:mb-6">See Us <span className="text-[#1FB6FF]">In Action</span></h2>
               <p className="text-gray-400 text-lg">Watch how we transform raw data into actionable insights and empower the next generation of researchers.</p>
             </div>
             <Link to="/gallery/video" className="group flex items-center gap-3 text-white font-bold border-b border-[#1FB6FF] pb-1 hover:text-[#1FB6FF] transition-colors">
@@ -172,8 +172,8 @@ export default function AboutUs() {
 
             {/* Play Button Overlay */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/30 transition-colors duration-500">
-              <button className="w-24 h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20 group-hover:scale-110 group-hover:bg-[#1FB6FF] group-hover:border-[#1FB6FF] transition-all duration-300 shadow-2xl">
-                <Play className="w-10 h-10 ml-1 fill-current" />
+              <button className="w-16 h-16 md:w-24 md:h-24 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20 group-hover:scale-110 group-hover:bg-[#1FB6FF] group-hover:border-[#1FB6FF] transition-all duration-300 shadow-2xl">
+                <Play className="w-6 h-6 md:w-10 md:h-10 ml-1 fill-current" />
               </button>
             </div>
 
@@ -194,9 +194,9 @@ export default function AboutUs() {
       </section>
 
       {/* --- CTA / WHAT WE OFFER --- */}
-      <section className="py-24 px-4 sm:px-6 bg-white">
+      <section className="py-12 md:py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-12">Empowering Your Research Journey</h2>
+          <h2 className="text-2xl md:text-5xl font-black text-gray-900 mb-8 md:mb-12">Empowering Your Research Journey</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left mb-16">
             {[

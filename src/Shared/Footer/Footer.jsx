@@ -79,18 +79,10 @@ const Footer = () => {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               <img
-                src={birstLogo}
+                src="https://ik.imagekit.io/2lax2ytm2/Frame%201%20(4).png?updatedAt=1768684405210"
                 alt="BIRST Logo"
-                className="w-10 h-10"
+                className="h-12 w-auto"
               />
-              <div className="flex flex-col">
-                <span className="font-medium text-white text-sm leading-tight tracking-wide">
-                  Bangladesh Institute for
-                </span>
-                <span className="font-medium text-white text-sm leading-tight tracking-wide">
-                  Research and Statistical Training
-                </span>
-              </div>
             </div>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
               Empowering minds through excellence in research and professional development.
@@ -153,11 +145,14 @@ const Footer = () => {
             <div className="space-y-4 text-sm text-gray-400 mb-8">
               <div className="flex items-start gap-3 group">
                 <MapPin className="w-5 h-5 text-[var(--color-birst-primary)] mt-0.5 flex-shrink-0 group-hover:animate-bounce" />
-                <p className="leading-relaxed">House #56, Road #03, Dhaka, Bangladesh</p>
+                <p className="leading-relaxed">H-16, RD-02, SEC-6/KA SENPARA PARBATA MIRPUR</p>
               </div>
               <div className="flex items-center gap-3 group">
                 <Phone className="w-5 h-5 text-[var(--color-birst-primary)] flex-shrink-0 group-hover:animate-shake" />
-                <a href="tel:+8801753973892" className="hover:text-white transition">+880 1753-973892</a>
+                <div>
+                  <a href="tel:+8801827891389" className="hover:text-white transition block">01827891389</a>
+                  <a href="tel:+8801551245430" className="hover:text-white transition block">01551245430</a>
+                </div>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-5 h-5 text-[var(--color-birst-primary)] flex-shrink-0" />

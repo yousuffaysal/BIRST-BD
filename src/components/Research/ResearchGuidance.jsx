@@ -99,17 +99,17 @@ export default function ResearchGuidance() {
   return (
     <div className="space-y-12">
       {/* Introduction */}
-      <div className="bg-white rounded-2xl shadow-lg p-8 border border-blue-50">
+      <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8 border border-blue-50">
         <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-200">
-            <Lightbulb className="w-8 h-8 text-white" />
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center shadow-lg shadow-blue-200 flex-shrink-0">
+            <Lightbulb className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Research Guidance</h2>
-            <p className="text-gray-500">Step-by-step guidance for conducting research</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Research Guidance</h2>
+            <p className="text-sm md:text-base text-gray-500">Step-by-step guidance for conducting research</p>
           </div>
         </div>
-        <p className="text-lg text-gray-600 leading-relaxed">
+        <p className="text-base md:text-lg text-gray-600 leading-relaxed">
           Whether you're a beginner researcher or an experienced academic, our comprehensive guide will help you navigate the research process from conception to publication. Follow these structured steps to ensure your research is rigorous, ethical, and impactful.
         </p>
       </div>
@@ -120,18 +120,18 @@ export default function ResearchGuidance() {
         {guideSteps.map((step, index) => (
           <div
             key={index}
-            className="bg-white rounded-xl shadow-md p-6 hover:shadow-xl transition-all border-l-4 border-blue-500 group"
+            className="bg-white rounded-xl shadow-md p-4 md:p-6 hover:shadow-xl transition-all border-l-4 border-blue-500 group"
           >
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                <span className="text-xl font-bold text-blue-600">{step.step}</span>
+            <div className="flex items-start gap-3 md:gap-4">
+              <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 bg-blue-50 rounded-full flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                <span className="text-lg md:text-xl font-bold text-blue-600">{step.step}</span>
               </div>
               <div className="flex-grow">
-                <h4 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h4>
-                <p className="text-gray-600 mb-4">{step.description}</p>
+                <h4 className="text-lg md:text-xl font-bold text-gray-900 mb-2">{step.title}</h4>
+                <p className="text-sm md:text-base text-gray-600 mb-4">{step.description}</p>
                 <ul className="space-y-2">
                   {step.tips.map((tip, tipIndex) => (
-                    <li key={tipIndex} className="flex items-start gap-2 text-gray-500">
+                    <li key={tipIndex} className="flex items-start gap-2 text-gray-500 text-sm md:text-base">
                       <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
                       <span>{tip}</span>
                     </li>

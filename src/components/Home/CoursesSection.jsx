@@ -104,11 +104,11 @@ const CoursesSection = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <section className="py-24 bg-[#fffff0] overflow-hidden">
+        <section className="py-16 lg:py-24 bg-[#fffff0] overflow-hidden">
             <ComingSoonModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
             <div className="container px-4 mx-auto">
-                <div className="flex flex-col items-center justify-between mb-16 text-center md:flex-row md:text-left">
+                <div className="flex flex-col items-center justify-between mb-10 lg:mb-16 text-center md:flex-row md:text-left">
                     <div className="max-w-2xl">
                         <motion.span
                             initial={{ opacity: 0, y: 30 }}
@@ -124,7 +124,7 @@ const CoursesSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-                            className="text-4xl md:text-5xl font-bold text-[var(--color-birst-primary)] mb-4"
+                            className="text-3xl sm:text-4xl md:text-5xl font-bold text-[var(--color-birst-primary)] mb-4"
                             style={{ fontFamily: 'var(--font-family-space-grotesk)' }}
                         >
                             <span className="block">Develop Your Skills</span>
@@ -154,7 +154,7 @@ const CoursesSection = () => {
                     </motion.button>
                 </div>
 
-                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-full mx-auto">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-full mx-auto">
                     {courses.map((course, index) => (
                         <motion.div
                             key={index}

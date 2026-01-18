@@ -434,7 +434,7 @@ export default function Services() {
           <p className="text-gray-400 text-sm hidden sm:block">Scroll right to explore</p>
         </div>
 
-        <div className="flex gap-8 px-4 sm:px-6 overflow-x-auto pb-8 snap-x no-scrollbar">
+        <div className="flex flex-col md:flex-row gap-8 px-4 sm:px-6 md:overflow-x-auto pb-8 md:snap-x no-scrollbar">
           {[
             { step: "01", title: "Discovery", desc: "Understanding your core objectives and data landscape." },
             { step: "02", title: "Strategy", desc: "Designing a rigorous analytical framework tailored to your needs." },
@@ -442,7 +442,7 @@ export default function Services() {
             { step: "04", title: "Analysis", desc: "Uncovering patterns and validating hypotheses." },
             { step: "05", title: "Delivery", desc: "Presenting actionable insights and strategic recommendations." }
           ].map((item, i) => (
-            <div key={i} className="min-w-[300px] flex-shrink-0 snap-center">
+            <div key={i} className="w-full md:w-auto md:min-w-[300px] flex-shrink-0 md:snap-center">
               <div className="border-t-2 border-gray-100 pt-6 group hover:border-[#1FB6FF] transition-colors duration-300">
                 <span className="text-6xl font-black text-gray-100 mb-6 block group-hover:text-blue-50 transition-colors duration-300">{item.step}</span>
                 <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
@@ -463,9 +463,9 @@ export default function Services() {
           <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
             Transform uncertainty into strategy with our expert data solutions.
           </p>
-          <button className="px-10 py-5 bg-[#1FB6FF] text-white font-bold text-lg rounded-full hover:bg-blue-500 transition-all hover:scale-105 shadow-lg shadow-blue-500/25">
+          <Link to="/signup" className="inline-block px-10 py-5 bg-[#1FB6FF] text-white font-bold text-lg rounded-full hover:bg-blue-500 transition-all hover:scale-105 shadow-lg shadow-blue-500/25">
             Start Your Project
-          </button>
+          </Link>
         </div>
       </section>
 

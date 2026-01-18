@@ -101,7 +101,7 @@ export default function OurMission() {
             <motion.p variants={fadeInUp} className="text-lg text-[#0B2340]/70 leading-relaxed mb-8">
               We are committed to bridging theory and practice through structured seminars, hands-on training, and mentorship led by experienced teachers, professors, and domain experts. By integrating modern statistical techniques and AI-assisted research tools, BIRST helps learners move confidently from research idea to publication-ready outcomes.
             </motion.p>
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <motion.div variants={fadeInUp} className="p-6 bg-white border border-[#0B2340]/5 rounded-xl shadow-sm hover:shadow-md transition-shadow group cursor-default">
                 <div className="text-3xl font-bold text-[#1FB6FF] mb-1 group-hover:scale-110 transition-transform origin-left">Expert-Led</div>
                 <div className="text-sm text-[#0B2340]/60 font-medium uppercase tracking-wider">Mentorship</div>

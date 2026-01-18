@@ -54,7 +54,7 @@ export default function BIRSTBDProfile() {
     <div className="min-h-screen bg-[#F8FAFC] font-sans selection:bg-blue-100 selection:text-blue-900">
 
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-24 px-4 sm:px-6 bg-[#0F172A] overflow-hidden">
+      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 px-4 sm:px-6 bg-[#0F172A] overflow-hidden">
         {/* Abstract Background */}
         <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-l from-[#1FB6FF]/10 to-transparent -z-10 pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-[#0F172A] to-transparent -z-10" />
@@ -80,7 +80,7 @@ export default function BIRSTBDProfile() {
                 <span>Institute Profile</span>
               </div>
 
-              <h1 className="text-5xl md:text-7xl font-black text-white tracking-tight mb-6 leading-tigher">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white tracking-tight mb-6 leading-tigher">
                 BIRST<span className="text-[#1FB6FF]">BD</span>
               </h1>
 
@@ -121,12 +121,12 @@ export default function BIRSTBDProfile() {
       </section>
 
       {/* --- MAIN CONTENT --- */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
 
         {/* Bento Grid Section */}
-        <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-24 auto-rows-[minmax(180px,auto)]">
+        <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16 md:mb-24 auto-rows-[minmax(180px,auto)]">
           {/* Box 1: Main Text (Wide) */}
-          <div className="md:col-span-2 md:row-span-2 bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col justify-center">
+          <div className="md:col-span-2 md:row-span-2 bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col justify-center">
             <h2 className="text-3xl font-black text-gray-900 mb-6">Pioneering Research Education</h2>
             <div className="prose prose-lg text-gray-600">
               <p className="mb-4">
@@ -146,12 +146,12 @@ export default function BIRSTBDProfile() {
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-8 w-full">
+            <div className="absolute bottom-0 left-0 p-6 md:p-8 w-full">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1FB6FF] text-white text-xs font-bold uppercase tracking-wider mb-3">
                 <Users className="w-3 h-3" />
                 <span>Community</span>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Empowering 5000+ Researchers across Bangladesh</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Empowering 5000+ Researchers across Bangladesh</h3>
               <p className="text-slate-300 text-sm line-clamp-2">Joining hands to build a data-literate nation through continuous learning and workshops.</p>
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function BIRSTBDProfile() {
                 <motion.div
                   key={index}
                   whileHover={{ y: -5 }}
-                  className="bg-white p-8 rounded-2xl shadow-lg shadow-gray-100 border border-gray-50 group transition-all duration-300"
+                  className="bg-white p-6 md:p-8 rounded-2xl shadow-lg shadow-gray-100 border border-gray-50 group transition-all duration-300"
                 >
                   <div className="w-14 h-14 bg-gray-50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-[#1FB6FF] transition-colors duration-300">
                     <Icon className="w-7 h-7 text-gray-400 group-hover:text-white transition-colors duration-300" />
@@ -223,18 +223,18 @@ export default function BIRSTBDProfile() {
         </section>
 
         {/* Leadership Section */}
-        <section className="mb-24 px-4">
+        <section className="mb-16 md:mb-24">
           <div className="max-w-4xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Leadership & Acquaintance</h2>
             <p className="text-gray-500 text-lg">Guided by visionary leaders and expert statisticians.</p>
           </div>
 
           {/* Director Spotlight */}
-          <div className="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-12 mb-16 overflow-hidden shadow-2xl">
+          <div className="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-6 md:p-12 mb-16 overflow-hidden shadow-2xl">
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#1FB6FF]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-            <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
-              <div className="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden bg-white/5">
+            <div className="relative z-10 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+              <div className="w-32 h-32 md:w-64 md:h-64 rounded-full border-4 border-white/10 shadow-2xl flex-shrink-0 overflow-hidden bg-white/5">
                 {/* Placeholder for Director Image */}
                 <img
                   src="https://ik.imagekit.io/2lax2ytm2/10001.png"
@@ -243,44 +243,44 @@ export default function BIRSTBDProfile() {
                 />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1FB6FF]/20 text-[#1FB6FF] text-xs font-bold uppercase tracking-wider mb-4 border border-[#1FB6FF]/20">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1FB6FF]/20 text-[#1FB6FF] text-[10px] font-bold uppercase tracking-wider mb-2 border border-[#1FB6FF]/20">
                   <Award className="w-3 h-3" />
                   <span>Director & Lead Statistician</span>
                 </div>
-                <h3 className="text-3xl md:text-4xl font-black text-white mb-2">Professor Hafiz T.A. Khan</h3>
-                <p className="text-[#1FB6FF] font-medium mb-4">Professor of Public Health and Statistics</p>
+                <h3 className="text-xl md:text-4xl font-black text-white mb-1">Professor Hafiz T.A. Khan</h3>
+                <p className="text-[#1FB6FF] text-sm md:text-base font-medium mb-3">Professor of Public Health and Statistics</p>
 
-                <div className="space-y-1 mb-6 text-sm text-slate-300">
-                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#1FB6FF] mt-2 shrink-0"></span> Post-Doctoral in Population Ageing 2005 (University of Oxford)</p>
-                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> PhD in Applied Statistics 1996 (Edinburgh Napier University)</p>
-                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> MSc in Statistics 1987 (University of Chittagong)</p>
-                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-2 shrink-0"></span> BSc in Statistics 1986 (University of Chittagong)</p>
+                <div className="space-y-1 mb-4 text-xs md:text-sm text-slate-300">
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-[#1FB6FF] mt-1.5 shrink-0"></span> Post-Doctoral in Population Ageing 2005 (University of Oxford)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-1.5 shrink-0"></span> PhD in Applied Statistics 1996 (Edinburgh Napier University)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-1.5 shrink-0"></span> MSc in Statistics 1987 (University of Chittagong)</p>
+                  <p className="flex gap-2"><span className="w-1.5 h-1.5 rounded-full bg-slate-500 mt-1.5 shrink-0"></span> BSc in Statistics 1986 (University of Chittagong)</p>
                 </div>
 
-                <p className="text-slate-300 leading-relaxed mb-8 max-w-2xl italic opacity-80">
+                <p className="text-slate-300 text-xs md:text-base leading-relaxed mb-4 md:mb-8 max-w-2xl italic opacity-80">
                   "Prior to joining UWL, he held several academic positions including Reader in Health Statistics at Birmingham City University and Research Fellow at the University of Oxford (2006-2008)."
                 </p>
 
-                <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-                  <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-                    <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-sm text-slate-300">
+                <div className="flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-start">
+                  <div className="flex flex-wrap gap-3 md:gap-4 justify-center md:justify-start">
+                    <div className="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 text-xs md:text-sm text-slate-300">
                       34+ Years Experience
                     </div>
-                    <div className="px-4 py-2 bg-white/5 rounded-lg border border-white/10 text-sm text-slate-300">
+                    <div className="px-3 py-1.5 bg-white/5 rounded-lg border border-white/10 text-xs md:text-sm text-slate-300">
                       Research Methodology
                     </div>
                   </div>
 
                   {/* Social Links */}
                   <div className="flex items-center gap-3">
-                    <a href="https://x.com/htakhan" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
-                      <Twitter className="w-5 h-5" />
+                    <a href="https://x.com/htakhan" target="_blank" rel="noopener noreferrer" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
+                      <Twitter className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
-                    <a href="https://www.linkedin.com/in/hafiz-t-a-khan-phd-978a9353/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
-                      <Linkedin className="w-5 h-5" />
+                    <a href="https://www.linkedin.com/in/hafiz-t-a-khan-phd-978a9353/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20">
+                      <Linkedin className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
-                    <a href="https://scholar.google.com/citations?user=z8-PmZcAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20" title="Google Scholar">
-                      <BookOpen className="w-5 h-5" />
+                    <a href="https://scholar.google.com/citations?user=z8-PmZcAAAAJ&hl=en" target="_blank" rel="noopener noreferrer" className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#1FB6FF] border border-[#1FB6FF] flex items-center justify-center text-white hover:bg-white hover:text-[#1FB6FF] transition-all duration-300 shadow-lg shadow-blue-500/20" title="Google Scholar">
+                      <BookOpen className="w-4 h-4 md:w-5 md:h-5" />
                     </a>
                   </div>
                 </div>
@@ -293,8 +293,8 @@ export default function BIRSTBDProfile() {
             {[
               {
                 name: 'Dr. Anamul Haque Sajib',
-                designation: 'Professor',
-                role: 'Department of Statistics, DU',
+                designation: 'Adjunct Faculty',
+                role: 'Professor, Department of Statistics, DU',
                 edu: 'PhD in Statistics (Nottingham)',
                 stats: '16+ Years Exp',
                 image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg',
@@ -305,20 +305,30 @@ export default function BIRSTBDProfile() {
                 }
               },
               {
-                name: 'Mr. Kamrul Hasan',
-                designation: 'Assistant Professor',
-                role: 'Training Program Coordinator',
-                edu: 'MSc in Applied Statistics',
-                stats: 'Training Lead',
-                social: { twitter: '#', linkedin: '#', scholar: '#' }
+                name: 'Dr. Hossain, Md Pear',
+                designation: 'Adjunct Faculty',
+                role: 'Post-doctoral Fellow, Division of Epidemiology and Biostatistics, HKU',
+                edu: 'PhD in Biomedical Sciences (CityU)',
+                stats: 'HKU Fellow',
+                image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg?updatedAt=1768594485417',
+                social: {
+                  twitter: '#',
+                  linkedin: 'https://www.linkedin.com/in/mphossain/?originalSubdomain=hk&skipRedirect=true&originalSubdomain=hk',
+                  scholar: 'https://scholar.google.com/citations?user=RUdvILMAAAAJ&hl=en'
+                }
               },
               {
-                name: 'Ms. Rehana Khatun',
-                designation: 'Senior Lecturer',
-                role: 'Research Methodology Specialist',
-                edu: 'MSc in Social Research',
-                stats: 'Survey Expert',
-                social: { twitter: '#', linkedin: '#', scholar: '#' }
+                name: 'Dr. Md. Shiblur Rahaman',
+                designation: 'Adjunct Faculty',
+                role: 'Associate Professor, Dept. of Environmental Science and Disaster Management, NSTU',
+                edu: 'Ph.D. in Environmental Science (Hokkaido)',
+                stats: '10+ Years Exp',
+                image: 'https://ik.imagekit.io/2lax2ytm2/WhatsApp%20Image%202026-01-16%20at%2021.20.56.jpeg',
+                social: {
+                  twitter: '#',
+                  linkedin: 'https://www.linkedin.com/in/md-shiblur-rahaman-phd-aa326228/?originalSubdomain=bd&skipRedirect=true&originalSubdomain=bd',
+                  scholar: 'https://scholar.google.com/citations?user=V1gOoGAAAAAJ&hl=en'
+                }
               }
             ].map((member, idx) => (
               <motion.div
@@ -328,7 +338,7 @@ export default function BIRSTBDProfile() {
               >
                 <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-[#1FB6FF]/10 transition-colors relative overflow-hidden">
                   {member.image ? (
-                    <img src={member.image} alt={member.name} className="w-full h-full object-cover" />
+                    <img src={member.image} alt={member.name} className="w-full h-full object-cover object-top" />
                   ) : (
                     <span className="text-2xl font-black text-gray-300 group-hover:text-[#1FB6FF] transition-colors z-10">{member.name.charAt(0)}</span>
                   )}
@@ -377,7 +387,7 @@ export default function BIRSTBDProfile() {
         </section>
 
         {/* Visual Journey Timeline */}
-        <section className="bg-slate-900 rounded-3xl p-8 md:p-16 relative overflow-hidden text-center md:text-left">
+        <section className="bg-slate-900 rounded-3xl p-6 md:p-16 relative overflow-hidden text-center md:text-left">
           <div className="absolute top-0 right-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5" />
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-indigo-500 via-[#1FB6FF] to-purple-500" />
 
@@ -410,7 +420,7 @@ export default function BIRSTBDProfile() {
         </section>
 
         {/* Footer CTA */}
-        <div className="mt-20 text-center">
+        <div className="mt-12 md:mt-20 text-center">
           <Link to="/contact" className="inline-flex items-center gap-3 px-8 py-4 bg-[#1FB6FF] text-white font-bold rounded-full shadow-xl shadow-blue-200 hover:shadow-blue-300 hover:-translate-y-1 transition-all duration-300">
             Partner With Us
             <ArrowLeft className="w-5 h-5 rotate-180" />

@@ -81,20 +81,13 @@ const Navbar = () => {
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
+          {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group shrink-0">
             <img
-              src={birstLogo}
+              src="https://ik.imagekit.io/2lax2ytm2/Rectangle%201%20(1).png"
               alt="BIRST Logo"
-              className="h-16 w-16 object-contain"
+              className="h-12 w-auto sm:h-14 object-contain"
             />
-            <div className="flex flex-col hidden sm:flex">
-              <span className="font-bold text-[#232323] text-[15px] xl:text-[17px] leading-tight tracking-wide font-['Montserrat'] uppercase">
-                Bangladesh Institute for
-              </span>
-              <span className="font-bold text-[#232323] text-[15px] xl:text-[17px] leading-tight tracking-wide font-['Montserrat'] uppercase">
-                Research and Statistical Training
-              </span>
-            </div>
           </Link>
 
           {/* Desktop Nav */}
@@ -198,54 +191,68 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`lg:hidden absolute top-full left-0 w-full bg-[#FFFFF0] border-t border-gray-100 shadow-xl transition-all duration-300 overflow-hidden ${isMobileOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+      <div className={`lg:hidden absolute top-full left-0 w-full bg-[#FFFFF0] border-t border-gray-100 shadow-xl transition-all duration-300 flex flex-col ${isMobileOpen ? 'h-[calc(100vh-100px)] opacity-100' : 'h-0 opacity-0 overflow-hidden'
         }`}>
-        <div className="px-4 py-6 space-y-2">
+
+        {/* Scrollable Nav Items */}
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-2">
           {navItems.map((item) => (
-            <div key={item.label}>
+            <div key={item.label} className="py-2">
               {item.dropdown ? (
                 <>
-                  <div className="px-4 py-2 text-sm font-bold text-gray-400 uppercase tracking-wider font-['Montserrat']">
+                  <div className="px-4 text-xl font-black text-gray-900 uppercase tracking-tight font-['Montserrat'] mb-2">
                     {item.label}
                   </div>
-                  {item.dropdown.map(sub => (
-                    <Link
-                      key={sub.to}
-                      to={sub.to}
-                      onClick={() => setIsMobileOpen(false)}
-                      className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl hover:bg-gray-50 hover:text-[#00BFFF] pl-8 font-['Montserrat']"
-                    >
-                      {sub.label}
-                    </Link>
-                  ))}
+                  <div className="flex flex-col gap-1 pl-4 border-l-2 border-gray-100 ml-4">
+                    {item.dropdown.map(sub => (
+                      <Link
+                        key={sub.to}
+                        to={sub.to}
+                        onClick={() => setIsMobileOpen(false)}
+                        className="block px-4 py-2 text-sm font-bold text-gray-500 rounded-r-lg hover:bg-gray-50 hover:text-[#00BFFF] transition-colors font-['Montserrat']"
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
                 </>
               ) : (
                 <Link
                   to={item.to}
                   onClick={() => setIsMobileOpen(false)}
-                  className="block px-4 py-3 text-base font-medium text-gray-700 rounded-xl hover:bg-gray-50 hover:text-[#00BFFF] font-['Montserrat']"
+                  className="block px-4 text-xl font-black text-gray-900 uppercase tracking-tight font-['Montserrat'] hover:text-[#00BFFF] transition-colors"
                 >
                   {item.label}
                 </Link>
               )}
             </div>
           ))}
-          <div className="pt-4 mt-4 border-t border-gray-100">
-            {user ? (
-              <button onClick={handleLogout} className="block w-full text-center px-6 py-3 border border-[#00BFFF] text-[#00BFFF] font-medium rounded-xl font-['Montserrat']">
-                Logout
-              </button>
-            ) : (
+        </div>
+
+        {/* Sticky Bottom Auth */}
+        <div className="p-4 border-t border-gray-100 bg-[#FFFFF0] shrink-0">
+          {user ? (
+            <button onClick={handleLogout} className="block w-full text-center px-6 py-3 border border-[#00BFFF] text-[#00BFFF] font-medium rounded-xl font-['Montserrat']">
+              Logout
+            </button>
+          ) : (
+            <div className="flex flex-col gap-3">
               <Link
                 to="/login"
                 onClick={() => setIsMobileOpen(false)}
-                className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-[#00BFFF] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 font-['Montserrat']"
+                className="flex items-center justify-center w-full px-6 py-3 border border-gray-200 text-gray-700 font-bold rounded-xl hover:border-[#00BFFF] hover:text-[#00BFFF] transition-all font-['Montserrat'] uppercase text-sm tracking-wider"
               >
-                <User size={18} />
-                Start Learning
+                Log In
               </Link>
-            )}
-          </div>
+              <Link
+                to="/signup"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center justify-center w-full px-6 py-3 bg-[#00BFFF] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-600 transition-all font-['Montserrat'] uppercase text-sm tracking-wider"
+              >
+                Registration
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </motion.nav>

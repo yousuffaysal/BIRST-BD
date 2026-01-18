@@ -39,17 +39,17 @@ const AboutSection = () => {
             <div className="absolute top-0 w-full h-[60%] bg-[#FFFFFF] z-0" />
             <div className="absolute bottom-0 w-full h-[40%] bg-[var(--color-birst-dark)] z-0" />
 
-            <div className="container mx-auto px-4 relative z-10 py-24">
+            <div className="container mx-auto px-4 relative z-10 py-16 lg:py-24">
 
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row justify-between items-start mb-20">
+                <div className="flex flex-col lg:flex-row justify-between items-start mb-12 lg:mb-20">
                     <div className="max-w-4xl">
                         <motion.span
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.6, ease: "easeOut" }}
-                            className="inline-block py-1.5 px-4 rounded-full bg-[var(--color-birst-primary)]/10 text-[var(--color-birst-primary)] text-sm font-bold uppercase tracking-widest mb-6 border border-[var(--color-birst-primary)]/20"
+                            className="inline-block py-1.5 px-4 rounded-full bg-[var(--color-birst-primary)]/10 text-[var(--color-birst-primary)] text-sm font-bold uppercase tracking-widest mb-4 lg:mb-6 border border-[var(--color-birst-primary)]/20"
                         >
                             About BIRSTBD
                         </motion.span>
@@ -58,7 +58,7 @@ const AboutSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-                            className="font-['Helvetica-Bold'] font-bold text-5xl sm:text-6xl lg:text-8xl text-[var(--color-birst-dark)] leading-[0.85] tracking-tight uppercase"
+                            className="font-['Helvetica-Bold'] font-bold text-4xl sm:text-6xl lg:text-8xl text-[var(--color-birst-dark)] leading-[0.9] lg:leading-[0.85] tracking-tight uppercase"
                         >
                             Future-Ready <br /> Learning
                         </motion.h2>
@@ -149,9 +149,17 @@ const AboutSection = () => {
                                 ease: [0.16, 1, 0.3, 1], // Custom smooth ease
                                 delay: 0.25
                             }}
-                            className="relative rounded-[2rem] overflow-hidden aspect-[4/5] lg:w-full shadow-2xl origin-bottom"
+                            className="relative rounded-[2rem] overflow-hidden aspect-auto md:aspect-[4/5] lg:w-full shadow-2xl origin-bottom"
                         >
-                            <img src="https://ik.imagekit.io/2lax2ytm2/10001.png" alt="Professor Hafiz T.A. Khan" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 ease-out" />
+                            <motion.img
+                                src="https://ik.imagekit.io/2lax2ytm2/10001.png"
+                                alt="Professor Hafiz T.A. Khan"
+                                initial={{ filter: "grayscale(100%)" }}
+                                whileInView={{ filter: "grayscale(0%)" }}
+                                transition={{ duration: 1.5 }}
+                                viewport={{ once: true }}
+                                className="w-full h-full object-cover transition-all duration-700 ease-out"
+                            />
 
                             {/* Name Overlay */}
                             <div className="absolute bottom-0 left-0 right-0 p-8 w-full bg-gradient-to-t from-[var(--color-birst-dark)] to-transparent">
@@ -171,7 +179,7 @@ const AboutSection = () => {
                                 damping: 20,
                                 delay: 0.6
                             }}
-                            className="absolute -bottom-8 right-2 lg:bottom-12 lg:-right-24 bg-[var(--color-birst-light)] p-8 w-64 shadow-xl z-30 border border-gray-100"
+                            className="relative mt-6 lg:mt-0 w-[95%] mx-auto lg:w-64 lg:absolute lg:bottom-12 lg:-right-24 bg-[var(--color-birst-light)] p-8 shadow-xl z-30 border border-gray-100 rounded-2xl"
                         >
                             <h3 className="text-5xl font-['Helvetica-Bold'] font-bold text-[var(--color-birst-dark)] mb-2">
                                 <CountUp to={20} suffix="+" />

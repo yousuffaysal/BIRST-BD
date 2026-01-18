@@ -42,7 +42,7 @@ const WatermarkIcon = ({ Icon, className, style, delay = 0 }) => (
 
 const WhyChooseSection = () => {
     return (
-        <section className="min-h-screen flex items-center py-24 bg-[#FFFFF0] relative overflow-hidden">
+        <section className="min-h-screen flex items-center py-16 lg:py-24 bg-[#FFFFF0] relative overflow-hidden">
             {/* Background Watermarks - Animated Entry */}
             <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
                 <WatermarkIcon Icon={Laptop} className="top-[-20%] left-[-20%] w-[1100px] h-[1100px] -rotate-12 opacity-40" delay={0} />
@@ -62,32 +62,32 @@ const WhyChooseSection = () => {
             </div>
 
             <div className="container px-4 mx-auto relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1.5fr] gap-12 lg:gap-20">
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1.5fr] gap-8 lg:gap-20">
 
                     {/* Left Content - Slide In from Left */}
                     <motion.div
-                        className="flex flex-col justify-center -mt-16 lg:-mt-40"
+                        className="flex flex-col justify-center mt-0 lg:-mt-40"
                         initial={{ opacity: 0, x: -50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.8, ease: "easeOut" }}
                         viewport={{ once: true }}
                     >
-                        <span className="text-[var(--color-birst-primary)] font-bold text-sm tracking-widest uppercase mb-4 pl-1">
+                        <span className="text-[var(--color-birst-primary)] font-bold text-xs sm:text-sm tracking-widest uppercase mb-4 pl-1">
                             / Why Choose Us?
                         </span>
-                        <h2 className="text-5xl lg:text-7xl font-['Helvetica-Bold'] font-bold text-[var(--color-birst-dark)] leading-[0.9] mb-8">
+                        <h2 className="text-3xl sm:text-5xl lg:text-7xl font-['Helvetica-Bold'] font-bold text-[var(--color-birst-dark)] leading-[0.95] lg:leading-[0.9] mb-6 lg:mb-8">
                             The BIRST <br /> Difference
                         </h2>
-                        <p className="text-lg text-gray-600 mb-10 leading-relaxed max-w-md">
+                        <p className="text-base sm:text-lg text-gray-600 mb-8 sm:mb-10 leading-relaxed max-w-md">
                             For over a decade, we've been a proud service provider, earning and maintaining the trust of the community in research and skills development.
                         </p>
 
-                        <div className="flex flex-wrap gap-8 items-center">
-                            <button className="flex items-center gap-1 text-[var(--color-birst-primary)] font-bold hover:text-[var(--color-birst-accent)] transition-colors group text-sm uppercase tracking-wide">
-                                Join Now <ChevronRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
+                        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto mt-2">
+                            <button className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[var(--color-birst-primary)] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:bg-[var(--color-birst-accent)] hover:shadow-xl transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
+                                Join Now <ChevronRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
                             </button>
-                            <button className="flex items-center gap-1 text-[var(--color-birst-dark)] font-bold hover:text-[var(--color-birst-primary)] transition-colors group text-sm uppercase tracking-wide">
-                                View Courses <ChevronRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
+                            <button className="flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border-2 border-[var(--color-birst-dark)] text-[var(--color-birst-dark)] font-bold rounded-xl hover:bg-[var(--color-birst-dark)] hover:text-white transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
+                                View Courses <ChevronRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
                             </button>
                         </div>
                     </motion.div>
@@ -103,7 +103,7 @@ const WhyChooseSection = () => {
 
                     {/* Right Content - Staggered Grid Entry */}
                     <motion.div
-                        className="grid grid-cols-1 md:grid-cols-2 mt-12 lg:mt-32"
+                        className="grid grid-cols-1 md:grid-cols-2 mt-8 lg:mt-32"
                         initial="hidden"
                         whileInView="visible"
                         viewport={{ once: true, margin: "-100px" }}
@@ -112,15 +112,15 @@ const WhyChooseSection = () => {
                         }}
                     >
                         {/* Item 1: Top Left */}
-                        <div className="p-8 md:pr-12 md:pb-12 md:border-r md:border-b border-gray-300 border-b md:border-b-gray-300">
+                        <div className="p-8 md:pr-12 md:pb-12 border-b border-gray-300 md:border-r">
                             <FeatureItem item={features[0]} />
                         </div>
                         {/* Item 2: Top Right */}
-                        <div className="p-8 md:pl-12 md:pb-12 md:border-b border-gray-300 border-b md:border-b-gray-300">
+                        <div className="p-8 md:pl-12 md:pb-12 border-b border-gray-300">
                             <FeatureItem item={features[1]} />
                         </div>
                         {/* Item 3: Bottom Left */}
-                        <div className="p-8 md:pr-12 md:pt-12 md:border-r border-gray-300 border-b md:border-b-0">
+                        <div className="p-8 md:pr-12 md:pt-12 border-b md:border-b-0 border-gray-300 md:border-r">
                             <FeatureItem item={features[2]} />
                         </div>
                         {/* Item 4: Bottom Right */}

@@ -352,10 +352,10 @@ export default function NewsAndEvents() {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
-                      className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-gray-200 hover:border-[var(--color-birst-primary)] hover:shadow-2xl transition-all duration-300 h-full"
+                      className="group flex flex-col bg-white rounded-3xl overflow-hidden border border-gray-200 hover:border-[var(--color-birst-primary)] hover:shadow-2xl transition-all duration-300 aspect-square"
                     >
-                      {/* Image Header - Aspect Video for better fit with text */}
-                      <div className="h-64 relative overflow-hidden">
+                      {/* Image Header - Half Height */}
+                      <div className="h-1/2 relative overflow-hidden shrink-0">
                         <img
                           src={event.thumbnail || event.image || 'https://via.placeholder.com/800x600?text=Event'}
                           alt={event.title}
@@ -370,9 +370,9 @@ export default function NewsAndEvents() {
                       </div>
 
                       {/* Content */}
-                      <div className="p-8 flex flex-col flex-grow">
+                      <div className="p-6 flex flex-col flex-grow">
                         {/* Date & Platform Row */}
-                        <div className="flex items-center gap-4 mb-4">
+                        <div className="flex items-center gap-4 mb-3">
                           <div className="flex items-baseline gap-1 text-[var(--color-birst-primary)]">
                             <span className="text-4xl font-extrabold">{day}</span>
                             <span className="text-lg font-bold uppercase">{month}</span>
@@ -384,16 +384,16 @@ export default function NewsAndEvents() {
                           </div>
                         </div>
 
-                        <h3 className="text-2xl font-bold text-[var(--color-birst-dark)] mb-3 leading-snug group-hover:text-[var(--color-birst-primary)] transition-colors">
+                        <h3 className="text-2xl font-bold text-[var(--color-birst-dark)] mb-2 leading-snug group-hover:text-[var(--color-birst-primary)] transition-colors line-clamp-2">
                           {event.title}
                         </h3>
 
-                        <p className="text-gray-600 mb-6 line-clamp-2 leading-relaxed">
+                        <p className="text-gray-600 mb-3 line-clamp-2 leading-relaxed text-sm">
                           {event.description}
                         </p>
 
                         {/* Meta Info Grid */}
-                        <div className="grid grid-cols-2 gap-4 mb-8">
+                        <div className="grid grid-cols-2 gap-4 mb-4">
                           <div className="flex items-center gap-2 text-sm text-gray-500">
                             <Clock size={16} className="text-gray-400" />
                             <span>{event.time}</span>
@@ -539,7 +539,8 @@ export default function NewsAndEvents() {
                 </p>
                 <WaterFillButton
                   text="Register Now"
-                  className="bg-white text-black hover:text-white"
+                  className="bg-white !text-black hover:text-white"
+                  onClick={() => navigate('/login')}
                 />
               </div>
             </div>

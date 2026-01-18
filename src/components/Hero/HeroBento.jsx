@@ -44,7 +44,7 @@ const HeroBento = () => {
     }, [axiosPublic]);
 
     return (
-        <div className="w-full bg-[#FFFFF0] pt-32 pb-20 px-4 sm:px-6 lg:px-8 min-h-screen relative">
+        <div className="w-full bg-[#FFFFF0] pt-24 lg:pt-32 pb-12 lg:pb-20 px-4 sm:px-6 lg:px-8 min-h-screen relative">
             {/* White Screen Entrance Animation */}
             <motion.div
                 initial={{ opacity: 1 }}
@@ -76,28 +76,21 @@ const HeroBento = () => {
                                 <span className="inline-block py-1 px-3 rounded-full bg-white/10 text-[#00BFFF] text-xs font-bold uppercase tracking-wider mb-6 border border-white/5">
                                     Online Research Platform
                                 </span>
-                                <h1 className="font-['Helvetica-Bold'] font-bold text-4xl sm:text-5xl lg:text-6xl text-white leading-tight mb-6">
+                                <h1 className="font-['Helvetica-Bold'] font-bold text-3xl sm:text-5xl lg:text-6xl text-white leading-tight mb-6">
                                     Start Your <span className="text-[#00BFFF]">Research</span> <br />
                                     Journey Today
                                 </h1>
-                                <p className="font-['Helvetica'] text-gray-300 text-lg mb-10 max-w-lg leading-relaxed">
+                                <p className="font-['Helvetica'] text-gray-300 text-sm sm:text-lg mb-10 max-w-lg leading-relaxed">
                                     Join a vibrant community of learners and transform your aspirations into achievements with professional statistical training.
                                 </p>
 
                                 <div className="flex flex-wrap gap-4">
                                     <Link
-                                        to="/researchAndPublication"
+                                        to="/login"
                                         className="px-8 py-4 bg-[#00BFFF] text-white font-bold rounded-full shadow-lg shadow-blue-900/20 hover:bg-[#009ACD] hover:scale-105 transition-all duration-300 font-['Helvetica'] flex items-center gap-2 group/btn"
                                     >
                                         Get Started
                                         <ArrowUpRight size={20} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                                    </Link>
-                                    <Link
-                                        to="/courses"
-                                        className="px-8 py-4 bg-white/5 border border-white/10 text-white font-bold rounded-full hover:bg-white/10 transition-all font-['Helvetica'] flex items-center justify-center w-12 h-12 !p-0 rounded-full"
-                                        aria-label="View Courses"
-                                    >
-                                        <ArrowUpRight size={20} />
                                     </Link>
                                 </div>
                             </div>
@@ -183,7 +176,7 @@ const HeroBento = () => {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.6, delay: 0.2 }}
-                            className="relative rounded-[2rem] overflow-hidden shadow-xl group h-full min-h-[500px]"
+                            className="relative rounded-[2rem] overflow-hidden shadow-xl group h-full min-h-[300px] lg:min-h-[500px]"
                         >
                             <img
                                 src={heroImage}

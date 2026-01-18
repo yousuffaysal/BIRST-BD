@@ -23,7 +23,7 @@ const CountUp = ({ to, suffix = "", duration = 2, decimals = 0 }) => {
 
 const StatsSection = () => {
     return (
-        <section className="py-16 bg-[var(--color-birst-dark)] text-white relative overflow-hidden">
+        <section className="py-12 lg:py-16 bg-[var(--color-birst-dark)] text-white relative overflow-hidden">
             <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
             <div className="container relative z-10 px-4 mx-auto">
                 <div className="grid grid-cols-2 gap-8 text-center md:grid-cols-4">

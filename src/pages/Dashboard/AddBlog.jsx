@@ -1,79 +1,62 @@
-
 import React, { useState, useEffect } from 'react';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
-import { Image as ImageIcon, X, Plus, Upload, Loader, Layout } from 'lucide-react';
+import { Image as ImageIcon, X, Plus, Upload, Loader, Layout, Search, PenTool, Trash2, Calendar, User, FileText, ChevronRight, Tag, Link as LinkIcon, Save, Eye } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-toastify';
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 
 const AddBlog = () => {
     const axiosSecure = useAxiosSecure();
-    const [blogs, setBlogs] = useState([]); // Kept for logic, though listing might be separate now or below
-    const [loading, setLoading] = useState(true); // Kept for fetchBlogs logic
+    const [blogs, setBlogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('list'); // 'list' or 'form'
     const [editMode, setEditMode] = useState(false);
     const [currentId, setCurrentId] = useState(null);
     const [uploading, setUploading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
-    // Initial State following the requested JSON structure, adapted for new UI
+    // Initial State
     const initialFormState = {
         title: '',
         slug: '',
         excerpt: '',
-        content: '', // Markdown/HTML
-
-        coverImage: {
-            url: '',
-            alt: '',
-            caption: ''
-        },
-
-        // Rich Data
+        content: '',
+        coverImage: { url: '', alt: '', caption: '' },
         tags: [],
-        references: [], // Mapped to earlier 'prerequisites' or new field? Let's add references support.
-
+        references: [],
         author: {
             name: '',
             role: '',
             bio: '',
             avatar: '',
-            socials: {
-                linkedin: '',
-                twitter: ''
-            }
+            socials: { linkedin: '', twitter: '' }
         },
-
-        // Keeping these for data completeness, even if not explicitly in screenshot, we'll hide or put in "Advanced" if needed.
-        // For now, I'll prioritize screenshot fields and execute mapped logic.
         category: 'Editorial',
         readingTime: { minutes: 5, words: 0 },
-        tableOfContents: [], // Not explicitly in new UI, but kept for data structure
-        contentType: 'RESEARCH_ARTICLE', // Not explicitly in new UI, but kept for data structure
-        difficultyLevel: 'INTERMEDIATE', // Not explicitly in new UI, but kept for data structure
-        completionTime: '15–20 minutes', // Not explicitly in new UI, but kept for data structure
-        language: 'en', // Not explicitly in new UI, but kept for data structure
-        targetAudience: [], // Not explicitly in new UI, but kept for data structure
-        learningObjectives: [], // Not explicitly in new UI, but kept for data structure
-        skillsCovered: [], // Not explicitly in new UI, but kept for data structure
-        prerequisites: [], // Not explicitly in new UI, but kept for data structure
+        // ... maintain other fields for structure if needed
+        tableOfContents: [],
+        contentType: 'RESEARCH_ARTICLE',
+        difficultyLevel: 'INTERMEDIATE',
+        completionTime: '15–20 minutes',
+        language: 'en',
     };
 
     const [formData, setFormData] = useState(initialFormState);
-
-    // Temporary inputs for array fields
     const [tempTag, setTempTag] = useState('');
     const [tempRef, setTempRef] = useState('');
-
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [authorAvatarFile, setAuthorAvatarFile] = useState(null);
     const [authorAvatarPreview, setAuthorAvatarPreview] = useState(null);
 
     useEffect(() => {
-        fetchBlogs(); // Keep this for existing blog management logic
+        fetchBlogs();
     }, []);
 
-    // Auto-generate slug from title
+    // Slug Generator
     useEffect(() => {
         if (!editMode && formData.title) {
             const generatedSlug = formData.title
@@ -84,53 +67,39 @@ const AddBlog = () => {
         }
     }, [formData.title, editMode]);
 
-    // Word count calculation
+    // Reading Time
     useEffect(() => {
-        const text = formData.content.replace(/<[^>]*>/g, ''); // Strip HTML
+        const text = formData.content.replace(/<[^>]*>/g, '');
         const words = text ? text.split(/\s+/).length : 0;
-        const minutes = Math.ceil(words / 200); // Avg reading speed
-        setFormData(prev => ({
-            ...prev,
-            readingTime: { words, minutes }
-        }));
+        const minutes = Math.ceil(words / 200);
+        setFormData(prev => ({ ...prev, readingTime: { words, minutes } }));
     }, [formData.content]);
 
 
     const fetchBlogs = async () => {
+        setLoading(true);
         try {
             const res = await axiosSecure.get('/blogs');
             setBlogs(res.data);
-            setLoading(false);
         } catch (error) {
             console.error('Failed to fetch blogs', error);
+            toast.error("Failed to load blogs");
+        } finally {
             setLoading(false);
         }
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // Handle nested updates
         if (name.includes('.')) {
             const [parent, child, subchild] = name.split('.');
             if (subchild) {
                 setFormData(prev => ({
-                    ...prev,
-                    [parent]: {
-                        ...prev[parent],
-                        [child]: {
-                            ...prev[parent][child],
-                            [subchild]: value
-                        }
-                    }
+                    ...prev, [parent]: { ...prev[parent], [child]: { ...prev[parent][child], [subchild]: value } }
                 }));
             } else {
                 setFormData(prev => ({
-                    ...prev,
-                    [parent]: {
-                        ...prev[parent],
-                        [child]: value
-                    }
+                    ...prev, [parent]: { ...prev[parent], [child]: value }
                 }));
             }
         } else {
@@ -149,7 +118,6 @@ const AddBlog = () => {
     const removeTag = (idx) => setFormData(p => ({ ...p, tags: p.tags.filter((_, i) => i !== idx) }));
 
     const addRef = (e) => {
-        // Using 'references' as a proxy for any list data if needed, or mapping to actual schema
         if ((e.key === 'Enter' || e.type === 'click') && tempRef.trim()) {
             e.preventDefault();
             setFormData(p => ({ ...p, references: [...(p.references || []), tempRef.trim()] }));
@@ -158,7 +126,7 @@ const AddBlog = () => {
     };
     const removeRef = (idx) => setFormData(p => ({ ...p, references: p.references.filter((_, i) => i !== idx) }));
 
-    // --- Image Upload Logic ---
+    // Image Upload
     const handleFileChange = (e, type) => {
         const file = e.target.files[0];
         if (file) {
@@ -187,14 +155,11 @@ const AddBlog = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Frontend Validation
         if (!formData.title?.trim() || !formData.content?.trim()) {
-            return Swal.fire('Error', 'Title and Content are required fields.', 'error');
+            return toast.error('Title and Content are required.');
         }
 
         setUploading(true);
-
         try {
             let coverUrl = formData.coverImage.url;
             if (imageFile) {
@@ -208,36 +173,27 @@ const AddBlog = () => {
                 if (uploaded) authorAvatarUrl = uploaded;
             }
 
-            // Construct final payload
             const payload = {
                 ...formData,
                 coverImage: { ...formData.coverImage, url: coverUrl },
                 author: { ...formData.author, avatar: authorAvatarUrl },
-                // Backwards compatibility for flat list view
-                image: coverUrl, // For compatibility with existing blog list if it expects 'image'
-                // Ensure arrays are arrays
-                tags: formData.tags || [],
-                references: formData.references || [],
-                targetAudience: formData.targetAudience || [],
-                learningObjectives: formData.learningObjectives || [],
-                skillsCovered: formData.skillsCovered || [],
-                prerequisites: formData.prerequisites || [],
-                tableOfContents: formData.tableOfContents || []
+                image: coverUrl, // fallback
             };
 
             if (editMode) {
                 await axiosSecure.put(`/blogs/${currentId}`, payload);
-                Swal.fire('Updated!', 'Blog updated successfully.', 'success');
+                toast.success('Blog updated successfully');
             } else {
                 await axiosSecure.post('/blogs', payload);
-                Swal.fire('Success!', 'Blog added successfully.', 'success');
+                toast.success('Blog created successfully');
             }
 
             resetForm();
-            fetchBlogs(); // Refresh the list of blogs after add/edit
+            fetchBlogs();
+            setActiveTab('list');
         } catch (error) {
             console.error(error);
-            Swal.fire('Error', 'Something went wrong.', 'error');
+            toast.error('Something went wrong.');
         } finally {
             setUploading(false);
         }
@@ -256,404 +212,471 @@ const AddBlog = () => {
     };
 
     const handleEdit = (blog) => {
-        // Merge fetched data with initial structure to ensure all fields exist
         const mergedData = {
             ...initialFormState,
             ...blog,
-            coverImage: { ...initialFormState.coverImage, ...(blog.coverImage || { url: blog.image }) }, // Fallback to flat image
-            author: { ...initialFormState.author, ...(typeof blog.author === 'string' ? { name: blog.author } : blog.author) }, // Fallback to string author
-            // Ensure arrays are properly merged, or default to empty if not present
+            coverImage: { ...initialFormState.coverImage, ...(blog.coverImage || { url: blog.image }) },
+            author: { ...initialFormState.author, ...(typeof blog.author === 'string' ? { name: blog.author } : blog.author) },
             tags: blog.tags || [],
-            references: blog.references || [], // Assuming references might be mapped from prerequisites or similar
-            targetAudience: blog.targetAudience || [],
-            learningObjectives: blog.learningObjectives || [],
-            skillsCovered: blog.skillsCovered || [],
-            prerequisites: blog.prerequisites || [],
-            tableOfContents: blog.tableOfContents || []
+            references: blog.references || [],
         };
-
         setFormData(mergedData);
         setImagePreview(mergedData.coverImage.url);
         setAuthorAvatarPreview(mergedData.author.avatar);
         setEditMode(true);
         setCurrentId(blog._id);
+        setActiveTab('form');
         window.scrollTo(0, 0);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (id, title) => {
         Swal.fire({
-            title: 'Are you sure?',
+            title: 'Delete Article?',
+            text: `Permanently delete "${title}"?`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#9CA3AF',
+            confirmButtonText: 'Yes, delete',
+            background: '#fff',
+            customClass: {
+                title: "font-unbounded text-[#0B2340]",
+                popup: "rounded-3xl",
+            }
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
                     await axiosSecure.delete(`/blogs/${id}`);
                     fetchBlogs();
-                    Swal.fire('Deleted!', 'Blog has been deleted.', 'success');
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Article removed.',
+                        icon: 'success',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        customClass: {
+                            title: "font-unbounded text-[#0B2340]",
+                            popup: "rounded-3xl",
+                        }
+                    });
                 } catch (error) {
-                    Swal.fire('Error', 'Failed to delete.', 'error');
+                    toast.error('Failed to delete.');
                 }
             }
         });
     };
 
+    const filteredBlogs = blogs.filter(blog =>
+        blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (typeof blog.author === 'string' ? blog.author : blog.author?.name)?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Animations
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
+    };
+    const itemVariants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0 }
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50 flex justify-center py-10 px-4 font-sans text-gray-900">
-            <div className="w-full max-w-4xl bg-white border-2 border-black rounded-xl shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col">
+        <div className="min-h-screen bg-[#FAFAFA] font-jakarta relative p-4 lg:p-8 overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#02bfff]/5 to-transparent pointer-events-none" />
+            <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-[#02bfff]/5 rounded-full blur-[100px] pointer-events-none" />
 
-                {/* Header */}
-                <div className="bg-[#FFD700] border-b-2 border-black p-6 flex justify-between items-start relative">
-                    <div>
-                        <h1 className="text-4xl font-black uppercase tracking-tight mb-2">New Entry</h1>
-                        <p className="font-mono text-sm font-medium opacity-80">Share something new with the world.</p>
-                    </div>
-                    {/* Decorative Close Icon (Visual only as per UI, or works as reset) */}
-                    <button onClick={() => window.history.back()} className="p-1 hover:bg-black/10 rounded transition">
-                        <X size={24} strokeWidth={3} />
-                    </button>
+            <div className="max-w-7xl mx-auto relative z-10">
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row justify-between items-end gap-6 mb-10">
+                    <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
+                        <h1 className="text-4xl font-bold font-unbounded text-[#0B2340] mb-2">Blog Management</h1>
+                        <p className="text-gray-500">Create, edit, and manage your editorial content.</p>
+                    </motion.div>
 
-                    {/* Tag label mockup */}
-                    <div className="absolute top-0 right-12 bg-black text-white px-3 py-1 text-xs font-bold uppercase rounded-b-lg">
-                        Admin Mode
-                    </div>
-                </div>
-
-                <form onSubmit={handleSubmit} className="flex-1 p-8 space-y-8">
-
-                    {/* Row 1: Title & Slug */}
-                    <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="block text-xs font-bold uppercase tracking-widest">Title</label>
-                            <input
-                                type="text"
-                                name="title"
-                                value={formData.title}
-                                onChange={handleChange}
-                                className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none focus:ring-4 focus:ring-yellow-400/50 transition-shadow"
-                                placeholder="Enter a catchy title..."
-                                required
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="block text-xs font-bold uppercase tracking-widest">Slug</label>
-                            <input
-                                type="text"
-                                name="slug"
-                                value={formData.slug}
-                                onChange={handleChange}
-                                className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm bg-gray-50 focus:outline-none"
-                                placeholder="url-friendly-slug"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Excerpt */}
-                    <div className="space-y-2">
-                        <label className="block text-xs font-bold uppercase tracking-widest">Excerpt</label>
-                        <input
-                            type="text"
-                            name="excerpt"
-                            value={formData.excerpt}
-                            onChange={handleChange}
-                            className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none focus:ring-4 focus:ring-yellow-400/50 transition-shadow"
-                            placeholder="A brief summary..."
+                    <div className="flex bg-white p-1.5 rounded-2xl border border-gray-100 shadow-sm relative">
+                        {/* Tab Switcher */}
+                        <motion.div
+                            className="absolute inset-y-1.5 rounded-xl bg-[#02bfff] shadow-lg shadow-cyan-200"
+                            layoutId="activeTab"
+                            initial={false}
+                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                            style={{
+                                width: '50%',
+                                left: activeTab === 'list' ? '4px' : '50%'
+                            }}
                         />
-                    </div>
-
-                    {/* Cover Image - Dashed Area */}
-                    <div className="space-y-2">
-                        <label className="block text-xs font-bold uppercase tracking-widest">Cover Image</label>
-                        <div className="relative border-2 border-dashed border-black rounded-xl p-8 bg-gray-50 hover:bg-yellow-50 transition-colors group cursor-pointer">
-                            <input
-                                type="file"
-                                onChange={(e) => handleFileChange(e, 'cover')}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                            {imagePreview ? (
-                                <div className="relative aspect-video w-full h-64 overflow-hidden rounded-lg border-2 border-black">
-                                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
-                                    <button
-                                        type="button"
-                                        onClick={(e) => { e.preventDefault(); setImagePreview(null); setImageFile(null); setFormData(prev => ({ ...prev, coverImage: { ...prev.coverImage, url: '' } })) }}
-                                        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full border-2 border-black hover:bg-red-600 transition"
-                                    >
-                                        <X size={16} />
-                                    </button>
-                                </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center h-48 text-gray-500 group-hover:text-black">
-                                    <ImageIcon size={48} strokeWidth={1.5} className="mb-4" />
-                                    <p className="font-mono text-sm">Click to Upload Cover</p>
-                                </div>
-                            )}
-                        </div>
-                        {/* URL Fallback */}
-                        <input
-                            type="text"
-                            name="coverImage.url"
-                            value={formData.coverImage.url}
-                            onChange={handleChange}
-                            placeholder="Or paste image URL..."
-                            className="w-full bg-transparent border-b border-black font-mono text-xs py-2 focus:outline-none text-gray-500"
-                        />
-                    </div>
-
-                    {/* Content */}
-                    <div className="space-y-2">
-                        <label className="block text-xs font-bold uppercase tracking-widest">Content (Markdown/HTML)</label>
-                        <textarea
-                            name="content"
-                            value={formData.content}
-                            onChange={handleChange}
-                            className="w-full border-2 border-black rounded-lg p-4 font-mono text-sm h-64 focus:outline-none focus:ring-4 focus:ring-yellow-400/50 transition-shadow resize-y"
-                            placeholder="# Start writing..."
-                            required
-                        ></textarea>
-                    </div>
-
-                    {/* Divider */}
-                    <hr className="border-t-2 border-black border-dashed my-8" />
-
-                    {/* Tags & Refs Row */}
-                    <div className="grid md:grid-cols-2 gap-8">
-                        <div className="space-y-2">
-                            <label className="block text-xs font-bold uppercase tracking-widest">Tags (Enter to add)</label>
-                            <div className="flex flex-wrap gap-2 mb-2 min-h-[40px]">
-                                {formData.tags.map((tag, i) => (
-                                    <span key={i} className="bg-yellow-300 border border-black rounded px-2 py-1 text-xs font-bold flex items-center gap-1">
-                                        {tag}
-                                        <button type="button" onClick={() => removeTag(i)}><X size={12} /></button>
-                                    </span>
-                                ))}
-                            </div>
-                            <input
-                                type="text"
-                                value={tempTag}
-                                onChange={(e) => setTempTag(e.target.value)}
-                                onKeyDown={addTag}
-                                className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none"
-                                placeholder="Design, Code, Life..."
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="block text-xs font-bold uppercase tracking-widest">References (One per line)</label>
-                            <div className="flex flex-col gap-1 mb-2">
-                                {formData.references?.map((ref, i) => (
-                                    <span key={i} className="text-xs font-mono bg-gray-100 px-2 py-1 truncate border border-gray-200 rounded flex justify-between">
-                                        {ref} <button type="button" onClick={() => removeRef(i)} className="text-red-500 hover:text-red-700 ml-2">Del</button>
-                                    </span>
-                                ))}
-                            </div>
-                            <textarea
-                                value={tempRef}
-                                onChange={(e) => setTempRef(e.target.value)}
-                                onKeyDown={addRef}
-                                className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none h-32"
-                                placeholder="https://example.com"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="relative py-4">
-                        <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t-2 border-black border-dashed"></div>
-                        </div>
-                        <div className="relative flex justify-center">
-                            <span className="bg-white px-4 text-xs font-bold uppercase tracking-widest">Author Details</span>
-                        </div>
-                    </div>
-
-                    {/* Author Section */}
-                    <div className="grid md:grid-cols-1 gap-6">
-                        {/* Name & Role */}
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <label className="block text-xs font-bold uppercase tracking-widest">Author Name</label>
-                                <input
-                                    type="text"
-                                    name="author.name"
-                                    value={formData.author.name}
-                                    onChange={handleChange}
-                                    className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none"
-                                    placeholder="e.g. Alex Fox"
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="block text-xs font-bold uppercase tracking-widest">Role / Job Title</label>
-                                <input
-                                    type="text"
-                                    name="author.role"
-                                    value={formData.author.role}
-                                    onChange={handleChange}
-                                    className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none"
-                                    placeholder="e.g. Lead Engineer"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Bio */}
-                        <div className="space-y-2">
-                            <label className="block text-xs font-bold uppercase tracking-widest">Mini Bio</label>
-                            <textarea
-                                name="author.bio"
-                                value={formData.author.bio}
-                                onChange={handleChange}
-                                className="w-full border-2 border-black rounded-lg p-3 font-mono text-sm focus:outline-none h-24"
-                                placeholder="Short bio about the author..."
-                            />
-                        </div>
-
-                        {/* Author Image & Socials */}
-                        <div className="flex flex-col md:flex-row gap-8 items-start">
-                            <div className="space-y-2 flex-shrink-0">
-                                <label className="block text-xs font-bold uppercase tracking-widest text-center">Author Image</label>
-                                <div className="w-24 h-24 border-2 border-black rounded-full overflow-hidden relative cursor-pointer group mx-auto bg-gray-50 hover:bg-yellow-100 transition">
-                                    <input
-                                        type="file"
-                                        onChange={(e) => handleFileChange(e, 'author')}
-                                        className="absolute inset-0 opacity-0 z-10 cursor-pointer"
-                                    />
-                                    {authorAvatarPreview ? (
-                                        <img src={authorAvatarPreview} className="w-full h-full object-cover" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center">
-                                            <ImageIcon size={24} className="text-gray-400 group-hover:text-black" />
-                                        </div>
-                                    )}
-                                </div>
-                                <p className="text-[10px] text-center font-mono text-gray-500">Click circle to upload</p>
-                            </div>
-
-                            <div className="flex-1 w-full space-y-4">
-                                <div className="space-y-2">
-                                    <label className="block text-xs font-bold uppercase tracking-widest">Combined Socials</label>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <input
-                                            type="text"
-                                            name="author.socials.twitter"
-                                            value={formData.author.socials.twitter}
-                                            onChange={handleChange}
-                                            className="w-full border-2 border-black rounded-lg p-3 font-mono text-xs focus:outline-none"
-                                            placeholder="https://twitter.com/..."
-                                        />
-                                        <input
-                                            type="text"
-                                            name="author.socials.linkedin"
-                                            value={formData.author.socials.linkedin}
-                                            onChange={handleChange}
-                                            className="w-full border-2 border-black rounded-lg p-3 font-mono text-xs focus:outline-none"
-                                            placeholder="https://linkedin.com/..."
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <hr className="border-t-2 border-black border-dashed my-8" />
-
-                    {/* Actions */}
-                    <div className="flex justify-end pt-4">
                         <button
-                            type="submit"
-                            disabled={uploading}
-                            className="bg-black text-white font-bold uppercase tracking-widest px-8 py-4 rounded-lg hover:bg-gray-800 transition transform active:scale-95 disabled:opacity-50 flex items-center gap-2"
+                            onClick={() => { setActiveTab('list'); if (editMode) resetForm(); }}
+                            className={`relative z-10 px-6 py-2.5 rounded-xl font-bold text-sm transition-colors duration-300 flex items-center gap-2 ${activeTab === 'list' ? 'text-white' : 'text-gray-500 hover:text-[#0b2340]'}`}
                         >
-                            {uploading ? <Loader className="animate-spin" /> : <Plus size={20} className="stroke-[3px]" />}
-                            {editMode ? 'Update Entry' : 'Save Changes'}
+                            <Layout size={16} /> Manage Posts
+                        </button>
+                        <button
+                            onClick={() => { setActiveTab('form'); resetForm(); }}
+                            className={`relative z-10 px-6 py-2.5 rounded-xl font-bold text-sm transition-colors duration-300 flex items-center gap-2 ${activeTab === 'form' ? 'text-white' : 'text-gray-500 hover:text-[#0b2340]'}`}
+                        >
+                            <PenTool size={16} /> Create New
                         </button>
                     </div>
-
-                </form>
-            </div>
-
-            {/* Existing Blogs Management */}
-            <div className="mt-12 w-full max-w-4xl">
-                <div className="bg-[#FFD700] border-2 border-black p-4 mb-4 flex justify-between items-center shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-                    <h2 className="text-xl font-black uppercase tracking-tight">Archives & Management</h2>
-                    <span className="font-mono text-xs font-bold bg-black text-white px-2 py-1">{blogs.length} ENTRIES</span>
                 </div>
 
-                <div className="bg-white border-2 border-black p-6 rounded-none shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="border-b-2 border-black font-mono text-xs uppercase tracking-wider">
-                                    <th className="p-4 border-r-2 border-black w-1/2">Post Details</th>
-                                    <th className="p-4 border-r-2 border-black">Author</th>
-                                    <th className="p-4 border-r-2 border-black">Date</th>
-                                    <th className="p-4 text-center">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="font-mono text-sm">
+                <AnimatePresence mode="wait">
+                    {activeTab === 'list' ? (
+                        <motion.div
+                            key="list"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="space-y-6"
+                        >
+                            {/* Search Bar */}
+                            <div className="relative max-w-md">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+                                <input
+                                    type="text"
+                                    placeholder="Search by title or author..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl shadow-sm focus:ring-2 focus:ring-[#02bfff] transition-all outline-none text-gray-700 font-medium"
+                                />
+                            </div>
+
+                            {/* Blog List Grid */}
+                            <motion.div
+                                variants={containerVariants}
+                                initial="hidden"
+                                animate="visible"
+                                className="grid grid-cols-1 gap-4"
+                            >
                                 {loading ? (
-                                    <tr><td colSpan="4" className="text-center p-8">Loading...</td></tr>
-                                ) : blogs.length === 0 ? (
-                                    <tr><td colSpan="4" className="text-center p-8 opacity-50">No entries found.</td></tr>
+                                    <div className="flex justify-center p-12"><Loader className="animate-spin text-[#02bfff]" /></div>
+                                ) : filteredBlogs.length === 0 ? (
+                                    <div className="text-center p-12 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                                        <p className="text-gray-400 font-medium">No blogs found.</p>
+                                    </div>
                                 ) : (
-                                    blogs.map(blog => (
-                                        <tr key={blog._id} className="border-b border-black last:border-0 hover:bg-yellow-50 transition-colors">
-                                            <td className="p-4 border-r-2 border-black">
-                                                <div className="flex items-center gap-3">
-                                                    <div className="w-12 h-12 border-2 border-black bg-gray-100 flex-shrink-0 overflow-hidden">
-                                                        <img
-                                                            src={blog.coverImage?.url || blog.image || 'https://via.placeholder.com/150'}
-                                                            alt=""
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
-                                                    <div>
-                                                        <div className="font-bold line-clamp-1">{blog.title}</div>
-                                                        <div className="text-[10px] uppercase tracking-widest opacity-60 flex gap-2">
-                                                            <span>{blog.category}</span>
-                                                            <span>•</span>
-                                                            <span>{blog.readingTime?.minutes || 5} min</span>
-                                                        </div>
-                                                    </div>
+                                    filteredBlogs.map((blog) => (
+                                        <motion.div
+                                            key={blog._id}
+                                            variants={itemVariants}
+                                            layout
+                                            className="group bg-white rounded-3xl p-4 border border-gray-100 shadow-[0_2px_10px_rgb(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-[#02bfff]/30 transition-all duration-300 flex flex-col md:flex-row items-center gap-6"
+                                        >
+                                            <div className="w-full md:w-32 h-32 md:h-24 rounded-2xl overflow-hidden bg-gray-50 shrink-0 relative">
+                                                <img
+                                                    src={blog.coverImage?.url || blog.image || 'https://via.placeholder.com/150'}
+                                                    alt={blog.title}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                                <div className="absolute inset-0 bg-[#02bfff]/0 group-hover:bg-[#02bfff]/10 transition-colors" />
+                                            </div>
+
+                                            <div className="flex-1 text-center md:text-left space-y-2">
+                                                <h3 className="text-lg font-bold text-[#0B2340] group-hover:text-[#02bfff] transition-colors font-unbounded line-clamp-1">{blog.title}</h3>
+                                                <div className="flex items-center justify-center md:justify-start gap-4 text-xs font-semibold text-gray-500">
+                                                    <span className="flex items-center gap-1.5"><Calendar size={12} /> {new Date(blog.createdAt).toLocaleDateString()}</span>
+                                                    <span className="w-1 h-1 rounded-full bg-gray-300" />
+                                                    <span className="flex items-center gap-1.5"><User size={12} /> {typeof blog.author === 'string' ? blog.author : blog.author?.name || 'Unknown'}</span>
+                                                    <span className="w-1 h-1 rounded-full bg-gray-300" />
+                                                    <span className="text-[#02bfff] bg-blue-50 px-2 py-0.5 rounded-md">{blog.readingTime?.minutes || 5} min read</span>
                                                 </div>
-                                            </td>
-                                            <td className="p-4 border-r-2 border-black text-xs">
-                                                {typeof blog.author === 'object' ? blog.author.name : blog.author}
-                                            </td>
-                                            <td className="p-4 border-r-2 border-black text-xs">
-                                                {new Date(blog.createdAt).toLocaleDateString()}
-                                            </td>
-                                            <td className="p-4">
-                                                <div className="flex justify-center gap-3">
-                                                    <button
-                                                        onClick={() => handleEdit(blog)}
-                                                        className="flex items-center gap-2 px-4 py-2 bg-yellow-300 border-2 border-black font-bold text-xs uppercase hover:bg-black hover:text-yellow-300 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-                                                        title="Edit Entry"
-                                                    >
-                                                        <Layout size={14} strokeWidth={2.5} />
-                                                        <span>Edit</span>
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDelete(blog._id)}
-                                                        className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-black text-red-600 font-bold text-xs uppercase hover:bg-red-600 hover:text-white transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"
-                                                        title="Delete Entry"
-                                                    >
-                                                        <X size={14} strokeWidth={2.5} />
-                                                        <span>Delete</span>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                <p className="text-sm text-gray-400 line-clamp-1 max-w-2xl hidden md:block">{blog.excerpt || "No excerpt details available..."}</p>
+                                            </div>
+
+                                            <div className="flex items-center gap-3">
+                                                <button
+                                                    onClick={() => handleEdit(blog)}
+                                                    className="p-3 rounded-xl bg-gray-50 text-gray-600 hover:bg-[#02bfff] hover:text-white transition-colors"
+                                                    title="Edit"
+                                                >
+                                                    <PenTool size={18} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(blog._id, blog.title)}
+                                                    className="p-3 rounded-xl bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors"
+                                                    title="Delete"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        </motion.div>
                                     ))
                                 )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                            </motion.div>
+                        </motion.div>
+                    ) : (
+                        <motion.div
+                            key="form"
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="bg-white rounded-[2rem] shadow-xl shadow-gray-200/50 border border-gray-100 overflow-hidden"
+                        >
+                            <div className="h-2 w-full bg-gradient-to-r from-[#02bfff] to-cyan-300" />
+
+                            <form onSubmit={handleSubmit} className="p-8 lg:p-10 space-y-10">
+                                {/* Section 1: Main Content */}
+                                <div>
+                                    <h3 className="text-xl font-bold font-unbounded text-[#0B2340] mb-6 flex items-center gap-2">
+                                        <FileText className="text-[#02bfff]" size={24} /> Content Details
+                                    </h3>
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="space-y-6">
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Title</label>
+                                                <input
+                                                    type="text"
+                                                    name="title"
+                                                    value={formData.title}
+                                                    onChange={handleChange}
+                                                    placeholder="Article Headline..."
+                                                    className="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#02bfff] font-bold text-[#0B2340] placeholder-gray-400 transition-all"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Slug (Auto-generated)</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-mono">/blog/</span>
+                                                    <input
+                                                        type="text"
+                                                        name="slug"
+                                                        value={formData.slug}
+                                                        onChange={handleChange}
+                                                        className="w-full pl-20 pr-5 py-4 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#02bfff] font-mono text-sm text-[#02bfff] transition-all"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Excerpt</label>
+                                                <textarea
+                                                    name="excerpt"
+                                                    rows="3"
+                                                    value={formData.excerpt}
+                                                    onChange={handleChange}
+                                                    placeholder="Brief summary for social cards..."
+                                                    className="w-full px-5 py-4 bg-gray-50 rounded-2xl border-none outline-none focus:ring-2 focus:ring-[#02bfff] font-medium text-gray-700 resize-none transition-all"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Cover Image</label>
+                                            <div className="relative h-full min-h-[250px] border-3 border-dashed border-gray-200 rounded-3xl bg-gray-50/50 hover:bg-[#02bfff]/5 hover:border-[#02bfff]/50 transition-all cursor-pointer group flex flex-col items-center justify-center overflow-hidden">
+                                                <input type="file" onChange={(e) => handleFileChange(e, 'cover')} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+                                                {imagePreview ? (
+                                                    <>
+                                                        <img src={imagePreview} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
+                                                        <div className="absolute top-4 right-4 z-20">
+                                                            <button
+                                                                type="button"
+                                                                onClick={(e) => { e.preventDefault(); setImagePreview(null); setImageFile(null); setFormData(p => ({ ...p, coverImage: { ...p.coverImage, url: '' } })) }}
+                                                                className="p-2 bg-white/90 rounded-full text-red-500 hover:bg-red-500 hover:text-white shadow-lg transition-colors"
+                                                            >
+                                                                <Trash2 size={16} />
+                                                            </button>
+                                                        </div>
+                                                    </>
+                                                ) : (
+                                                    <div className="text-center p-6 transition-transform group-hover:scale-110 max-w-[80%]">
+                                                        <div className="w-16 h-16 rounded-full bg-white shadow-sm flex items-center justify-center text-[#02bfff] mx-auto mb-4">
+                                                            <Upload size={28} />
+                                                        </div>
+                                                        <p className="font-bold text-[#0B2340]">Click to upload cover</p>
+                                                        <p className="text-xs text-gray-400 mt-2">or paste URL below</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {/* URL Fallback */}
+                                            <div className="flex items-center gap-2 mt-2 px-1">
+                                                <LinkIcon size={14} className="text-gray-400" />
+                                                <input
+                                                    type="text"
+                                                    placeholder="https://..."
+                                                    value={formData.coverImage.url}
+                                                    onChange={handleChange}
+                                                    name="coverImage.url"
+                                                    className="bg-transparent border-none outline-none text-xs text-gray-500 w-full hover:text-[#02bfff] focus:text-[#02bfff] transition-colors"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Markdown Editor Area */}
+                                    <div className="space-y-3 mt-8">
+                                        <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Article Content (Markdown)</label>
+                                        <div className="relative">
+                                            <textarea
+                                                name="content"
+                                                value={formData.content}
+                                                onChange={handleChange}
+                                                className="w-full h-[500px] p-6 bg-[#1a1a1a] text-gray-300 font-mono text-sm rounded-3xl outline-none focus:ring-4 focus:ring-gray-200 resize-y shadow-inner leading-relaxed"
+                                                placeholder="# Begin your masterpiece..."
+                                            />
+                                            <div className="absolute bottom-4 right-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-lg text-xs font-bold text-gray-400 border border-white/10">
+                                                {formData.readingTime.words} words
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="h-px w-full bg-gray-100" />
+
+                                {/* Section 2: Metadata & Author */}
+                                <div className="grid lg:grid-cols-2 gap-12">
+                                    {/* Tags & Refs */}
+                                    <div>
+                                        <h3 className="text-lg font-bold font-unbounded text-[#0B2340] mb-6 flex items-center gap-2">
+                                            <Tag className="text-[#02bfff]" size={20} /> Metadata
+                                        </h3>
+                                        <div className="space-y-6">
+                                            <div className="space-y-3">
+                                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Tags</label>
+                                                <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl focus-within:ring-2 focus-within:ring-[#02bfff] transition-all">
+                                                    <Plus size={18} className="text-gray-400" />
+                                                    <input
+                                                        type="text"
+                                                        value={tempTag}
+                                                        onChange={(e) => setTempTag(e.target.value)}
+                                                        onKeyDown={addTag}
+                                                        placeholder="Add tags..."
+                                                        className="bg-transparent border-none outline-none text-sm font-medium w-full py-2 text-[#0B2340]"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {formData.tags.map((tag, i) => (
+                                                        <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-[#02bfff] text-xs font-bold">
+                                                            {tag}
+                                                            <button type="button" onClick={() => removeTag(i)} className="hover:text-[#0b2340]"><X size={12} /></button>
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">References</label>
+                                                <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-xl focus-within:ring-2 focus-within:ring-[#02bfff] transition-all">
+                                                    <LinkIcon size={18} className="text-gray-400" />
+                                                    <input
+                                                        type="text"
+                                                        value={tempRef}
+                                                        onChange={(e) => setTempRef(e.target.value)}
+                                                        onKeyDown={addRef}
+                                                        placeholder="Add URL references..."
+                                                        className="bg-transparent border-none outline-none text-sm font-medium w-full py-2 text-[#0B2340]"
+                                                    />
+                                                </div>
+                                                <div className="flex flex-col gap-2">
+                                                    {formData.references.map((ref, i) => (
+                                                        <div key={i} className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-50 text-xs font-mono text-gray-600 border border-gray-100">
+                                                            <span className="truncate flex-1">{ref}</span>
+                                                            <button type="button" onClick={() => removeRef(i)} className="text-red-400 hover:text-red-600 ml-2"><X size={14} /></button>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Author Profile */}
+                                    <div>
+                                        <h3 className="text-lg font-bold font-unbounded text-[#0B2340] mb-6 flex items-center gap-2">
+                                            <User className="text-[#02bfff]" size={20} /> Author Card
+                                        </h3>
+                                        <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
+                                            <div className="flex items-start gap-4 mb-4">
+                                                <div className="w-16 h-16 rounded-full bg-white shadow-sm border border-gray-100 flex-shrink-0 overflow-hidden relative group cursor-pointer">
+                                                    <input type="file" onChange={(e) => handleFileChange(e, 'author')} className="absolute inset-0 opacity-0 z-10 cursor-pointer" />
+                                                    {authorAvatarPreview ? (
+                                                        <img src={authorAvatarPreview} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center text-gray-300">
+                                                            <User size={24} />
+                                                        </div>
+                                                    )}
+                                                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <Upload size={16} className="text-white" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex-1 space-y-3">
+                                                    <input
+                                                        type="text"
+                                                        name="author.name"
+                                                        value={formData.author.name}
+                                                        onChange={handleChange}
+                                                        placeholder="Author Name"
+                                                        className="w-full bg-white px-3 py-2 rounded-xl text-sm font-bold shadow-sm outline-none border border-transparent focus:border-[#02bfff] transition-all"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        name="author.role"
+                                                        value={formData.author.role}
+                                                        onChange={handleChange}
+                                                        placeholder="Job Title / Role"
+                                                        className="w-full bg-white px-3 py-2 rounded-xl text-xs font-medium shadow-sm outline-none border border-transparent focus:border-[#02bfff] transition-all text-gray-500"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <textarea
+                                                name="author.bio"
+                                                value={formData.author.bio}
+                                                onChange={handleChange}
+                                                placeholder="Short author bio..."
+                                                className="w-full bg-white p-4 rounded-2xl text-xs text-gray-600 outline-none border border-transparent focus:border-[#02bfff] shadow-sm resize-none mb-4"
+                                                rows="3"
+                                            />
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <input
+                                                    type="text"
+                                                    name="author.socials.twitter"
+                                                    value={formData.author.socials.twitter}
+                                                    onChange={handleChange}
+                                                    placeholder="Twitter URL"
+                                                    className="bg-white px-3 py-2 rounded-xl text-[10px] shadow-sm outline-none"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    name="author.socials.linkedin"
+                                                    value={formData.author.socials.linkedin}
+                                                    onChange={handleChange}
+                                                    placeholder="LinkedIn URL"
+                                                    className="bg-white px-3 py-2 rounded-xl text-[10px] shadow-sm outline-none"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="h-20" /> {/* Spacer */}
+
+                                {/* Sticky Footer Actions */}
+                                <div className="absolute bottom-0 left-0 w-full bg-white/80 backdrop-blur-md p-4 lg:px-10 border-t border-gray-100 flex items-center justify-between">
+                                    <button
+                                        type="button"
+                                        onClick={() => { setActiveTab('list'); resetForm(); }}
+                                        className="px-6 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-100 transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={uploading}
+                                        className="px-8 py-3 bg-[#02bfff] text-white rounded-xl font-bold hover:bg-[#0099cc] transition-all shadow-lg shadow-cyan-200/50 flex items-center gap-2 transform active:scale-95"
+                                    >
+                                        {uploading ? <Loader className="animate-spin" size={20} /> : <Save size={20} />}
+                                        {editMode ? 'Save Changes' : 'Publish Article'}
+                                    </button>
+                                </div>
+                            </form>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </div>
     );
 };
 
 export default AddBlog;
-

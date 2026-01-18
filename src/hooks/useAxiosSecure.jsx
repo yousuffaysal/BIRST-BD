@@ -7,8 +7,7 @@ import useAuth from "./useAuth";
 
 // Create Axios instance
 const AxiosSecure = axios.create({
-  baseURL: "https://birstbd.vercel.app",
-
+  baseURL: import.meta.env.VITE_API_URL || "https://birstbd.vercel.app",
 });
 
 // Custom hook to use the Axios instance

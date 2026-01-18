@@ -95,42 +95,42 @@ export default function Publications() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-2xl shadow-lg p-8">
+      <div className="bg-white rounded-2xl shadow-lg p-6 md:p-8">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center">
-            <FileText className="w-8 h-8 text-white" />
+          <div className="w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-blue-500 to-sky-500 rounded-full flex items-center justify-center flex-shrink-0">
+            <FileText className="w-6 h-6 md:w-8 md:h-8 text-white" />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Research Publications</h2>
-            <p className="text-gray-600">Browse our collection of published research</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 font-['Unbounded']">Research Publications</h2>
+            <p className="text-sm md:text-base text-gray-600 font-['Plus_Jakarta_Sans']">Browse our collection of published research</p>
           </div>
         </div>
       </div>
 
       {/* Search and Filters */}
-      <div className="bg-white rounded-xl shadow-md p-6">
+      <div className="bg-white rounded-xl shadow-md p-4 md:p-6">
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Search publications by title, author, or abstract..."
+              placeholder="Search publications..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm md:text-base font-['Plus_Jakarta_Sans']"
             />
           </div>
 
-          <div className="flex flex-wrap gap-4">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="hidden md:flex items-center gap-2">
               <Filter className="w-5 h-5 text-gray-600" />
             </div>
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm md:text-base font-['Plus_Jakarta_Sans']"
             >
               {years.map((year) => (
                 <option key={year} value={year}>
@@ -141,7 +141,7 @@ export default function Publications() {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full md:w-auto px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm md:text-base font-['Plus_Jakarta_Sans']"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -154,68 +154,82 @@ export default function Publications() {
       </div>
 
       {/* Results */}
-      <div className="text-gray-600">
-        Found <span className="font-bold text-blue-600">{filteredPublications.length}</span> publications
+      <div className="text-gray-600 text-sm md:text-base font-['Plus_Jakarta_Sans']">
+        Found <span className="font-bold text-blue-600 font-['Unbounded']">{filteredPublications.length}</span> publications
       </div>
 
       {/* Publications List */}
       {filteredPublications.length === 0 ? (
-        <div className="bg-white rounded-xl shadow-md p-12 text-center">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-          <p className="text-gray-600 text-lg">No publications found. Try adjusting your filters.</p>
+        <div className="bg-white rounded-xl shadow-md p-8 md:p-12 text-center">
+          <FileText className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 text-gray-400" />
+          <p className="text-gray-600 text-base md:text-lg font-['Plus_Jakarta_Sans']">No publications found. Try adjusting your filters.</p>
         </div>
       ) : (
         <div className="space-y-6">
           {filteredPublications.map((publication) => (
             <div
               key={publication._id}
-              className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all p-6 border-l-4 border-blue-500"
+              className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 p-5 md:p-8 border border-gray-100 relative group overflow-hidden"
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{publication.title}</h3>
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                    <div className="flex items-center gap-1">
-                      <User className="w-4 h-4" />
-                      <span>{publication.authors.join(', ')}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
-                      <span>{publication.year}</span>
-                    </div>
+              <div className="absolute top-0 left-0 w-1 h-full bg-blue-500 transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top"></div>
+
+              <div className="flex flex-col md:flex-row items-start justify-between mb-6 gap-4">
+                <div className="flex-1 space-y-3">
+                  <div className="flex items-center gap-3 mb-2">
+                    <span className="px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold uppercase tracking-wider rounded-full font-['Unbounded']">
+                      {publication.category}
+                    </span>
+                    {publication.doi && (
+                      <span className="text-xs text-gray-400 font-['Plus_Jakarta_Sans'] hidden sm:inline-block">DOI: {publication.doi}</span>
+                    )}
                   </div>
-                  {publication.journal && (
-                    <p className="text-sm text-gray-600 italic mb-2">{publication.journal}</p>
-                  )}
-                  {publication.abstract && (
-                    <p className="text-gray-700 text-sm mb-4 line-clamp-2">{publication.abstract}</p>
-                  )}
-                  {publication.doi && (
-                    <p className="text-xs text-gray-500 mb-4">DOI: {publication.doi}</p>
-                  )}
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 leading-tight font-['Unbounded'] group-hover:text-blue-600 transition-colors">
+                    {publication.title}
+                  </h3>
+
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 font-['Plus_Jakarta_Sans']">
+                    <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
+                      <User className="w-4 h-4 text-blue-500" />
+                      <span className="font-medium text-gray-700">{publication.authors.join(', ')}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 bg-gray-50 px-2 py-1 rounded-md">
+                      <Calendar className="w-4 h-4 text-blue-500" />
+                      <span className="font-medium text-gray-700">{publication.year}</span>
+                    </div>
+                    {publication.journal && (
+                      <div className="hidden sm:flex items-center gap-1.5 px-2 py-1">
+                        <span className="italic text-gray-600">{publication.journal}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-                <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded ml-4">
-                  {publication.category}
-                </span>
               </div>
 
-              <div className="flex gap-2">
+              <div className="mb-6">
+                {publication.abstract && (
+                  <p className="text-gray-600 text-sm md:text-base leading-relaxed font-['Plus_Jakarta_Sans'] line-clamp-3 md:line-clamp-2 bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+                    "{publication.abstract}"
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <a
                   href={publication.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  className="flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 !text-white rounded-xl hover:bg-blue-600 transition-all duration-300 text-sm font-bold font-['Unbounded'] shadow-lg shadow-gray-200 hover:shadow-blue-200 transform hover:-translate-y-0.5"
                 >
-                  <ExternalLink className="w-4 h-4" />
+                  <ExternalLink className="w-4 h-4 !text-white" />
                   Read Full Text
                 </a>
-                <button className="flex items-center gap-2 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition">
+                <button className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-100 text-gray-700 rounded-xl hover:border-blue-100 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 text-sm font-bold font-['Unbounded']">
                   <Download className="w-4 h-4" />
-                  PDF
+                  Download PDF
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">
+                <button className="flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-100 text-gray-700 rounded-xl hover:border-blue-100 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 text-sm font-bold font-['Unbounded']">
                   <Eye className="w-4 h-4" />
-                  Cite
+                  Cite Paper
                 </button>
               </div>
             </div>
