@@ -280,6 +280,7 @@ export default function BirstAiChatbot() {
                                             <div dangerouslySetInnerHTML={{
                                                 __html: msg.content
                                                     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                                                    .replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer" class="text-[#1FB6FF] hover:text-blue-600 underline font-medium break-all">$1</a>')
                                                     .replace(/\n/g, '<br />')
                                             }} />
                                         ) : (
