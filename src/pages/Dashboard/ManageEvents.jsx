@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   Plus, Edit, Trash2, Save, X, Calendar, Clock, User,
   Mail, Phone, ExternalLink, MapPin, Globe, Mic, Users,
-  Loader, CalendarDays, Video, RefreshCcw
+  Loader, CalendarDays, Video, RefreshCcw, Image
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
@@ -617,7 +617,7 @@ export default function ManageEvents() {
                   {/* Media & Settings */}
                   <div>
                     <h4 className="text-sm uppercase tracking-wider font-bold text-gray-400 mb-4 flex items-center gap-2 border-t pt-6 border-gray-100">
-                      <ImageIcon size={16} /> Media & Settings
+                      <Image size={16} /> Media & Settings
                     </h4>
                     <div className="grid md:grid-cols-2 gap-6 items-start">
                       <div className="space-y-2">
