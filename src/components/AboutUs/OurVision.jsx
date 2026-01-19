@@ -162,8 +162,8 @@ export default function OurVision() {
           className="max-w-5xl mx-auto text-center"
         >
           <QuoteIcon className="w-16 h-16 text-[#0B2340]/20 mx-auto mb-8" />
-          <h2 className="text-3xl md:text-5xl font-medium leading-normal md:leading-snug text-[#0B2340]">
-            "To become the leading research and statistical training institute in Bangladesh, fostering excellence in research and data-driven decision making."
+          <h2 className="text-2xl md:text-3xl font-medium leading-normal md:leading-relaxed text-[#0B2340] max-w-4xl mx-auto">
+            "To strengthen research competence, statistical expertise, and professional skills among students, researchers, academics, and professionals through high-quality online workshops, seminars, training programs, and research consultancy services that enhance career readiness and foster both national and international research collaboration."
           </h2>
           <div className="mt-12 flex justify-center">
             <div className="h-1 w-24 bg-gradient-to-r from-transparent via-[#1FB6FF] to-transparent" />
