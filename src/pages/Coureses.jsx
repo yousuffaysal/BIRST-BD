@@ -189,7 +189,7 @@ export default function Coureses() {
               </div>
             </div>
             {/* External Brand Ad (Long Section) */}
-            <div className="bg-gray-100 rounded-3xl border-2 border-dashed border-gray-300 p-8 text-center flex flex-col items-center justify-center min-h-[600px] group cursor-pointer hover:border-gray-400 transition-colors hidden lg:flex">
+            <div onClick={() => navigate('/contact')} className="bg-gray-100 rounded-3xl border-2 border-dashed border-gray-300 p-8 text-center flex flex-col items-center justify-center min-h-[600px] group cursor-pointer hover:border-gray-400 transition-colors hidden lg:flex">
               <div className="mb-4 p-4 bg-white rounded-full shadow-sm group-hover:scale-110 transition-transform">
                 <TrendingUp className="w-8 h-8 text-gray-400" />
               </div>
