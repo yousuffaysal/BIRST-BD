@@ -152,65 +152,80 @@
 
 
 import { createBrowserRouter, Navigate } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
-// Layouts
+// Layouts - Keep static for immediate shell rendering
 import Main from "../Layout/Main";
 import Dashboard from "../Layout/Dashboard";
 
-// Pages
-import Home from "../pages/Home/Home";
-import Login from "../Login/Login";
-import SignUp from "../SignUp/SignUp";
-import NotFound from "../pages/NotFoumd";
-import Loading from "../components/Loading/Loading";
+// Lightweight Loader for Route Transitions
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-[60vh] w-full">
+    <div className="w-12 h-12 border-4 border-[#1FB6FF]/20 border-t-[#1FB6FF] rounded-full animate-spin"></div>
+  </div>
+);
+
+// Lazy Load Helper
+const Load = (Component) => (
+  <Suspense fallback={<PageLoader />}>
+    <Component />
+  </Suspense>
+);
+
+// Lazy Imports
+const Home = lazy(() => import("../pages/Home/Home"));
+const Login = lazy(() => import("../Login/Login"));
+const SignUp = lazy(() => import("../SignUp/SignUp"));
+const NotFound = lazy(() => import("../pages/NotFoumd"));
 
 // Common Pages
-import AboutUs from "../pages/AboutUs";
-import ContactUs from "../pages/ContactUs";
-import Services from "../pages/Services";
-import AiTools from "../pages/AiTools";
-import BotWorkspace from "../pages/BotWorkspace";
-import Coureses from "../pages/Coureses";
-import CourseDetails from "../pages/CourseDetails";
-import CourseCheckout from "../pages/CourseCheckout";
-import ResearchAndPublication from "../pages/ResearchAndPublication";
-import Publication from "../pages/Publication";
-import KnowledgeCenter from "../pages/KnowledgeCenter";
-import NewsAndEvents from "../pages/NewsAndEvents";
-import Gallery from "../pages/Gallery";
+const AboutUs = lazy(() => import("../pages/AboutUs"));
+const ContactUs = lazy(() => import("../pages/ContactUs"));
+const Services = lazy(() => import("../pages/Services"));
+const AiTools = lazy(() => import("../pages/AiTools"));
+const BotWorkspace = lazy(() => import("../pages/BotWorkspace"));
+const Coureses = lazy(() => import("../pages/Coureses"));
+const CourseDetails = lazy(() => import("../pages/CourseDetails"));
+const CourseCheckout = lazy(() => import("../pages/CourseCheckout"));
+const ResearchAndPublication = lazy(() => import("../pages/ResearchAndPublication"));
+const Publication = lazy(() => import("../pages/Publication"));
+const KnowledgeCenter = lazy(() => import("../pages/KnowledgeCenter"));
+const NewsAndEvents = lazy(() => import("../pages/NewsAndEvents"));
+const Gallery = lazy(() => import("../pages/Gallery"));
 
 // Dashboard Pages
-import ManageUsers from "../pages/Dashboard/ManageUsers";
-import ShowContactData from "../pages/Dashboard/ShowContactData";
-import Profile from "../pages/Dashboard/Profile";
-import ManageGallery from "../pages/Dashboard/ManageGallery";
-import ManageHero from "../pages/Dashboard/ManageHero";
-import ManageEvents from "../pages/Dashboard/ManageEvents";
-import ManageCourses from "../pages/Dashboard/ManageCourses";
-import ManagePublications from "../pages/Dashboard/ManagePublications";
-import ManageResearchResources from "../pages/Dashboard/ManageResearchResources";
-import ManagePayments from "../pages/Dashboard/ManagePayments";
-import PaymentHistory from "../pages/Dashboard/PaymentHistory";
-import MyBookings from "../pages/Dashboard/MyBookings";
-import ShowCourseEnrollment from "../pages/Dashboard/ShowCourseEnrollment";
-import ShowEventEnrollment from "../pages/Dashboard/ShowEventEnrollment";
-import ShowProfileData from "../pages/Dashboard/ShowProfileData";
-import AddTeamMembers from "../pages/Dashboard/AddTeamMembers";
-import AddBlog from "../pages/Dashboard/AddBlog";
-import Blogs from "../pages/Blogs";
-import BlogDetails from "../pages/BlogDetails";
+const ManageUsers = lazy(() => import("../pages/Dashboard/ManageUsers"));
+const ShowContactData = lazy(() => import("../pages/Dashboard/ShowContactData"));
+const Profile = lazy(() => import("../pages/Dashboard/Profile"));
+const ManageGallery = lazy(() => import("../pages/Dashboard/ManageGallery"));
+const ManageHero = lazy(() => import("../pages/Dashboard/ManageHero"));
+const ManageEvents = lazy(() => import("../pages/Dashboard/ManageEvents"));
+const ManageCourses = lazy(() => import("../pages/Dashboard/ManageCourses"));
+const ManagePublications = lazy(() => import("../pages/Dashboard/ManagePublications"));
+const ManageResearchResources = lazy(() => import("../pages/Dashboard/ManageResearchResources"));
+const ManagePayments = lazy(() => import("../pages/Dashboard/ManagePayments"));
+const PaymentHistory = lazy(() => import("../pages/Dashboard/PaymentHistory"));
+const MyBookings = lazy(() => import("../pages/Dashboard/MyBookings"));
+const ShowCourseEnrollment = lazy(() => import("../pages/Dashboard/ShowCourseEnrollment"));
+const ShowEventEnrollment = lazy(() => import("../pages/Dashboard/ShowEventEnrollment"));
+const ShowProfileData = lazy(() => import("../pages/Dashboard/ShowProfileData"));
+const AddTeamMembers = lazy(() => import("../pages/Dashboard/AddTeamMembers"));
+const AddBlog = lazy(() => import("../pages/Dashboard/AddBlog"));
+const Blogs = lazy(() => import("../pages/Blogs"));
+const BlogDetails = lazy(() => import("../pages/BlogDetails"));
 
-// Custom Routes
-import PrivateRoute from "./PrivateRoute";
+// Custom Components
+const PrivateRoute = lazy(() => import("./PrivateRoute"));
+const BIRSTBDProfile = lazy(() => import("../components/AboutUs/BIRSTBDProfile"));
+const OurMission = lazy(() => import("../components/AboutUs/OurMission"));
+const OurVision = lazy(() => import("../components/AboutUs/OurVision"));
+const OurTeam = lazy(() => import("../components/AboutUs/OurTeam"));
+const PhotoGallery = lazy(() => import("../components/Gallery/PhotoGallery"));
+const VideoGallery = lazy(() => import("../components/Gallery/VideoGallery"));
+
+// Import useAdmin and Loading for AdminRoute (Keep static or lazy? Hook must be static, Component inside can be lazy)
 import useAdmin from "../hooks/useAdmin";
-import BIRSTBDProfile from "../components/AboutUs/BIRSTBDProfile";
-import OurMission from "../components/AboutUs/OurMission";
-import OurVision from "../components/AboutUs/OurVision";
-import OurTeam from "../components/AboutUs/OurTeam";
-import PhotoGallery from "../components/Gallery/PhotoGallery";
-import VideoGallery from "../components/Gallery/VideoGallery";
-
-
+import Loading from "../components/Loading/Loading";
 
 // ✅ AdminRoute Wrapper
 const AdminRoute = ({ children }) => {
@@ -234,32 +249,32 @@ export const router = createBrowserRouter([
       // --------- Main Public Routes ----------
       {
         path: "/",
-        element: <Home />,
+        element: Load(Home),
       },
       {
         path: "/about",
-        element: <AboutUs />,
+        element: Load(AboutUs),
       },
       {
         path: "/about/profile",
-        element: <BIRSTBDProfile />,
+        element: Load(BIRSTBDProfile),
       },
       {
         path: "/about/mission",
-        element: <OurMission />,
+        element: Load(OurMission),
       },
       {
         path: "/about/vision",
-        element: <OurVision />,
+        element: Load(OurVision),
       },
       {
         path: "/about/team",
-        element: <OurTeam />,
+        element: Load(OurTeam),
       },
 
       {
         path: "/gallery",
-        element: <Gallery />,
+        element: Load(Gallery),
       },
       {
         path: "/gallery/photo",
@@ -267,74 +282,74 @@ export const router = createBrowserRouter([
       },
       {
         path: "/gallery/photo/:id",
-        element: <PhotoGallery />,
+        element: Load(PhotoGallery),
       },
       {
         path: "/gallery/video",
-        element: <VideoGallery />,
+        element: Load(VideoGallery),
       },
 
       {
         path: "/contact",
-        element: <ContactUs />,
+        element: Load(ContactUs),
       },
       {
         path: "/service",
-        element: <Services />,
+        element: Load(Services),
       },
       {
         path: "/aitools",
-        element: <AiTools />,
+        element: Load(AiTools),
       },
       {
         path: "/bot/:id",
-        element: <BotWorkspace />,
+        element: Load(BotWorkspace),
       },
       {
         path: "/courses",
-        element: <Coureses />,
+        element: Load(Coureses),
       },
       {
         path: "/courses/checkout/:courseId",
-        element: <CourseCheckout />,
+        element: Load(CourseCheckout),
       },
       {
         path: "/course-details/:id",
-        element: <CourseDetails />,
+        element: Load(CourseDetails),
       },
       {
         path: "/researchAndPublication",
-        element: <ResearchAndPublication />,
+        element: Load(ResearchAndPublication),
       },
       {
         path: "/publication",
-        element: <Publication />,
+        element: Load(Publication),
       },
       {
         path: "/knowledge-center",
-        element: <KnowledgeCenter />,
+        element: Load(KnowledgeCenter),
       },
       {
         path: "/newsAndEvents",
-        element: <NewsAndEvents />,
+        element: Load(NewsAndEvents),
       },
       {
         path: "/blogs",
-        element: <Blogs />,
+        element: Load(Blogs),
       },
       {
         path: "/blog/:id",
-        element: <BlogDetails />,
+        element: Load(BlogDetails),
       },
 
       // --------- Auth Routes ----------
       {
         path: "/login",
-        element: <Login />,
+        element: Load(Login),
       },
       {
         path: "/signup",
-        element: <SignUp />,
+        element: Load(SignUp),
       },
     ],
   },
@@ -343,16 +358,20 @@ export const router = createBrowserRouter([
   {
     path: "dashboard",
     element: (
-      <PrivateRoute>
-        <Dashboard />
-      </PrivateRoute>
+      // PrivateRoute is lazy loaded too? Better keep PrivateRoute static if it contains logic? 
+      // Actually it's fine.
+      <Suspense fallback={<PageLoader />}>
+        <PrivateRoute>
+          <Dashboard />
+        </PrivateRoute>
+      </Suspense>
     ),
     children: [
       {
         path: "manage-users",
         element: (
           <AdminRoute>
-            <ManageUsers />
+            {Load(ManageUsers)}
           </AdminRoute>
         ),
       },
@@ -360,7 +379,7 @@ export const router = createBrowserRouter([
         path: "showContact",
         element: (
           <AdminRoute>
-            <ShowContactData />
+            {Load(ShowContactData)}
           </AdminRoute>
         ),
       },
@@ -368,7 +387,7 @@ export const router = createBrowserRouter([
         path: "show-course-enrollments",
         element: (
           <AdminRoute>
-            <ShowCourseEnrollment />
+            {Load(ShowCourseEnrollment)}
           </AdminRoute>
         ),
       },
@@ -376,7 +395,7 @@ export const router = createBrowserRouter([
         path: "show-event-enrollments",
         element: (
           <AdminRoute>
-            <ShowEventEnrollment />
+            {Load(ShowEventEnrollment)}
           </AdminRoute>
         ),
       },
@@ -384,19 +403,19 @@ export const router = createBrowserRouter([
         path: "show-profile-data",
         element: (
           <AdminRoute>
-            <ShowProfileData />
+            {Load(ShowProfileData)}
           </AdminRoute>
         ),
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: Load(Profile),
       },
       {
         path: "manage-gallery",
         element: (
           <AdminRoute>
-            <ManageGallery />
+            {Load(ManageGallery)}
           </AdminRoute>
         ),
       },
@@ -404,7 +423,7 @@ export const router = createBrowserRouter([
         path: "manage-hero",
         element: (
           <AdminRoute>
-            <ManageHero />
+            {Load(ManageHero)}
           </AdminRoute>
         ),
       },
@@ -412,7 +431,7 @@ export const router = createBrowserRouter([
         path: "manage-events",
         element: (
           <AdminRoute>
-            <ManageEvents />
+            {Load(ManageEvents)}
           </AdminRoute>
         ),
       },
@@ -420,7 +439,7 @@ export const router = createBrowserRouter([
         path: "manage-courses",
         element: (
           <AdminRoute>
-            <ManageCourses />
+            {Load(ManageCourses)}
           </AdminRoute>
         ),
       },
@@ -428,7 +447,7 @@ export const router = createBrowserRouter([
         path: "manage-publications",
         element: (
           <AdminRoute>
-            <ManagePublications />
+            {Load(ManagePublications)}
           </AdminRoute>
         ),
       },
@@ -436,7 +455,7 @@ export const router = createBrowserRouter([
         path: "manage-resources",
         element: (
           <AdminRoute>
-            <ManageResearchResources />
+            {Load(ManageResearchResources)}
           </AdminRoute>
         ),
       },
@@ -444,7 +463,7 @@ export const router = createBrowserRouter([
         path: "manage-payments",
         element: (
           <AdminRoute>
-            <ManagePayments />
+            {Load(ManagePayments)}
           </AdminRoute>
         ),
       },
@@ -452,7 +471,7 @@ export const router = createBrowserRouter([
         path: "manage-team",
         element: (
           <AdminRoute>
-            <AddTeamMembers />
+            {Load(AddTeamMembers)}
           </AdminRoute>
         ),
       },
@@ -460,17 +479,17 @@ export const router = createBrowserRouter([
         path: "manage-blogs",
         element: (
           <AdminRoute>
-            <AddBlog />
+            {Load(AddBlog)}
           </AdminRoute>
         ),
       },
       {
         path: "payment-history",
-        element: <PaymentHistory />,
+        element: Load(PaymentHistory),
       },
       {
         path: "my-bookings",
-        element: <MyBookings />,
+        element: Load(MyBookings),
       },
     ],
   },
@@ -478,6 +497,6 @@ export const router = createBrowserRouter([
   // --------- 404 Not Found ----------
   {
     path: "*",
-    element: <NotFound />,
+    element: Load(NotFound),
   },
 ]);
