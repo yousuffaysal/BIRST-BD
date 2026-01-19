@@ -149,11 +149,11 @@ const SignUp = () => {
     const inputClasses = "w-full pl-9 pr-3 py-2 bg-transparent border-b border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-[#1FB6FF] transition-all duration-300 font-jakarta text-sm";
 
     return (
-        <div className="h-screen w-full bg-[#0B2340] flex flex-col lg:flex-row relative overflow-hidden font-jakarta">
+        <div className="min-h-screen w-full bg-[#0B2340] flex flex-col lg:flex-row relative font-jakarta">
             {/* Left Side - Visual & Branding */}
-            <div className="hidden lg:flex lg:w-1/2 relative bg-[#06182c] items-center justify-center p-8 overflow-hidden h-full">
+            <div className="hidden lg:flex lg:w-1/2 relative bg-[#06182c] items-center justify-center p-8 min-h-screen">
                 {/* Abstract Background Elements */}
-                <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
                     <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#1FB6FF]/10 rounded-full blur-[100px] animate-pulse" />
                     <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#70C5D7]/10 rounded-full blur-[100px]" />
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20" />
@@ -192,7 +192,7 @@ const SignUp = () => {
             </div>
 
             {/* Right Side - Signup Form */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8 relative bg-[#0B2340] h-full overflow-y-auto">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-8 relative bg-[#0B2340] py-12 lg:py-0">
                 <div className="absolute inset-0 overflow-hidden pointer-events-none lg:hidden">
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10" />
                 </div>
