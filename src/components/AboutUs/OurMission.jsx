@@ -66,7 +66,7 @@ export default function OurMission() {
               variants={fadeInUp}
               className="text-xl md:text-2xl text-[#0B2340]/70 leading-relaxed max-w-4xl border-l-4 border-[#1FB6FF] pl-8"
             >
-              At Bangladesh Institute for Research and Statistical Training (BIRST), our mission is to empower students, researchers, and professionals with strong foundations in statistics, research methodology, and data-driven thinking—so they can produce high-quality, ethical, and impactful research.
+              To provide high-quality online education and research consultancy that develops research, statistical, and professional skills, enhances career readiness, and promotes ethical, evidence-based, and collaborative learning across disciplines at both national and international levels.
             </motion.p>
           </div>
         </div>
