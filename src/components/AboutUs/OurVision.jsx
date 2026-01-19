@@ -162,13 +162,45 @@ export default function OurVision() {
           className="max-w-5xl mx-auto text-center"
         >
           <QuoteIcon className="w-16 h-16 text-[#0B2340]/20 mx-auto mb-8" />
-          <h2 className="text-2xl md:text-3xl font-medium leading-normal md:leading-relaxed text-[#0B2340] max-w-4xl mx-auto">
-            "To strengthen research competence, statistical expertise, and professional skills among students, researchers, academics, and professionals through high-quality online workshops, seminars, training programs, and research consultancy services that enhance career readiness and foster both national and international research collaboration."
+          <h2 className="text-3xl md:text-5xl font-medium leading-normal md:leading-snug text-[#0B2340]">
+            "To become the leading research and statistical training institute in Bangladesh, fostering excellence in research and data-driven decision making."
           </h2>
           <div className="mt-12 flex justify-center">
             <div className="h-1 w-24 bg-gradient-to-r from-transparent via-[#1FB6FF] to-transparent" />
           </div>
         </motion.div>
+      </section>
+
+      {/* Aim Section */}
+      <section className="relative z-10 py-24 px-6 md:px-12 bg-white text-[#0B2340] border-y border-[#0B2340]/5">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#1FB6FF]/10 border border-[#1FB6FF]/20 text-[#1FB6FF] font-semibold text-sm tracking-uppercase mb-6">
+              <Target className="w-5 h-5" />
+              <span>OUR AIM</span>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0B2340]">
+              Strengthening <br /> <span className="text-[#1FB6FF]">Research Competence.</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="p-8 bg-[#f8fafc] rounded-3xl border border-[#0B2340]/5"
+          >
+            <p className="text-xl text-[#0B2340]/70 leading-relaxed font-medium">
+              "To strengthen research competence, statistical expertise, and professional skills among students, researchers, academics, and professionals through high-quality online workshops, seminars, training programs, and research consultancy services that enhance career readiness and foster both national and international research collaboration."
+            </p>
+          </motion.div>
+        </div>
       </section>
 
       {/* Pillars Grid */}
