@@ -431,9 +431,45 @@ const SeminarsSection = () => {
                             );
                         })
                     ) : (
-                        <div className="col-span-1 md:col-span-2 text-center py-10 bg-gray-50 rounded-2xl">
-                            <p className="text-gray-500">No upcoming events scheduled at the moment.</p>
-                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            className="col-span-1 md:col-span-2 relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0B2340] to-[#1a3a5f] p-12 text-center shadow-2xl border border-white/10"
+                        >
+                            {/* Animated Background Elements */}
+                            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#1FB6FF]/20 rounded-full blur-[80px] animate-pulse"></div>
+                                <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+                            </div>
+
+                            <div className="relative z-10 flex flex-col items-center justify-center space-y-6">
+                                <div className="w-20 h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(31,182,255,0.2)]">
+                                    <Clock className="w-10 h-10 text-[#FFD700] animate-[spin_10s_linear_infinite]" />
+                                </div>
+
+                                <div className="space-y-3 max-w-lg mx-auto">
+                                    <h3 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                                        Stay Tuned! <br />
+                                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-[#00d2ff]">Something Amazing Is Coming.</span>
+                                    </h3>
+                                    <p className="text-blue-200/80 text-lg leading-relaxed font-light">
+                                        We are curating high-impact seminars and exclusive workshops just for you. Get ready to elevate your research skills.
+                                    </p>
+                                </div>
+
+                                <motion.div
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="pt-4"
+                                >
+                                    <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#0B2340] font-bold rounded-full hover:bg-gray-100 transition-colors shadow-lg shadow-white/10">
+                                        Notify Me
+                                        <ArrowRight className="w-4 h-4" />
+                                    </Link>
+                                </motion.div>
+                            </div>
+                        </motion.div>
                     )}
                 </div>
             </div>

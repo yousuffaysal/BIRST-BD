@@ -287,7 +287,46 @@ export default function Coureses() {
               </AnimatePresence>
             </motion.div>
 
-            {filteredCourses.length === 0 && (
+            {courses.length === 0 && !loading ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="col-span-1 md:col-span-2 relative overflow-hidden rounded-[32px] bg-gradient-to-br from-[#0B2340] to-[#1a3a5f] p-12 text-center shadow-2xl border border-white/10"
+              >
+                {/* Animated Background Elements */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                  <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#1FB6FF]/20 rounded-full blur-[80px] animate-pulse"></div>
+                  <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/20 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+                </div>
+
+                <div className="relative z-10 flex flex-col items-center justify-center space-y-6">
+                  <div className="w-20 h-20 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(31,182,255,0.2)]">
+                    <BookOpen className="w-10 h-10 text-[#FFD700] animate-bounce" style={{ animationDuration: '3s' }} />
+                  </div>
+
+                  <div className="space-y-3 max-w-lg mx-auto">
+                    <h3 className="text-3xl md:text-5xl font-black text-white tracking-tight leading-tight">
+                      New Curriculum <br />
+                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-[#00d2ff]">Coming Soon.</span>
+                    </h3>
+                    <p className="text-blue-200/80 text-lg leading-relaxed font-light">
+                      We are crafting comprehensive learning paths designed to master research and data science. Stay tuned for expert-led courses.
+                    </p>
+                  </div>
+
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="pt-4"
+                  >
+                    <Link to="/contact" className="inline-flex items-center gap-2 px-8 py-3 bg-white text-[#0B2340] font-bold rounded-full hover:bg-gray-100 transition-colors shadow-lg shadow-white/10">
+                      Get Notified
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </motion.div>
+                </div>
+              </motion.div>
+            ) : filteredCourses.length === 0 && (
               <div className="text-center py-20 bg-white rounded-[32px] border border-gray-100 border-dashed">
                 <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Search className="w-8 h-8 text-gray-400" />
