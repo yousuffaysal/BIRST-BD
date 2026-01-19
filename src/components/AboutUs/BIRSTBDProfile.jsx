@@ -3,6 +3,7 @@ import { ArrowLeft, Building2, MapPin, Calendar, Users, Target, Award, TrendingU
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import imgAnamul from '../../assets/images/10001.jpg';
+import imgHossain from '../../assets/images/10002.jpg';
 
 export default function BIRSTBDProfile() {
   const highlights = [
@@ -311,7 +312,7 @@ export default function BIRSTBDProfile() {
                 role: 'Post-doctoral Fellow, Division of Epidemiology and Biostatistics, HKU',
                 edu: 'PhD in Biomedical Sciences (CityU)',
                 stats: 'HKU Fellow',
-                image: 'https://ik.imagekit.io/2lax2ytm2/10001.jpg?updatedAt=1768594485417',
+                image: imgHossain,
                 social: {
                   twitter: '#',
                   linkedin: 'https://www.linkedin.com/in/mphossain/?originalSubdomain=hk&skipRedirect=true&originalSubdomain=hk',
