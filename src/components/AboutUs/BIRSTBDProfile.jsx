@@ -88,7 +88,7 @@ export default function BIRSTBDProfile() {
               </h1>
 
               <p className="text-lg md:text-xl text-slate-300 leading-relaxed mb-8 border-l-4 border-[#1FB6FF] pl-6">
-                Bangladesh Institute for Research and Statistical Training — Empowering excellence through data-driven insights and rigorous academic standards.
+                Bangladesh Institute for Research and Statistical Training — Empowering Global Research, Statistical, and Professional Excellence through Innovative Training and Consultancy
               </p>
             </motion.div>
 
