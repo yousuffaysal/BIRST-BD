@@ -391,7 +391,8 @@ export default function BIRSTBDProfile() {
                 social: {
                   twitter: '#',
                   linkedin: 'https://www.linkedin.com/in/mphossain/?originalSubdomain=hk&skipRedirect=true&originalSubdomain=hk',
-                  scholar: 'https://scholar.google.com/citations?user=RUdvILMAAAAJ&hl=en'
+                  scholar: 'https://scholar.google.com/citations?user=RUdvILMAAAAJ&hl=en',
+                  orcid: 'https://orcid.org/0000-0001-5247-4820'
                 }
               },
               {
@@ -450,6 +451,11 @@ export default function BIRSTBDProfile() {
                   {member.social.faculty && (
                     <a href={member.social.faculty} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-blue-50 hover:text-indigo-600 transition-colors" title="Faculty Profile">
                       <Building2 className="w-4 h-4" />
+                    </a>
+                  )}
+                  {member.social.orcid && (
+                    <a href={member.social.orcid} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-green-50 hover:text-green-600 transition-colors" title="ORCID">
+                      <GraduationCap className="w-4 h-4" />
                     </a>
                   )}
                 </div>
