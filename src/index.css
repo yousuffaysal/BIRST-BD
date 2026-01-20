@@ -1,12 +1,10 @@
-/* @import "tailwindcss"; */
-
-
-
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @import "./styles/responsive.css";
 
-/* === SRCBD BRANDING COLORS === */
+/* === BIRSTBD BRANDING COLORS === */
 @theme {
   /* Existing */
   --color-deep-teal: var(--color-deep-teal);
@@ -26,7 +24,7 @@
   --color-button-hero-shadow: var(--color-button-hero-shadow);
   --font-family-space-grotesk: var(--font-family-space-grotesk);
 
-  /* SRCBD */
+  /* BIRSTBD */
   --color-srcbd-red: var(--color-srcbd-red);
   --color-srcbd-red-hover: var(--color-srcbd-red-hover);
   --color-srcbd-green: var(--color-srcbd-green);
@@ -120,7 +118,7 @@
   --font-family-helvetica: 'Helvetica', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-family-helvetica-bold: 'Helvetica-Bold', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
-  /* === SRCBD OFFICIAL COLORS === */
+  /* === BIRSTBD OFFICIAL COLORS === */
   --color-srcbd-red: #e63946;
   --color-srcbd-red-hover: #d62828;
   --color-srcbd-green: #a8dadc;
@@ -322,7 +320,7 @@ button {
 
 /* === BUTTONS === */
 
-/* Primary SRCBD Button (Red) */
+/* Primary BIRSTBD Button (Red) */
 .btn-srcbd {
   @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-srcbd-red rounded-md transition-all duration-200 hover:bg-srcbd-red-hover hover:shadow-md focus:outline-none focus:ring-2 focus:ring-srcbd-red focus:ring-offset-2;
 }

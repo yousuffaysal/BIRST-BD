@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import imgAnamul from '../../assets/images/10001.jpg';
 import imgHossain from '../../assets/images/10002.jpg';
+import FounderSection from './FounderSection';
 
 export default function BIRSTBDProfile() {
   const highlights = [
@@ -33,7 +34,7 @@ export default function BIRSTBDProfile() {
     {
       year: '2015',
       title: 'Foundation',
-      description: 'SRCBD established to bridge the gap between theory and practice.',
+      description: 'BIRSTBD established to bridge the gap between theory and practice.',
     },
     {
       year: '2018',
@@ -122,6 +123,81 @@ export default function BIRSTBDProfile() {
         </div>
       </section>
 
+      {/* --- FOUNDER SECTION HEADER --- */}
+      <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        {/* Atmospheric Background Layers */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#1FB6FF] rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-400 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+
+        {/* Geometric Pattern Overlay */}
+        <div className="absolute inset-0 opacity-5" style={{
+          backgroundImage: `radial-gradient(circle at 2px 2px, white 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+
+        <div className="container mx-auto px-4 max-w-6xl relative z-10 py-16 md:py-20">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="text-center"
+          >
+            {/* Decorative Line */}
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: '80px' }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="h-[2px] bg-gradient-to-r from-transparent via-[#1FB6FF] to-transparent mx-auto mb-6"
+            />
+
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight"
+              style={{
+                fontFamily: "'Playfair Display', serif",
+                letterSpacing: '-0.02em',
+                textShadow: '0 0 40px rgba(31, 182, 255, 0.3)'
+              }}
+            >
+              Meet Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#1FB6FF] to-cyan-300">Founder</span>
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="text-slate-300 text-base md:text-lg max-w-2xl mx-auto font-light italic"
+              style={{ fontFamily: "'Crimson Text', serif" }}
+            >
+              Driven by passion for statistical excellence and research innovation
+            </motion.p>
+
+            {/* Decorative Bottom Element */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="mt-8 h-px bg-gradient-to-r from-transparent via-slate-600 to-transparent"
+            />
+          </motion.div>
+        </div>
+
+        {/* Bottom Fade to Slate */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-slate-50 to-transparent" />
+      </div>
+
+      {/* --- FOUNDER SECTION (Second Section) --- */}
+      <FounderSection />
+
       {/* --- MAIN CONTENT --- */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-20">
 
@@ -132,7 +208,7 @@ export default function BIRSTBDProfile() {
             <h2 className="text-3xl font-black text-gray-900 mb-6">Pioneering Research Education</h2>
             <div className="prose prose-lg text-gray-600">
               <p className="mb-4">
-                Bangladesh Institute for Research and Statistical Training (BIRST) is an innovative initiative by Statistical Research Consultants Bangladesh (SRCBD). We exist to democratize access to high-quality statistical and research training.
+                Bangladesh Institute for Research and Statistical Training (BIRST) is an innovative initiative by BIRSTBD. We exist to democratize access to high-quality statistical and research training.
               </p>
               <p>
                 Our programs represent the culmination of years of experience in statistical consulting. We combine academic rigor with practical application.
@@ -223,7 +299,6 @@ export default function BIRSTBDProfile() {
             })}
           </div>
         </section>
-
         {/* Leadership Section */}
         <section className="mb-16 md:mb-24">
           <div className="max-w-4xl mx-auto text-center mb-16">

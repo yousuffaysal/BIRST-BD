@@ -32,7 +32,7 @@ export default function AboutUs() {
             </h1>
 
             <p className="text-base md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light">
-              Statistical Research Consultants Bangladesh (SRCBD) is bridging the gap between theoretical knowledge and practical application.
+              Bangladesh Institute for Research and Statistical Training (BIRSTBD) is bridging the gap between theoretical knowledge and practical application.
             </p>
           </motion.div>
         </div>
@@ -140,7 +140,6 @@ export default function AboutUs() {
 
         </div>
       </section>
-
       {/* --- CINEMATIC VIDEO SECTION --- */}
       <section className="py-12 md:py-20 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-blue-900/10" />
@@ -184,7 +183,7 @@ export default function AboutUs() {
                   <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?w=100" alt="" className="w-full h-full object-cover" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-lg">Inside SRCBD</h3>
+                  <h3 className="text-white font-bold text-lg">Inside BIRSTBD</h3>
                   <p className="text-gray-400 text-sm">A glimpse into our workshop culture</p>
                 </div>
               </div>
