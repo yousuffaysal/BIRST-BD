@@ -46,7 +46,7 @@ const HeroSection = () => {
                         <ArrowRight className="w-5 h-5" />
                     </Link>
                     <Link
-                        to="/about"
+                        to="/about/profile"
                         className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white transition-all border rounded-full border-white/20 hover:bg-white/10 hover:border-white/40 font-semibold"
                     >
                         Learn More

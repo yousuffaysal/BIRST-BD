@@ -68,7 +68,7 @@ export default function OurTeam() {
       {/* Navigation */}
       <nav className="relative z-10 pt-8 px-6 md:px-12 flex justify-between items-center">
         <Link
-          to="/about"
+          to="/about/profile"
           className="group flex items-center gap-2 text-[#8892b0] hover:text-[#1FB6FF] transition-colors duration-300"
         >
           <div className="p-2 rounded-full border border-white/10 group-hover:border-[#1FB6FF]/50 group-hover:bg-[#1FB6FF]/10 transition-all">

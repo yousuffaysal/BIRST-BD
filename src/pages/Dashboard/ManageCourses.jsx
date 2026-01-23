@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 
 export default function ManageCourses() {
   const axiosSecure = useAxiosSecure();
@@ -19,7 +20,7 @@ export default function ManageCourses() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    category: 'Statistics',
+    category: 'Research & Methodology',
     duration: '',
     level: 'Beginner',
     price: 0,
@@ -69,7 +70,7 @@ export default function ManageCourses() {
       setFormData({
         title: course.title || '',
         description: course.description || '',
-        category: course.category || 'Statistics',
+        category: course.category || 'Research & Methodology',
         duration: course.duration || '',
         level: course.level || 'Beginner',
         price: course.price || 0,
@@ -87,7 +88,7 @@ export default function ManageCourses() {
       setFormData({
         title: '',
         description: '',
-        category: 'Statistics',
+        category: 'Research & Methodology',
         duration: '',
         level: 'Beginner',
         price: 0,
@@ -377,11 +378,16 @@ export default function ManageCourses() {
                             required
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium appearance-none"
                           >
-                            <option value="Statistics">Statistics</option>
-                            <option value="Data Science">Data Science</option>
-                            <option value="Research Methods">Research Methods</option>
-                            <option value="Software Training">Software Training</option>
-                            <option value="Machine Learning">Machine Learning</option>
+                            <option value="Research & Methodology">Research & Methodology</option>
+                            <option value="Statistics & Data Analysis">Statistics & Data Analysis</option>
+                            <option value="Public Health & Social Sciences">Public Health & Social Sciences</option>
+                            <option value="Data Science & AI Applications">Data Science & AI Applications</option>
+                            <option value="Professional & Career Skills">Professional & Career Skills</option>
+                            <option value="Interdisciplinary Problem Solving">Interdisciplinary Problem Solving</option>
+                            <option value="Digital Tools & Technology">Digital Tools & Technology</option>
+                            <option value="Ethics, Compliance & Governance">Ethics, Compliance & Governance</option>
+                            <option value="Capacity Building & Collaborative Projects">Capacity Building & Collaborative Projects</option>
+                            <option value="Policy, Strategy & Management Training">Policy, Strategy & Management Training</option>
                           </select>
                         </div>
                       </div>
@@ -502,16 +508,13 @@ export default function ManageCourses() {
                             className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
                           />
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-bold text-gray-700">Instructor Image URL</label>
-                          <input
-                            type="url"
-                            name="instructorImage"
-                            value={formData.instructorImage}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                          />
-                        </div>
+                        <ImageUpload
+                          value={formData.instructorImage}
+                          onChange={(url) => setFormData(prev => ({ ...prev, instructorImage: url }))}
+                          folder="instructors"
+                          label="Instructor Image"
+                          required={false}
+                        />
                       </div>
                       <div className="space-y-2">
                         <label className="text-sm font-bold text-gray-700">Instructor Bio</label>
@@ -532,21 +535,13 @@ export default function ManageCourses() {
                         <Image size={16} /> Course Content & Media
                       </h4>
                       <div className="space-y-6">
-                        <div className="space-y-2">
-                          <label className="text-sm font-bold text-gray-700">Course Thumbnail URL</label>
-                          <input
-                            type="url"
-                            name="thumbnail"
-                            value={formData.thumbnail}
-                            onChange={handleInputChange}
-                            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                          />
-                          {formData.thumbnail && (
-                            <div className="mt-2 h-32 w-48 rounded-xl overflow-hidden border border-gray-200">
-                              <img src={formData.thumbnail} className="w-full h-full object-cover" alt="Preview" />
-                            </div>
-                          )}
-                        </div>
+                        <ImageUpload
+                          value={formData.thumbnail}
+                          onChange={(url) => setFormData(prev => ({ ...prev, thumbnail: url }))}
+                          folder="courses"
+                          label="Course Thumbnail"
+                          required={false}
+                        />
 
                         <div className="space-y-2">
                           <label className="text-sm font-bold text-gray-700">What You'll Learn (One point per line)</label>

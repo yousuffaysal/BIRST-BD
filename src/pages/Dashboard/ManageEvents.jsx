@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 
 export default function ManageEvents() {
   const axiosSecure = useAxiosSecure();
@@ -497,14 +498,13 @@ export default function ManageEvents() {
                       </div>
                     </div>
 
-                    <div className="space-y-2 mb-6">
-                      <label className="text-sm font-bold text-gray-700">Speaker Image URL</label>
-                      <input
-                        type="url"
-                        name="speakerImage"
+                    <div className="mb-6">
+                      <ImageUpload
                         value={formData.speakerImage}
-                        onChange={handleInputChange}
-                        className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
+                        onChange={(url) => setFormData(prev => ({ ...prev, speakerImage: url }))}
+                        folder="speakers"
+                        label="Speaker Image"
+                        required={false}
                       />
                     </div>
 
@@ -620,21 +620,13 @@ export default function ManageEvents() {
                       <Image size={16} /> Media & Settings
                     </h4>
                     <div className="grid md:grid-cols-2 gap-6 items-start">
-                      <div className="space-y-2">
-                        <label className="text-sm font-bold text-gray-700">Thumbnail URL</label>
-                        <input
-                          type="url"
-                          name="thumbnail"
-                          value={formData.thumbnail}
-                          onChange={handleInputChange}
-                          className="w-full px-4 py-3 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-[#02bfff]/20 focus:border-[#02bfff] outline-none transition-all font-medium"
-                        />
-                        {formData.thumbnail && (
-                          <div className="mt-2 h-32 w-full rounded-xl overflow-hidden border border-gray-200">
-                            <img src={formData.thumbnail} className="w-full h-full object-cover" alt="Preview" />
-                          </div>
-                        )}
-                      </div>
+                      <ImageUpload
+                        value={formData.thumbnail}
+                        onChange={(url) => setFormData(prev => ({ ...prev, thumbnail: url }))}
+                        folder="events"
+                        label="Event Thumbnail"
+                        required={false}
+                      />
 
                       <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl border border-green-100">
                         <input

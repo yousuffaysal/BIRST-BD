@@ -90,7 +90,7 @@ export default function OurVision() {
       {/* Navigation */}
       <nav className="relative z-10 pt-8 px-6 md:px-12 flex justify-between items-center">
         <Link
-          to="/about"
+          to="/about/profile"
           className="group flex items-center gap-2 text-[#8892b0] hover:text-[#1FB6FF] transition-colors duration-300"
         >
           <div className="p-2 rounded-full border border-white/10 group-hover:border-[#1FB6FF]/50 group-hover:bg-[#1FB6FF]/10 transition-all">
@@ -163,7 +163,7 @@ export default function OurVision() {
         >
           <QuoteIcon className="w-16 h-16 text-[#0B2340]/20 mx-auto mb-8" />
           <h2 className="text-3xl md:text-5xl font-medium leading-normal md:leading-snug text-[#0B2340]">
-            "To become the leading research and statistical training institute in Bangladesh, fostering excellence in research and data-driven decision making."
+            "To be a globally recognized online institute that empowers learners and professionals from diverse disciplines through advanced research training, statistical expertise, career-focused skill development, technology-driven learning, and collaborative opportunities, enabling them to contribute to ethical, evidence-based, and impactful research worldwide."
           </h2>
           <div className="mt-12 flex justify-center">
             <div className="h-1 w-24 bg-gradient-to-r from-transparent via-[#1FB6FF] to-transparent" />

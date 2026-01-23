@@ -253,7 +253,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/about",
-        element: Load(AboutUs),
+        element: <Navigate to="/about/profile" replace />,
       },
       {
         path: "/about/profile",

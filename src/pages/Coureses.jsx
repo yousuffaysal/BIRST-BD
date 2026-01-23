@@ -17,8 +17,21 @@ export default function Coureses() {
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
-  const categories = ['all', 'Statistics', 'Data Science', 'Research Methods', 'Software Training', 'Machine Learning'];
+  const categories = [
+    'all',
+    'Research & Methodology',
+    'Statistics & Data Analysis',
+    'Public Health & Social Sciences',
+    'Data Science & AI Applications',
+    'Professional & Career Skills',
+    'Interdisciplinary Problem Solving',
+    'Digital Tools & Technology',
+    'Ethics, Compliance & Governance',
+    'Capacity Building & Collaborative Projects',
+    'Policy, Strategy & Management Training'
+  ];
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -125,7 +138,7 @@ export default function Coureses() {
                 <h3>Categories</h3>
               </div>
               <div className="flex flex-wrap lg:flex-col gap-2">
-                {categories.map(category => (
+                {(showAllCategories ? categories : categories.slice(0, 5)).map(category => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -138,6 +151,28 @@ export default function Coureses() {
                     {selectedCategory === category && <ArrowRight className="w-4 h-4" />}
                   </button>
                 ))}
+                {categories.length > 5 && (
+                  <button
+                    onClick={() => setShowAllCategories(!showAllCategories)}
+                    className="px-4 py-3 rounded-xl text-sm font-bold text-gray-500 hover:text-[#1FB6FF] hover:bg-blue-50 transition-all duration-200 flex items-center justify-center gap-2 border border-dashed border-gray-200 hover:border-[#1FB6FF]"
+                  >
+                    {showAllCategories ? (
+                      <>
+                        <span>Show Less</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                        </svg>
+                      </>
+                    ) : (
+                      <>
+                        <span>More Categories</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </>
+                    )}
+                  </button>
+                )}
               </div>
             </div>
 

@@ -65,7 +65,7 @@ export default function BIRSTBDProfile() {
 
         <div className="max-w-7xl mx-auto relative z-10">
           <Link
-            to="/about"
+            to="/about/profile"
             className="inline-flex items-center gap-2 text-slate-400 hover:text-[#1FB6FF] transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />

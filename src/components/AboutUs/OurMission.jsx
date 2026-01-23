@@ -39,7 +39,7 @@ export default function OurMission() {
       >
         <div className="max-w-7xl mx-auto">
           <Link
-            to="/about"
+            to="/about/profile"
             className="inline-flex items-center gap-2 text-[#0B2340]/60 hover:text-[#1FB6FF] transition-colors mb-12 group text-sm font-bold tracking-widest uppercase"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
