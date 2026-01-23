@@ -6,6 +6,8 @@ import { AuthContext } from '../Providers/AuthProvider';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../components/SEO/SEO';
+import { pageSEO } from '../config/seoConfig';
 
 // --- Demo Data Removed ---
 
@@ -97,7 +99,13 @@ export default function Coureses() {
 
   return (
     <div className="min-h-screen bg-[#fffff0] font-sans selection:bg-yellow-200 pt-20 lg:pt-20">
-
+      <SEO
+        title={pageSEO.courses.title}
+        description={pageSEO.courses.description}
+        keywords={pageSEO.courses.keywords}
+        image={pageSEO.courses.image}
+        path="/courses"
+      />
       {/* Header Section */}
       <div className="bg-white border-b border-gray-100 sticky top-20 lg:top-20 z-30 shadow-sm transition-all">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6">

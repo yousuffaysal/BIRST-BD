@@ -12,6 +12,8 @@ import CertificateSection from "../../components/Home/CertificateSection";
 import ResourcesSection from "../../components/Home/ResourcesSection";
 import StatsSection from "../../components/Home/StatsSection";
 import FaqSection from "../../components/Home/FaqSection";
+import SEO from "../../components/SEO/SEO";
+import { pageSEO, organizationSchema, websiteSchema } from "../../config/seoConfig";
 
 const Home = () => {
 
@@ -22,10 +24,18 @@ const Home = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-[var(--color-birst-light)]">
+      <SEO
+        title={pageSEO.home.title}
+        description={pageSEO.home.description}
+        keywords={pageSEO.home.keywords}
+        image={pageSEO.home.image}
+        path="/"
+        structuredData={[organizationSchema, websiteSchema]}
+      />
       <HeroBento />
       <AboutSection />
       <WhyChooseSection />
-       <SeminarsSection /> 
+      <SeminarsSection />
       <AiToolsSection />
       <DashboardPreviewSection />
       <CoursesSection />

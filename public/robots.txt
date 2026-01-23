@@ -1,0 +1,20 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow admin and dashboard routes
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+
+# Allow specific public pages
+Allow: /courses
+Allow: /events
+Allow: /about
+Allow: /contact
+Allow: /blogs
+Allow: /gallery
+
+# Sitemap
+Sitemap: https://birstbd.com/sitemap.xml

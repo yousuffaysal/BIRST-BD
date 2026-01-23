@@ -26,6 +26,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import AuthProvider from './Providers/AuthProvider';
 import LoadingScreen from './components/Loading/LoadingScreen';
 import SmoothCursor from './components/ui/SmoothCursor';
+import { HelmetProvider } from 'react-helmet-async';
 
 const queryClient = new QueryClient();
 
@@ -36,15 +37,17 @@ import BirstAiChatbot from './components/Chatbot/BirstAiChatbot';
 const App = () => {
   useKeepAlive(); // Prevent backend sleep
   return (
-    <AuthProvider>
-      <div>
-        <QueryClientProvider client={queryClient}>
-          <RouterProvider router={router} />
-          <ToastContainer position="top-center" autoClose={3000} />
-          <BirstAiChatbot />
-        </QueryClientProvider>
-      </div>
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <div>
+          <QueryClientProvider client={queryClient}>
+            <RouterProvider router={router} />
+            <ToastContainer position="top-center" autoClose={3000} />
+            <BirstAiChatbot />
+          </QueryClientProvider>
+        </div>
+      </AuthProvider>
+    </HelmetProvider>
   );
 };
 
