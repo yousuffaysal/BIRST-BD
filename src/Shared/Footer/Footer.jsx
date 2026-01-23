@@ -187,20 +187,56 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500">
-          <p>
-            &copy; {new Date().getFullYear()} BIRSTBD. All rights reserved.
-          </p>
-          <div className="flex gap-6 items-center">
-            <a href="#" className="hover:text-white transition">Privacy Policy</a>
-            <a href="#" className="hover:text-white transition">Terms of Service</a>
-            <button
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="flex items-center gap-1 hover:text-[var(--color-birst-primary)] transition-colors ml-4 pl-4 border-l border-white/10"
-            >
-              Back to Top
-              <ArrowUp className="w-4 h-4" />
-            </button>
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* Copyright & Links */}
+            <div className="flex flex-col md:flex-row items-center gap-4 md:gap-6 text-sm text-gray-500">
+              <p>
+                &copy; {new Date().getFullYear()} BIRSTBD. All rights reserved.
+              </p>
+              <div className="flex gap-6 items-center">
+                <a href="#" className="hover:text-white transition">Privacy Policy</a>
+                <a href="#" className="hover:text-white transition">Terms of Service</a>
+              </div>
+            </div>
+
+            {/* Built By Credit & Back to Top */}
+            <div className="flex items-center gap-6">
+              {/* Built By Credit */}
+              <a
+                href="https://foxmenstudio.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2.5 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[var(--color-birst-primary)]/30 rounded-full transition-all duration-300 backdrop-blur-sm"
+              >
+                <span className="text-xs text-gray-400 group-hover:text-gray-300 transition-colors font-medium">
+                  Built by
+                </span>
+                <img
+                  src="https://ik.imagekit.io/2lax2ytm2/Frame%202.svg?updatedAt=1767898162197"
+                  alt="Foxmen Studio"
+                  className="h-5 w-auto opacity-90 group-hover:opacity-100 transition-all duration-300"
+                  style={{
+                    filter: 'drop-shadow(0 0 8px rgba(140, 95, 253, 0.5))',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.filter = 'drop-shadow(0 0 12px rgba(140, 95, 253, 0.8)) drop-shadow(0 0 20px rgba(140, 95, 253, 0.5))';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.filter = 'drop-shadow(0 0 8px rgba(140, 95, 253, 0.5))';
+                  }}
+                />
+              </a>
+
+              {/* Back to Top */}
+              <button
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="flex items-center gap-1 hover:text-[var(--color-birst-primary)] transition-colors text-sm text-gray-500 pl-6 border-l border-white/10"
+              >
+                Back to Top
+                <ArrowUp className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
