@@ -81,7 +81,7 @@ const HeroBento = () => {
                                     Journey Today
                                 </h1>
                                 <p className="font-['Helvetica'] text-gray-300 text-sm sm:text-lg mb-10 max-w-lg leading-relaxed">
-                                    Join a vibrant community of learners and transform your aspirations into achievements with professional statistical training.
+                                    Join a vibrant community of learners and transform your aspirations into achievements with professional statistical training and Workshop.
                                 </p>
 
                                 <div className="flex flex-wrap gap-4">
