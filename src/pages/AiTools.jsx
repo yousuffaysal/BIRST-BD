@@ -127,7 +127,7 @@ const AiTools = () => {
                             className="hidden md:flex gap-12"
                         >
                             <div>
-                                <div className="text-3xl font-['Helvetica-Bold'] text-[#0B2340] mb-1">6+</div>
+                                <div className="text-3xl font-['Helvetica-Bold'] text-[#0B2340] mb-1">9+</div>
                                 <div className="text-xs text-slate-500 uppercase tracking-wider font-['Helvetica-Bold']">Active Agents</div>
                             </div>
                             <div>
