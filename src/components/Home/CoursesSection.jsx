@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BookOpen, Target, ArrowRight, Sparkles, Users, X } from "lucide-react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import ResearchAvatar from "../../assets/images/research_avatar.png";
 
@@ -140,18 +141,17 @@ const CoursesSection = () => {
                             Explore our curated learning paths designed to take you from beginner to expert researcher.
                         </motion.p>
                     </div>
-                    <motion.button
+                    <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6, delay: 0.3, ease: "easeOut" }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="hidden md:flex items-center gap-2 px-6 py-3 bg-[var(--color-birst-dark)] text-white rounded-full font-bold hover:bg-black transition-colors"
                     >
-                        View All Paths
-                        <ArrowRight className="w-5 h-5" />
-                    </motion.button>
+                        <Link to="/courses" className="hidden md:flex items-center gap-2 px-6 py-3 bg-[var(--color-birst-dark)] !text-white rounded-full font-bold hover:bg-black transition-colors">
+                            View All Paths
+                            <ArrowRight className="w-5 h-5" />
+                        </Link>
+                    </motion.div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-full mx-auto">
@@ -256,9 +256,9 @@ const CoursesSection = () => {
                 </div>
 
                 <div className="mt-12 text-center md:hidden">
-                    <button className="px-6 py-3 bg-[var(--color-birst-dark)] text-white rounded-full font-bold">
+                    <Link to="/courses" className="inline-block px-6 py-3 bg-[var(--color-birst-dark)] !text-white rounded-full font-bold">
                         View All Paths
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>

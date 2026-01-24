@@ -1,5 +1,7 @@
 import React from "react";
 import { GraduationCap, Cpu, Briefcase, Trophy, ChevronRight, Laptop, Pencil, Calculator, FileText, BookOpen, Lightbulb, Microscope, ScrollText, PenTool } from "lucide-react";
+import { Link } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import { motion } from "framer-motion";
 
 // Feature Data
@@ -41,6 +43,7 @@ const WatermarkIcon = ({ Icon, className, style, delay = 0 }) => (
 );
 
 const WhyChooseSection = () => {
+    const { user } = useAuth();
     return (
         <section className="min-h-screen flex items-center py-16 lg:py-24 bg-[#FFFFF0] relative overflow-hidden">
             {/* Background Watermarks - Animated Entry */}
@@ -83,12 +86,12 @@ const WhyChooseSection = () => {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 w-full sm:w-auto mt-2">
-                            <button className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[var(--color-birst-primary)] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:bg-[var(--color-birst-accent)] hover:shadow-xl transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
+                            <Link to={user ? "/dashboard" : "/signup"} className="flex items-center justify-center gap-2 px-8 py-3.5 bg-[var(--color-birst-primary)] text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 hover:bg-[var(--color-birst-accent)] hover:shadow-xl transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
                                 Join Now <ChevronRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
-                            </button>
-                            <button className="flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border-2 border-[var(--color-birst-dark)] text-[var(--color-birst-dark)] font-bold rounded-xl hover:bg-[var(--color-birst-dark)] hover:text-white transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
+                            </Link>
+                            <Link to="/courses" className="flex items-center justify-center gap-2 px-8 py-3.5 bg-transparent border-2 border-[var(--color-birst-dark)] text-[var(--color-birst-dark)] font-bold rounded-xl hover:bg-[var(--color-birst-dark)] hover:text-white transition-all w-full sm:w-auto group text-sm uppercase tracking-wide">
                                 View Courses <ChevronRight size={18} className="transform group-hover:translate-x-1 transition-transform" />
-                            </button>
+                            </Link>
                         </div>
                     </motion.div>
 

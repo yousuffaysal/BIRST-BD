@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Mail,
   Phone,
@@ -7,43 +6,13 @@ import {
   Linkedin,
   Youtube,
   Twitter,
-  Send,
   ChevronRight,
   ArrowUp
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import birstLogo from "../../assets/BIRST_LOGO.svg";
-import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const Footer = () => {
-  const axiosPublic = useAxiosPublic();
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSubscribed(false);
-
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      setError("Please enter a valid email");
-      return;
-    }
-
-    try {
-      await axiosPublic.post("/contacts", {
-        name: "Newsletter Subscriber",
-        email: email,
-        message: "Newsletter subscription request from footer"
-      });
-      setSubscribed(true);
-      setEmail("");
-      setTimeout(() => setSubscribed(false), 5000);
-    } catch (err) {
-      setError("Subscription failed. Please try again.");
-    }
-  };
 
   const quickLinks = [
     { label: "Home", to: "/" },
@@ -65,7 +34,7 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: Facebook, href: "https://facebook.com/birstbd", label: "Facebook" },
-    { icon: Linkedin, href: "https://linkedin.com/company/birstbd", label: "LinkedIn" },
+    { icon: Linkedin, href: "https://www.linkedin.com/in/birst-bd-36054139b/", label: "LinkedIn" },
     { icon: Youtube, href: "https://youtube.com/@birstbd", label: "YouTube" },
     { icon: Twitter, href: "https://twitter.com/birstbd", label: "Twitter" },
   ];
@@ -162,27 +131,7 @@ const Footer = () => {
               </div>
             </div>
 
-            {/* Newsletter */}
-            <div>
-              <h5 className="text-sm font-semibold text-white mb-3">Newsletter</h5>
-              <form onSubmit={handleSubscribe} className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address"
-                  className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-[var(--color-birst-primary)] transition text-sm"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1 top-1 p-2 bg-[var(--color-birst-primary)] hover:bg-[var(--color-birst-accent)] rounded-md text-white transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
-              </form>
-              {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
-              {subscribed && <p className="text-green-400 text-xs mt-2">Subscribed!</p>}
-            </div>
+
           </div>
         </div>
 
