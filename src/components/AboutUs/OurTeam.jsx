@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowLeft, Users, Award, GraduationCap, Briefcase, Mail, Linkedin, Sparkles, UserCheck } from 'lucide-react';
+import { ArrowLeft, Users, Award, GraduationCap, Briefcase, Mail, Linkedin, Sparkles, UserCheck, BookOpen, Globe } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import useAxiosPublic from '../../hooks/useAxiosPublic';
 
@@ -227,13 +227,32 @@ export default function OurTeam() {
                         <strong className="text-[#0B2340]">Expertise:</strong> {member.expertise}
                       </p>
 
-                      <div className="flex gap-3">
-                        <a href="#" className="p-2 rounded-lg bg-[#1FB6FF] text-white hover:bg-[#0077b5] transition-colors shadow-md">
-                          <Mail className="w-5 h-5" />
-                        </a>
-                        <a href="#" className="p-2 rounded-lg bg-[#1FB6FF] text-white hover:bg-[#0077b5] transition-colors shadow-md">
-                          <Linkedin className="w-5 h-5" />
-                        </a>
+                      <div className="flex gap-3 flex-wrap">
+                        {member.linkedin && (
+                          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-[#0077b5] text-white hover:bg-[#006396] transition-colors shadow-md" title="LinkedIn">
+                            <Linkedin className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.email && (
+                          <a href={`mailto:${member.email}`} className="p-2 rounded-lg bg-[#EA4335] text-white hover:bg-[#c9302c] transition-colors shadow-md" title="Email">
+                            <Mail className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.orcid && (
+                          <a href={member.orcid} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-[#A6CE39] text-white hover:bg-[#8dae30] transition-colors shadow-md flex items-center justify-center font-bold text-xs" title="ORCID">
+                            ID
+                          </a>
+                        )}
+                        {member.researchGate && (
+                          <a href={member.researchGate} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-[#00CCBB] text-white hover:bg-[#00a698] transition-colors shadow-md" title="ResearchGate">
+                            <Globe className="w-5 h-5" />
+                          </a>
+                        )}
+                        {member.googleScholar && (
+                          <a href={member.googleScholar} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-[#4285F4] text-white hover:bg-[#3367d6] transition-colors shadow-md" title="Google Scholar">
+                            <BookOpen className="w-5 h-5" />
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>

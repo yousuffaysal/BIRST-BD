@@ -1,15 +1,14 @@
 /**
- * Image Upload Utility for ImageKit Integration
- * Handles file validation, upload to ImageKit, and error handling
+ * Image Upload Utility for ImgBB Integration
+ * Handles file validation, upload to ImgBB, and error handling
  */
 
-const IMAGEKIT_PUBLIC_KEY = import.meta.env.VITE_IMAGEKIT_PUBLIC_KEY || 'your_public_key_here';
-const IMAGEKIT_URL_ENDPOINT = import.meta.env.VITE_IMAGEKIT_URL_ENDPOINT || 'https://ik.imagekit.io/2lax2ytm2';
-const IMAGEKIT_AUTH_ENDPOINT = import.meta.env.VITE_IMAGEKIT_AUTH_ENDPOINT || 'http://localhost:5000/imagekit-auth';
+const IMAGE_HOSTING_KEY = import.meta.env.VITE_IMAGE_HOSTING_KEY || 'your_imgbb_key_here';
+const IMGBB_API_URL = `https://api.imgbb.com/1/upload?key=${IMAGE_HOSTING_KEY}`;
 
 // Allowed file types
 const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 32 * 1024 * 1024; // 32MB (ImgBB supports large files)
 
 /**
  * Validate image file
@@ -31,7 +30,7 @@ export const validateImageFile = (file) => {
     if (file.size > MAX_FILE_SIZE) {
         return {
             valid: false,
-            error: `File size exceeds 5MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB`
+            error: `File size exceeds 32MB. Your file is ${(file.size / 1024 / 1024).toFixed(2)}MB`
         };
     }
 
@@ -39,10 +38,10 @@ export const validateImageFile = (file) => {
 };
 
 /**
- * Upload image to ImageKit (with fallback to local preview)
+ * Upload image to ImgBB
  * @param {File} file - The image file to upload
- * @param {string} folder - The folder path in ImageKit (e.g., 'courses', 'events')
- * @param {Function} onProgress - Callback for upload progress (0-100)
+ * @param {string} folder - (Unused in simple ImgBB upload)
+ * @param {Function} onProgress - Callback for upload progress (simulated for fetch)
  * @returns {Promise<Object>} - { success: boolean, url: string, error: string }
  */
 export const uploadImageToImageKit = async (file, folder = 'uploads', onProgress = null) => {
@@ -53,99 +52,43 @@ export const uploadImageToImageKit = async (file, folder = 'uploads', onProgress
             return { success: false, url: null, error: validation.error };
         }
 
-        // Try to upload to ImageKit, but fall back to local preview if auth fails
-        try {
-            // Get authentication parameters from backend
-            const authResponse = await fetch(IMAGEKIT_AUTH_ENDPOINT);
+        const formData = new FormData();
+        formData.append('image', file);
 
-            if (authResponse.ok) {
-                const authData = await authResponse.json();
-
-                // Prepare form data
-                const formData = new FormData();
-                formData.append('file', file);
-                formData.append('publicKey', IMAGEKIT_PUBLIC_KEY);
-                formData.append('signature', authData.signature);
-                formData.append('expire', authData.expire);
-                formData.append('token', authData.token);
-                formData.append('fileName', `${Date.now()}_${file.name}`);
-                formData.append('folder', folder);
-
-                // Upload to ImageKit
-                const uploadResponse = await new Promise((resolve, reject) => {
-                    const xhr = new XMLHttpRequest();
-
-                    // Track upload progress
-                    if (onProgress) {
-                        xhr.upload.addEventListener('progress', (e) => {
-                            if (e.lengthComputable) {
-                                const percentComplete = Math.round((e.loaded / e.total) * 100);
-                                onProgress(percentComplete);
-                            }
-                        });
-                    }
-
-                    xhr.addEventListener('load', () => {
-                        if (xhr.status === 200) {
-                            resolve(JSON.parse(xhr.responseText));
-                        } else {
-                            reject(new Error(`Upload failed with status ${xhr.status}`));
-                        }
-                    });
-
-                    xhr.addEventListener('error', () => {
-                        reject(new Error('Upload failed due to network error'));
-                    });
-
-                    xhr.open('POST', 'https://upload.imagekit.io/api/v1/files/upload');
-                    xhr.send(formData);
-                });
-
-                return {
-                    success: true,
-                    url: uploadResponse.url,
-                    fileId: uploadResponse.fileId,
-                    error: null
-                };
-            }
-        } catch (authError) {
-            console.warn('ImageKit auth failed, using local preview:', authError);
-        }
-
-        // Fallback: Create local preview using FileReader
-        console.info('Using local file preview (ImageKit not configured)');
-
-        // Simulate upload progress
+        // Simulate progress for better UX since fetch doesn't support it natively easily without XHR
         if (onProgress) {
-            const progressInterval = setInterval(() => {
-                const currentProgress = Math.min(100, (Date.now() % 1000) / 10);
-                onProgress(currentProgress);
-            }, 50);
-
-            setTimeout(() => clearInterval(progressInterval), 500);
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                if (progress > 90) clearInterval(interval);
+                onProgress(Math.min(progress, 90));
+            }, 100);
         }
 
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                if (onProgress) onProgress(100);
-                resolve({
-                    success: true,
-                    url: reader.result, // Base64 data URL
-                    fileId: `local_${Date.now()}`,
-                    error: null,
-                    isLocal: true // Flag to indicate this is a local preview
-                });
-            };
-            reader.onerror = () => {
-                resolve({
-                    success: false,
-                    url: null,
-                    error: 'Failed to read file'
-                });
-            };
-            reader.readAsDataURL(file);
+        const response = await fetch(IMGBB_API_URL, {
+            method: 'POST',
+            body: formData,
         });
+
+        if (onProgress) onProgress(100);
+
+        const data = await response.json();
+
+        if (data.success) {
+            return {
+                success: true,
+                url: data.data.url,
+                fileId: data.data.id,
+                deleteUrl: data.data.delete_url,
+                error: null
+            };
+        } else {
+            return {
+                success: false,
+                url: null,
+                error: data.error?.message || 'ImgBB upload failed'
+            };
+        }
 
     } catch (error) {
         console.error('Image upload error:', error);

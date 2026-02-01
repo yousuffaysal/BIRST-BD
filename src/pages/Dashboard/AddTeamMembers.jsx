@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Save, X, User, Briefcase, GraduationCap, Award, Upload, Sparkles, Filter, Search, Linkedin, Mail, CheckCircle, Palette } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X, User, Briefcase, GraduationCap, Award, Upload, Sparkles, Filter, Search, Linkedin, Mail, CheckCircle, Palette, BookOpen, Globe } from 'lucide-react';
+import ImageUpload from '../../components/ImageUpload/ImageUpload';
 import useAxiosSecure from '../../hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -29,8 +30,12 @@ export default function AddTeamMembers() {
         image: '',
         color: GRADIENT_PRESETS[0].value,
         linkedin: '',
+        github: '',
         email: '',
-        position: ''
+        position: '',
+        orcid: '',
+        researchGate: '',
+        googleScholar: ''
     };
 
     const [formData, setFormData] = useState(initialFormState);
@@ -71,8 +76,12 @@ export default function AddTeamMembers() {
                 image: member.image || '',
                 color: member.color || GRADIENT_PRESETS[0].value,
                 linkedin: member.linkedin || '',
+                github: member.github || '',
                 email: member.email || '',
-                position: member.position || ''
+                position: member.position || '',
+                orcid: member.orcid || '',
+                researchGate: member.researchGate || '',
+                googleScholar: member.googleScholar || ''
             });
         } else {
             setEditingMember(null);
@@ -256,8 +265,8 @@ export default function AddTeamMembers() {
                                     </div>
 
                                     {/* Social Footer */}
-                                    {(member.linkedin || member.email) && (
-                                        <div className="mt-auto pt-3 border-t border-gray-100 w-full flex justify-center gap-3">
+                                    {(member.linkedin || member.email || member.orcid || member.researchGate || member.googleScholar) && (
+                                        <div className="mt-auto pt-3 border-t border-gray-100 w-full flex justify-center gap-3 flex-wrap">
                                             {member.linkedin && (
                                                 <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-colors">
                                                     <Linkedin size={16} />
@@ -266,6 +275,21 @@ export default function AddTeamMembers() {
                                             {member.email && (
                                                 <a href={`mailto:${member.email}`} className="text-gray-400 hover:text-gray-900 transition-colors">
                                                     <Mail size={16} />
+                                                </a>
+                                            )}
+                                            {member.orcid && (
+                                                <a href={member.orcid} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#A6CE39] transition-colors font-bold text-[10px] flex items-center">
+                                                    ID
+                                                </a>
+                                            )}
+                                            {member.researchGate && (
+                                                <a href={member.researchGate} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#00CCBB] transition-colors">
+                                                    <Globe size={16} />
+                                                </a>
+                                            )}
+                                            {member.googleScholar && (
+                                                <a href={member.googleScholar} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#4285F4] transition-colors">
+                                                    <BookOpen size={16} />
                                                 </a>
                                             )}
                                         </div>
@@ -400,16 +424,13 @@ export default function AddTeamMembers() {
 
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-2">
-                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Image URL</label>
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider">Image</label>
                                                 <div className="relative">
-                                                    <Upload className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                                                    <input
-                                                        type="url"
-                                                        name="image"
+                                                    <ImageUpload
                                                         value={formData.image}
-                                                        onChange={handleInputChange}
-                                                        className="w-full pl-10 pr-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
-                                                        placeholder="https://..."
+                                                        onChange={(url) => setFormData(prev => ({ ...prev, image: url }))}
+                                                        folder="team-members"
+                                                        label="Profile Photo"
                                                     />
                                                 </div>
                                             </div>
@@ -449,6 +470,39 @@ export default function AddTeamMembers() {
                                                     onChange={handleInputChange}
                                                     className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
                                                     placeholder="addr@example.com"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">ORCID</label>
+                                                <input
+                                                    type="url"
+                                                    name="orcid"
+                                                    value={formData.orcid}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="ORCID Profile"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">ResearchGate</label>
+                                                <input
+                                                    type="url"
+                                                    name="researchGate"
+                                                    value={formData.researchGate}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="ResearchGate Profile"
+                                                />
+                                            </div>
+                                            <div className="space-y-2">
+                                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider flex items-center gap-1">Google Scholar</label>
+                                                <input
+                                                    type="url"
+                                                    name="googleScholar"
+                                                    value={formData.googleScholar}
+                                                    onChange={handleInputChange}
+                                                    className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-[#02bfff] transition-all font-medium text-sm"
+                                                    placeholder="Scholar Profile"
                                                 />
                                             </div>
                                         </div>
