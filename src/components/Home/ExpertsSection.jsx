@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Linkedin, Twitter, Facebook, Award, FileText, Activity, Quote } from "lucide-react";
+import { Linkedin, Twitter, Facebook, Award, FileText, Activity, Quote, Mail, Globe, BookOpen, Github } from "lucide-react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const ExpertCard = ({ expert }) => {
@@ -60,18 +60,38 @@ const ExpertCard = ({ expert }) => {
         </div>
 
         {/* Social Links - Reveal on Hover */}
-        <div className="flex gap-4 justify-center">
+        {/* Social Links - Reveal on Hover */}
+        <div className="flex gap-4 justify-center flex-wrap">
           {expert.linkedin && (
-            <a href={expert.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-colors bg-gray-50 p-2 rounded-full hover:bg-blue-50">
+            <a href={expert.linkedin} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#0077b5] transition-colors bg-gray-50 p-2 rounded-full hover:bg-blue-50" title="LinkedIn">
               <Linkedin size={18} />
             </a>
           )}
-          <a href="#" className="text-gray-400 hover:text-[#1877F2] transition-colors bg-gray-50 p-2 rounded-full hover:bg-blue-50">
-            <Facebook size={18} />
-          </a>
-          <a href="#" className="text-gray-400 hover:text-[#1DA1F2] transition-colors bg-gray-50 p-2 rounded-full hover:bg-blue-50">
-            <Twitter size={18} />
-          </a>
+          {expert.email && (
+            <a href={`mailto:${expert.email}`} className="text-gray-400 hover:text-[#EA4335] transition-colors bg-gray-50 p-2 rounded-full hover:bg-red-50" title="Email">
+              <Mail size={18} />
+            </a>
+          )}
+          {expert.orcid && (
+            <a href={expert.orcid} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#A6CE39] transition-colors bg-gray-50 p-2 rounded-full hover:bg-green-50 flex items-center justify-center font-bold text-[10px]" title="ORCID">
+              ID
+            </a>
+          )}
+          {expert.researchGate && (
+            <a href={expert.researchGate} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#00CCBB] transition-colors bg-gray-50 p-2 rounded-full hover:bg-teal-50" title="ResearchGate">
+              <Globe size={18} />
+            </a>
+          )}
+          {expert.googleScholar && (
+            <a href={expert.googleScholar} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#4285F4] transition-colors bg-gray-50 p-2 rounded-full hover:bg-blue-50" title="Google Scholar">
+              <BookOpen size={18} />
+            </a>
+          )}
+          {expert.github && (
+            <a href={expert.github} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-black transition-colors bg-gray-50 p-2 rounded-full hover:bg-gray-200" title="GitHub">
+              <Github size={18} />
+            </a>
+          )}
         </div>
       </div>
     </div>
@@ -100,7 +120,12 @@ const ExpertsSection = () => {
     fetchExperts();
   }, [axiosPublic]);
 
+  const shouldAnimate = experts.length >= 4;
+  const displayExperts = shouldAnimate ? [...experts, ...experts] : experts;
+
   React.useEffect(() => {
+    if (!shouldAnimate) return;
+
     const scroller = scrollerRef.current;
     let animationId;
 
@@ -127,9 +152,10 @@ const ExpertsSection = () => {
     animationId = requestAnimationFrame(step);
 
     return () => cancelAnimationFrame(animationId);
-  }, [isPaused, isDragging, experts]);
+  }, [isPaused, isDragging, experts, shouldAnimate]);
 
   const handleMouseDown = (e) => {
+    if (!shouldAnimate) return;
     setIsDragging(true);
     setIsPaused(true); // Pause auto-scroll while dragging
     setStartX(e.pageX - scrollerRef.current.offsetLeft);
@@ -147,7 +173,7 @@ const ExpertsSection = () => {
   };
 
   const handleMouseMove = (e) => {
-    if (!isDragging) return;
+    if (!isDragging || !shouldAnimate) return;
     e.preventDefault();
     const x = e.pageX - scrollerRef.current.offsetLeft;
     const walk = (x - startX) * 2; // Scroll-fast
@@ -172,21 +198,25 @@ const ExpertsSection = () => {
 
       {/* Draggable Rolling Animation Container */}
       <div className="relative w-full group">
-        {/* Soft Edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#ffffff] to-transparent z-10 pointer-events-none"></div>
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#ffffff] to-transparent z-10 pointer-events-none"></div>
+        {/* Soft Edges - Only show if animating */}
+        {shouldAnimate && (
+          <>
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#ffffff] to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#ffffff] to-transparent z-10 pointer-events-none"></div>
+          </>
+        )}
 
         <div
           ref={scrollerRef}
-          className="flex overflow-x-hidden cursor-grab active:cursor-grabbing no-scrollbar py-20"
+          className={`flex overflow-x-hidden ${shouldAnimate ? 'cursor-grab active:cursor-grabbing no-scrollbar py-20' : 'justify-center py-10 flex-wrap gap-y-8'}`}
           onMouseDown={handleMouseDown}
           onMouseLeave={handleMouseLeave}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsPaused(true)}
         >
-          {/* Double the list for infinite seamless loop */}
-          {[...experts, ...experts].map((expert, index) => (
+          {/* Render Items */}
+          {displayExperts.map((expert, index) => (
             <ExpertCard key={`${expert._id || index}-${index}`} expert={expert} />
           ))}
         </div>
