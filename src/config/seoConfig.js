@@ -6,7 +6,7 @@
 export const defaultSEO = {
     siteName: 'BIRSTBD',
     siteUrl: 'https://birstbd.com',
-    defaultTitle: 'BIRSTBD - Professional Research & Statistical Training in Bangladesh',
+    defaultTitle: 'Bangladesh Institute for Research and Statistical Training',
     defaultDescription: 'Join BIRSTBD for expert research training, statistical analysis courses, and professional workshops. Empowering researchers across Bangladesh with data-driven skills and AI-powered tools.',
     defaultKeywords: 'research training Bangladesh, statistical analysis, data science courses, SPSS training, research methodology, thesis support, BIRSTBD, online learning, workshops',
     defaultImage: 'https://ik.imagekit.io/2lax2ytm2/og-image-default.jpg',
@@ -18,7 +18,7 @@ export const defaultSEO = {
 
 export const pageSEO = {
     home: {
-        title: 'BIRSTBD - Professional Research & Statistical Training in Bangladesh',
+        title: 'Bangladesh Institute for Research and Statistical Training',
         description: 'Join a vibrant community of learners. Transform your aspirations into achievements with professional statistical training and workshops from BIRSTBD.',
         keywords: 'research training, statistical analysis, data science, Bangladesh, online courses, workshops, BIRSTBD',
         image: 'https://ik.imagekit.io/2lax2ytm2/home-og.jpg',
